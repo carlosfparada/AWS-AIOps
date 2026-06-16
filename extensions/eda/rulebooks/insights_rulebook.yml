@@ -19,6 +19,8 @@
         # - run_job_template:
         #     organization: "Default"
         #     name: "AIOps: XXX"
+        # labels:
+        #   - EDA
 
     - name: match vulnerability event
       condition: |-
@@ -36,6 +38,8 @@
         # - run_job_template:
         #     organization: "Default"
         #     name: "AIOps: XXX"
+        # labels:
+        #   - EDA
 
     - name: Match Compliance Below Threshold
       condition:
@@ -46,4 +50,6 @@
             pretty: true
         # - run_job_template:
         #     organization: "Default"
-        #     name: "AIOps: XXX"          
+        #     name: "AIOps: XXX"
+        # labels:
+        #   - EDA
