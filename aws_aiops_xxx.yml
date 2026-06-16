@@ -1,0 +1,11 @@
+---
+
+- name: AWS AIOps
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  # vars_files: 
+  #   - main.yml
+  tasks:
+    - debug:
+        msg: "Hello World"
