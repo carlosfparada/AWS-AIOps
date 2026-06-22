@@ -4,7 +4,7 @@
 #   ansible.builtin.include_vars: ../vaults/rh_subs-vault.yml
 
 - name: Setup RHELs with Lightspeed
-  hosts: all
+  hosts: rhel
   become: true
   tasks:
     - name: Register using Org ID and Activation Key
@@ -37,51 +37,51 @@
 
 # 
 
-- name: Install Software
-  ansible.builtin.dnf:
-    name: "{{ packages }}"
-    state: present
-  vars:
-    packages:
-      - firewalld
-      - httpd
-      - php 
-      - php-common
-  become: yes
+    # - name: Install Software
+    #   ansible.builtin.dnf:
+    #     name: "{{ packages }}"
+    #     state: present
+    #   vars:
+    #     packages:
+    #       - firewalld
+    #       - httpd
+    #       - php 
+    #       - php-common
+    #   become: yes
 
-- name: Open port TCP 80
-  ansible.posix.firewalld:
-    port: http/tcp
-    permanent: yes
-    state: enabled
-  become: true
+    # - name: Open port TCP 80
+    #   ansible.posix.firewalld:
+    #     port: http/tcp
+    #     permanent: yes
+    #     state: enabled
+    #   become: true
 
-- name: Webpage template
-  ansible.builtin.template:
-    src: ../templates/webpage.html.j2
-    dest: /var/www/html/index.html
-    owner: apache
-    mode: "0644"
-  become: yes
+    # - name: Webpage template
+    #   ansible.builtin.template:
+    #     src: ../templates/webpage.html.j2
+    #     dest: /var/www/html/index.html
+    #     owner: apache
+    #     mode: "0644"
+    #   become: yes
 
-- name: Start firewalld
-  ansible.builtin.service:
-    name: firewalld
-    enabled: yes
-    state: restarted
-  become: true
+    # - name: Start firewalld
+    #   ansible.builtin.service:
+    #     name: firewalld
+    #     enabled: yes
+    #     state: restarted
+    #   become: true
 
-- name: Restart httpd server 
-  ansible.builtin.service: 
-    name: httpd
-    enabled: yes
-    state: restarted
-  become: yes
- 
-- name: Dettach Red Hat subscription
-  community.general.redhat_subscription:
-    state: absent
-    username: "{{ subscription_user }}"
-    password: "{{ subscription_pass }}"
-    pool_ids: "{{ rh_subs_pool_id }}"
-  become: true
+    # - name: Restart httpd server 
+    #   ansible.builtin.service: 
+    #     name: httpd
+    #     enabled: yes
+    #     state: restarted
+    #   become: yes
+    
+    # - name: Dettach Red Hat subscription
+    #   community.general.redhat_subscription:
+    #     state: absent
+    #     username: "{{ subscription_user }}"
+    #     password: "{{ subscription_pass }}"
+    #     pool_ids: "{{ rh_subs_pool_id }}"
+    #   become: true
