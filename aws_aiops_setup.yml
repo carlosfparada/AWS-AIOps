@@ -21,10 +21,13 @@
     #     pool_ids: "{{ rh_subs_pool_id }}"
     #   become: true
 
+    - debug:
+        var: hostvars[inventory_hostname].tags.Name
+
     - name: Register with Insights
       redhatinsights.insights.insights_register:
         state: present
-        display_name: rhel
+        display_name: "{{ hostvars[inventory_hostname].tags.Name }}"
       become: true
 
       
