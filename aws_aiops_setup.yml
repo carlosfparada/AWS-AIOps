@@ -30,12 +30,19 @@
     - debug:
         var: hostvars[inventory_hostname].tags.Name
 
+    - name: Unregister the insights client
+      insights_register:
+        state: absent
+      become: true 
+
     - name: Register with Insights
       redhatinsights.insights.insights_register:
         state: present
         display_name: "{{ hostvars[inventory_hostname].tags.Name }}"
         force_reregister: true
       become: true
+
+
 
       
 
