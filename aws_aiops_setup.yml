@@ -13,7 +13,7 @@
   hosts: rhel
   become: true
   tasks:
-    - name: Register using Org ID and Activation Key
+    - name: Unregister using Org ID and Activation Key
       community.general.redhat_subscription:
         state: absent
         org_id: "{{ org_id }}"
