@@ -15,9 +15,16 @@
   tasks:
     - name: Register using Org ID and Activation Key
       community.general.redhat_subscription:
+        state: absent
+        org_id: "{{ org_id }}"
+        activationkey: "{{ activation_key }}"
+
+    - name: Register using Org ID and Activation Key
+      community.general.redhat_subscription:
         state: present
         org_id: "{{ org_id }}"
         activationkey: "{{ activation_key }}"
+        force_register: true
 
     # - name: Attach Red Hat subscription
     #   community.general.redhat_subscription:
