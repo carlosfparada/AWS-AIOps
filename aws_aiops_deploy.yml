@@ -8,4 +8,4 @@
     - main.yml
   tasks:
     - include_role: 
-        name: aws_aiops_deploy
+        name: aws_deploy_aiops
