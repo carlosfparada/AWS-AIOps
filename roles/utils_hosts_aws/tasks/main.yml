@@ -12,7 +12,7 @@
 - name: Add RHEL node to the rhel group
   add_host:
     name: "{{ node_name }}"
-    groups: "rhel1"
+    groups: "rhel"
   when: node_name is defined
 
 - name: Get RHEL 2 node
@@ -24,5 +24,5 @@
 - name: Add RHEL node to the rhel group
   add_host:
     name: "{{ node_name }}"
-    groups: "rhel2"
+    groups: "rhel"
   when: node_name is defined

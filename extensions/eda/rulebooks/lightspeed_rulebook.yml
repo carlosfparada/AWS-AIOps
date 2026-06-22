@@ -7,7 +7,10 @@
     - redhatinsights.eda.insights:
         host: 0.0.0.0
         port: 10000
-        #token: "{{ SECRET }}"
+        # token:    # secret token.
+        # certfile: # (optional) path to a certificate file to enable TLS support
+        # keyfile:  # (optional) path to a key file to be used together with certfile
+        # password: # (optional) path to a key file to be used together with certfile
   rules:
     - name: Match Advisor Recommendation Event
       condition:

@@ -3,31 +3,36 @@
 # - name: Include vault quay.io credentials
 #   ansible.builtin.include_vars: ../vaults/rh_subs-vault.yml
 
-- name: Register with activation key
+- name: Setup RHELs
   hosts: all
   become: true
   tasks:
-    - name: Register with RHSM using activation key
+    - name: Register using Org ID and Activation Key
       community.general.redhat_subscription:
         state: present
         org_id: "{{ org_id }}"
         activationkey: "{{ activation_key }}"
 
+    # - name: Attach Red Hat subscription
+    #   community.general.redhat_subscription:
+    #     state: present
+    #     username: "{{ subscription_user }}"
+    #     password: "{{ subscription_pass }}"
+    #     pool_ids: "{{ rh_subs_pool_id }}"
+    #   become: true
+
     - name: Register with Insights
-      ansible.builtin.command:
-        cmd: insights-client --register
-      changed_when: true
+      redhatinsights.insights.insights_register:
+        state: present
+        display_name: rhel
+      become: true
+
+      
 
 
 
 
-- name: Attach Red Hat subscription
-  community.general.redhat_subscription:
-    state: present
-    username: "{{ subscription_user }}"
-    password: "{{ subscription_pass }}"
-    pool_ids: "{{ rh_subs_pool_id }}"
-  become: true
+# 
 
 - name: Install Software
   ansible.builtin.dnf:
