@@ -34,7 +34,7 @@ ec2_rhel1_pass: "{{ ansible_password }}"
 
 # RHEL 2
 # AMI
-ec2_rhe2_image_name: RHEL-9.5.0_HVM*x86_64*
+ec2_rhel2_image_name: RHEL-9.5.0_HVM*x86_64*
 # Flavour 
 ec2_rhel2_flavor_name: t2.large
 # Disk
