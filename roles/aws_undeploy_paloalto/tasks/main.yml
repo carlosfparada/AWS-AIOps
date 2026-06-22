@@ -21,11 +21,18 @@
       "tag:Name": "{{ ec2_rt_name }}"
   register: rtb
 
-- name: Terminate RHEL instance
+- name: Terminate RHEL 2 instance
   amazon.aws.ec2_instance:
     region: "{{ ec2_vpc_region }}"
     filters:
-      "tag:name": "{{ ec2_rhel_instance_name }}"
+      "tag:name": "{{ ec2_rhel2_instance_name }}"
+    state: absent
+
+- name: Terminate RHEL 1 instance
+  amazon.aws.ec2_instance:
+    region: "{{ ec2_vpc_region }}"
+    filters:
+      "tag:name": "{{ ec2_rhel1_instance_name }}"
     state: absent
 
 - name: Delete Security Group
