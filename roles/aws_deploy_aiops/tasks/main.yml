@@ -89,7 +89,7 @@
         ebs:
           volume_size: "{{ ec2_rhel1_disk_size | default(20, true) }}"
           delete_on_termination: true
-    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel.j2') }}"
+    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel1.j2') }}"
     state: running
   register: ec2_rhel1_instance
 
@@ -123,7 +123,7 @@
         ebs:
           volume_size: "{{ ec2_rhel2_disk_size | default(20, true) }}"
           delete_on_termination: true
-    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel.j2') }}"
+    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel2.j2') }}"
     state: running
   register: ec2_rhel2_instance
 
