@@ -69,11 +69,11 @@
     filters:
       name: "{{ ec2_rhel1_image_name }}"
     region: "{{ ec2_vpc_region }}"
-  register: ami_rhel_find
+  register: ami_rhel1_find
 
-- name: Create RHEL instance
+- name: Create RHEL 1 instance
   amazon.aws.ec2_instance:
-    image_id: "{{ ami_rhel_find.images[-1].image_id | default('') }}"
+    image_id: "{{ ami_rhel1_find.images[-1].image_id | default('') }}"
     instance_type: "{{ ec2_rhel1_flavor_name }}"
     security_group: "{{ ec2_sg_name }}"
     name: "{{ ec2_rhel1_instance_name }}"
@@ -103,11 +103,11 @@
     filters:
       name: "{{ ec2_rhel2_image_name }}"
     region: "{{ ec2_vpc_region }}"
-  register: ami_rhel_find
+  register: ami_rhel2_find
 
 - name: Create RHEL 2 instance
   amazon.aws.ec2_instance:
-    image_id: "{{ ami_rhel_find.images[-1].image_id | default('') }}"
+    image_id: "{{ ami_rhel2_find.images[-1].image_id | default('') }}"
     instance_type: "{{ ec2_rhel2_flavor_name }}"
     security_group: "{{ ec2_sg_name }}"
     name: "{{ ec2_rhel2_instance_name }}"
