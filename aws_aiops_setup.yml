@@ -3,7 +3,7 @@
 # - name: Include vault quay.io credentials
 #   ansible.builtin.include_vars: ../vaults/rh_subs-vault.yml
 
-- name: Setup RHELs
+- name: Setup RHELs with Lightspeed
   hosts: all
   become: true
   tasks:
