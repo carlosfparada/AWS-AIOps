@@ -34,6 +34,7 @@
       redhatinsights.insights.insights_register:
         state: present
         display_name: "{{ hostvars[inventory_hostname].tags.Name }}"
+        force_reregister: true
       become: true
 
       
