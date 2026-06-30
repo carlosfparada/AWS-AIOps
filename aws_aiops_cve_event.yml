@@ -55,7 +55,7 @@
         url: "http://{{ inventory_hostname }}:10000"
         method: POST
         body: "{{ cve_event_body }}"
-        status_code: 201
+        status_code: 200
         body_format: json
         headers:
           Content-Type: "application/json"
