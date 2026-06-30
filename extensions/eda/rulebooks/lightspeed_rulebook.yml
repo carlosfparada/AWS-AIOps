@@ -13,18 +13,6 @@
         # keyfile:  # (optional) path to a key file to be used together with certfile
         # password: # (optional) path to a key file to be used together with certfile
   rules:
-    - name: Always true
-      condition:
-        event.payload is defined
-      actions:
-        - print_event:
-            pretty: true
-        - run_job_template:
-            organization: "Default"
-            name: "AWS AIOps: X. Action"
-            labels:
-              - EDA Lightspeed all
-
     - name: match vulnerability event
       condition: |-
         event.payload.application == "vulnerability"
@@ -71,3 +59,16 @@
         #     name: "AIOps: XXX"
         # labels:
         #   - EDA Lightspeed
+
+    - name: Always true
+      condition:
+        event.payload is defined
+      actions:
+        - print_event:
+            pretty: true
+        - run_job_template:
+            organization: "Default"
+            name: "AWS AIOps: X. Action"
+            labels:
+              - EDA Lightspeed all
+
