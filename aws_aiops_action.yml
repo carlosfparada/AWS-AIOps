@@ -30,3 +30,5 @@
     - name: AIOps Lightspeed action payload
       set_fact:
         payload: "{{ ansible_eda.event.payload }}"
+
+    # descarrregar cve
