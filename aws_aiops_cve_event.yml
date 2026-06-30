@@ -10,7 +10,7 @@
 
 
 - name: Emulate new CVE event
-  hosts: localhost
+  hosts: aap
   connection: local
   gather_facts: no
   vars_files: vars/main.yml
@@ -54,7 +54,7 @@
 
     - name: Create a CVE Event
       ansible.builtin.uri:
-        url: "http://{{ aap_fqdn }}:10000"
+        url: "http://{{ inventory_hostname }}:10000"
         method: POST
         body: |
           { 
