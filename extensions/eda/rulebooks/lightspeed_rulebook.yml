@@ -15,7 +15,7 @@
   rules:
     - name: Always true
       condition:
-        # true == true
+        true == true
       actions:
         - print_event:
             pretty: true
