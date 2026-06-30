@@ -1,7 +1,7 @@
 ---
 
 # example_rulebook.yaml
-- name: Red Hat Insights (Lightspeed) XXX
+- name: Red Hat Insights (Lightspeed)
   hosts: localhost
   sources:
     # console.redhat.com -> Settings -> Integrations -> Reporting & automation -> Event-Driven Ansible
