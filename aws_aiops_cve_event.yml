@@ -11,14 +11,12 @@
 
 - name: Emulate new CVE event
   hosts: aap
-  connection: local
   gather_facts: no
   vars_files: vars/main.yml
   tasks:
     - name: Set CVE
       set_fact: 
-        cve_event_body: 
-          ip_address: |
+        cve_event_body: |
             {
               "bundle": "rhel",
               "application": "vulnerability",
@@ -56,11 +54,7 @@
       ansible.builtin.uri:
         url: "http://{{ inventory_hostname }}:10000"
         method: POST
-        body: |
-          { 
-            "username": "admin",
-            "password": "{{ ec2_netbox_pass }}"
-          }
+        body: "{{ cve_event_body }}"
         status_code: 201
         body_format: json
         headers:
