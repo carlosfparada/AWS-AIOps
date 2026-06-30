@@ -4,6 +4,7 @@
 - name: Red Hat Insights (Lightspeed) XXX
   hosts: localhost
   sources:
+    # console.redhat.com -> Settings -> Integrations -> Reporting & automation -> Event-Driven Ansible
     - redhatinsights.eda.insights:
         host: 0.0.0.0
         port: 10000
