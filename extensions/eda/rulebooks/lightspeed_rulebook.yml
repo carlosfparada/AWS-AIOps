@@ -22,11 +22,11 @@
       actions:
         - print_event:
             pretty: true
-        # - run_job_template:
-        #     organization: "Default"
-        #     name: "AIOps: XXX"
-        # labels:
-        #   - EDA Lightspeed
+        - run_job_template:
+            organization: "Default"
+            name: "AWS AIOps: X. Action"
+            labels:
+              - EDA Lightspeed
 
     - name: match vulnerability event
       condition: |-
