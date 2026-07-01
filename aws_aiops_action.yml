@@ -23,13 +23,18 @@
           username: "{{ ansible_user }}"
           password: "{{ ansible_ssh_pass }}"
 
-    - name: Hostvars
+    - name: Debug Hostvars
       debug:
         var: hostvars['localhost']
 
     - name: AIOps Lightspeed action payload
       set_fact:
         payload: "{{ ansible_eda.event.payload }}"
+
+    - name: Debug Payload
+      debug:
+        var: payload
+
 
     # descarrregar cve
     # {
