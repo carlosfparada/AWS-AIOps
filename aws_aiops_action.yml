@@ -92,6 +92,10 @@
     - name: Debug Prompt to Openshift AI
       debug:
         var: ai_response.json.choices.text
+        
+    - name: Debug Playbook
+      debug:
+        var: ai_response.json.choices.text
 
     # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
     #   -H "Content-Type: application/json" \
