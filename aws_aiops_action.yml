@@ -92,10 +92,6 @@
     - name: Debug Prompt to Openshift AI
       debug:
         var: ai_response
-        
-    - name: Debug Playbook
-      debug:
-        var: ai_response.json.choices[0].text
 
     - name: Extract clean Ansible Playbook
       ansible.builtin.set_fact:
@@ -107,7 +103,7 @@
 
     - name: Debug Clean Playbook
       debug:
-        var: ai_response.json.choices[0].text
+        var: clean_playbook
 
     # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
     #   -H "Content-Type: application/json" \
