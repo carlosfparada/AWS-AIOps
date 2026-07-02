@@ -35,8 +35,6 @@
       debug:
         var: payload
 
-
-    # descarrregar cve
     # {
     #   "bundle": "rhel",
     #   "application": "vulnerability",
@@ -69,3 +67,38 @@
     #   ],
     #   "org_id": "13959588"
     # }
+
+
+    - name: Prompt to Openshift AI
+      ansible.builtin.uri:
+        url: "{{ ai_endpoint }}"
+        method: POST
+        body: |
+          { 
+          "model": "{{ ai_model }}",
+          "prompt": "What is the capital of USA?",
+          "max_tokens": {{ ai_max_tokens }},
+          "temperature": 0
+          }
+        status_code: 201
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ ai_token }}"
+        validate_certs: yes
+      delegate_to: localhost
+      register: ai_response
+
+    - name: Debug Prompt to Openshift AI
+      debug:
+        var: ai_response
+
+    # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
+    #   -H "Content-Type: application/json" \
+    #   -H "Authorization: Bearer sk-fgFlaBkDridZSPUNWiIjZA" \
+    #   -d '{
+    #     "model": "openai/granite-3-2-8b-instruct",
+    #     "prompt": "What is the capital of USA?",
+    #     "max_tokens": 100,
+    #     "temperature": 0
+    #   }' | jq -r '.choices[0].text'
