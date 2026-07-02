@@ -114,8 +114,45 @@
     #     "temperature": 0
     #   }' | jq -r '.choices[0].text'
 
+    ######
+    # Store playbook on GIT
+    ######
+    - name: Retrieve a repository
+      ansible.scm.git_retrieve:
+        origin:
+          url: "{{ github_url }}"
+        upstream:
+          url: "{{ github_url }}"
+        branch: 
+          name: "{{ github_branch }}"
+          duplicate_detection: false
+      register: repository
 
+    - name: Debug repository data
+      debug: 
+        var: repository
 
+    - name: Copy playbook content to the GIT folder
+      ansible.builtin.copy:
+        content: "{{ clean_playbook }}/"
+        dest: "{{ repository['path'] }}/"
+        remote_src: false
+        force: true
+        mode: '0644'
+
+    - name: Publish the changes
+      ansible.scm.git_publish:
+        commit:
+          message: Generated CaC from AAP objects
+        path: "{{ repository['path'] }}"
+        user:
+          name: "{{ github_user }}"
+          email: "{{ github_email }}"
+        token: "{{ github_token }}"
+
+    ######
+    # Create Job Template and Project
+    ######
     - name: Create Job Template
       vars:
         aap_hostname: "https://{{ aap_fqdn }}"
@@ -136,5 +173,18 @@
               - "AWS AIOps Ansible Credential"
             execution_environment: "{{ ee_name }}"
             survey_enabled: false
+        controller_projects:
+          - name: "AWS AIOps fix Project"
+            description: "AWS AIOps Project"
+            organization: "Default"
+            scm_type: "git"
+            scm_url: "{{ project_fix_url }}"
+            scm_update_on_launch: "True"
+            execution_environment: "{{ ee_name }}"
+            wait: true            
       ansible.builtin.include_role:
-        name: infra.aap_configuration.controller_job_templates
+        name: "{{ item }}"
+      loop:  
+        - infra.aap_configuration.controller_projects
+        - infra.aap_configuration.controller_project_update
+        - infra.aap_configuration.controller_job_templates
