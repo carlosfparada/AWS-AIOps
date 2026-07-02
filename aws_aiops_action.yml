@@ -76,7 +76,7 @@
         body: |
           { 
           "model": "{{ ai_model }}",
-          "prompt": "What is the capital of USA?",
+          "prompt": "Give me an example of a basic ansible playbook",
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
           }
