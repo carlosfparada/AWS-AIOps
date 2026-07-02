@@ -114,3 +114,28 @@
     #     "max_tokens": 100,
     #     "temperature": 0
     #   }' | jq -r '.choices[0].text'
+
+    - name: Create Job Template
+      vars:
+        aap_hostname: "https://{{ groups['aap'][0] }}"
+        aap_username: admin
+        aap_password: "{{ admin_password }}"
+        aap_validate_certs: false
+        controller_inventory_sources:
+          - name: Netbox Inventory Source
+            inventory: Netbox Inventory
+            source_vars:
+              NETBOX_API: "{{ netbox_url }}"
+              NETBOX_TOKEN: "{{ netbox_token.json.key }}" # token v1
+              # NETBOX_TOKEN: "nbt_{{ netbox_token.json.key }}.{{ netbox_token.json.token }}" # token v2
+        controller_inventory_source_update:
+          - name: Netbox Inventory Source Update
+            description: Netbox Inventory Source Update
+            organization: Default
+            inventory: Netbox Inventory
+            wait: True
+      roles:
+        - {role: infra.aap_configuration.controller_inventory_sources, when: controller_inventory_sources is defined}
+        - {role: infra.aap_configuration.controller_inventory_source_update, when: controller_inventory_source_update is defined}
+
+
