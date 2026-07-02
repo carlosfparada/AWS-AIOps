@@ -97,6 +97,18 @@
       debug:
         var: ai_response.json.choices[0].text
 
+    - name: Extract clean Ansible Playbook
+      ansible.builtin.set_fact:
+        clean_playbook: >-
+          {{
+            (ai_response.json.choices[0].text | 
+            regex_search('```yaml\n([\s\S]*?)\n```', '\1'))[0]
+          }}
+
+    - name: Debug Clean Playbook
+      debug:
+        var: ai_response.json.choices[0].text
+
     # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
     #   -H "Content-Type: application/json" \
     #   -H "Authorization: Bearer sk-fgFlaBkDridZSPUNWiIjZA" \
