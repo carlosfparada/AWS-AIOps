@@ -95,7 +95,7 @@
         
     - name: Debug Playbook
       debug:
-        var: ai_response.json.choices.text
+        var: ai_response.json.choices[0].text
 
     # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
     #   -H "Content-Type: application/json" \
