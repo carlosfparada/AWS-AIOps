@@ -136,7 +136,6 @@
       ansible.builtin.copy:
         content: "{{ clean_playbook }}"
         dest: "{{ repository['path'] }}/"
-        remote_src: false
         force: true
         mode: '0644'
 
