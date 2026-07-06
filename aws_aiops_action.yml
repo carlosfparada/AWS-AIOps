@@ -109,8 +109,9 @@
         body: |
           { 
           "model": "{{ ai_model }}",
-          "prompt": >
-              Write an ansible playbook to mitigate this CVE: {{ cve_response.json.data }}.
+          "prompt":
+              Write an ansible playbook to mitigate the following CVE:
+              {{ cve_response.json.data }}
               Return for me only the playbook text.
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
