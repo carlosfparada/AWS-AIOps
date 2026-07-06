@@ -171,7 +171,7 @@
           - name: "AWS AIOps: X. Fix CVE {{ payload.events[0].payload.reported_cve }}"
             description: ""
             organization: "Default"
-            project: "AWS AIOps Project"
+            project: "AWS AIOps Fix Project"
             inventory: "AWS Inventory"
             playbook: "playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
             verbosity: 0
