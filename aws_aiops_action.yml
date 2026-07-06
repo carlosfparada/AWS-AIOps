@@ -173,7 +173,7 @@
             organization: "Default"
             project: "AWS AIOps Project"
             inventory: "AWS Inventory"
-            playbook: "aws_aiops_fix_{{ payload.events[0].payload.reported_cve }}.yml"
+            playbook: "playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
             verbosity: 0
             job_type: "run"
             credentials:
