@@ -72,6 +72,14 @@
   # GET CVE description
   ######
 
+    - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
+      set_fact:
+        cve_name: "{{ payload.events[0].payload.reported_cve }}"
+
+    - name: Debug CVE {{ cve_name }} Name
+      debug:
+        msg: "CVE Name: {{ cve_name }}"
+
     - name: Get access token using Service Account Client ID and Secret
       ansible.builtin.uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
@@ -84,7 +92,7 @@
         status_code: 200
       register: sso_response
 
-    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }} details
+    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }} description
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
         method: GET
@@ -93,16 +101,20 @@
         status_code: 200
       register: cve_response
 
+    - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Description
+      set_fact:
+        cve_description: "{{ cve_response.json.data.attributes.description }}"
 
-    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Details
+    - name: Debug CVE {{ cve_description }} Description
       debug:
-        var: cve_response.json.data
+        msg: "CVE Name: {{ cve_description }}"
+
 
   ######
   # AI Prompt
   ######
 
-    - name: Prompt to Openshift AI
+    - name: Prompt Openshift AI
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
@@ -110,9 +122,11 @@
           { 
           "model": "{{ ai_model }}",
           "prompt":
-              Write an ansible playbook to mitigate the following CVE:
-              {{ cve_response.json.data }}
-              Return for me only the playbook text.
+              {
+                Write an ansible playbook to mitigate the following CVE:
+                {{ cve_description }}.
+                Return for me only the playbook code, not any other text.
+              }
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
           }
@@ -168,14 +182,14 @@
     - name: Copy playbook content to the GIT folder
       ansible.builtin.copy:
         content: "{{ generated_playbook }}"
-        dest: "{{ repository['path'] }}/playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
+        dest: "{{ repository['path'] }}/playbook_fix_{{ cve_name }}.yml"
         force: true
         mode: '0644'
 
     - name: Publish the changes
       ansible.scm.git_publish:
         commit:
-          message: Adding new playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
+          message: Adding new playbook_fix_{{ cve_name }}.yml"
         path: "{{ repository['path'] }}"
         user:
           name: "{{ github_user }}"
@@ -201,12 +215,12 @@
             execution_environment: "{{ ee_name }}"
             wait: true            
         controller_templates:
-          - name: "AWS AIOps: X. Fix CVE {{ payload.events[0].payload.reported_cve }}"
+          - name: "AWS AIOps: X. Fix CVE {{ cve_name }}"
             description: ""
             organization: "Default"
             project: "AWS AIOps Fix Project"
             inventory: "AWS Inventory"
-            playbook: "playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
+            playbook: "playbook_fix_{{ cve_name }}.yml"
             verbosity: 0
             #job_type: "check"
             job_type: "run"
@@ -218,9 +232,4 @@
         dispatch_include_wildcard_vars: true
       ansible.builtin.include_role:
         name: infra.aap_configuration.dispatch        
-      # ansible.builtin.include_role:
-      #   name: "{{ item }}"
-      # loop:  
-      #   - infra.aap_configuration.controller_projects
-      #   - infra.aap_configuration.controller_project_update
-      #   - infra.aap_configuration.controller_job_templates
+
