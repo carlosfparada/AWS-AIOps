@@ -121,12 +121,10 @@
         body: |
           { 
           "model": "{{ ai_model }}",
-          "prompt":
-              {
+          "prompt": >
                 Write an ansible playbook to mitigate the following CVE:
                 {{ cve_description }}.
                 Return for me only the playbook code, not any other text.
-              }
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
           }
