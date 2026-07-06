@@ -109,7 +109,9 @@
         body: |
           { 
           "model": "{{ ai_model }}",
-          "prompt": "Give me an example of a basic ansible playbook to mitigate this CVE: {{ cve_response.json.data }}",
+          "prompt": >
+              Write an ansible playbook to mitigate this CVE: {{ cve_response.json.data }}.
+              Return for me only the playbook text.
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
           }
@@ -126,21 +128,13 @@
       debug:
         var: ai_response
 
-    - name: Extract clean Ansible Playbook
+    - name: Set Generated Ansible Playbook
       ansible.builtin.set_fact:
-        # clean_playbook: >-
-        #   {{
-        #     (ai_response.json.choices[0].text | 
-        #     regex_search('```yaml\n([\s\S]*?)\n```', '\1'))[0]
-        #   }}
-        generated_playbook: >-
-          {{ ai_response.json.choices[0].text
-             | regex_search('```yaml\n(.*?)```', '\1', multiline=True, ignorecase=True)
-             | first }}
-             
+        generated_playbook: ai_response.json.choices[0].text
+
     - name: Debug Clean Playbook
       debug:
-        var: clean_playbook
+        var: generated_playbook
 
     # curl -X POST https://maas-rhdp.apps.maas.redhatworkshops.io/v1/completions \
     #   -H "Content-Type: application/json" \
@@ -172,7 +166,7 @@
 
     - name: Copy playbook content to the GIT folder
       ansible.builtin.copy:
-        content: "{{ clean_playbook }}"
+        content: "{{ generated_playbook }}"
         dest: "{{ repository['path'] }}/playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
         force: true
         mode: '0644'
