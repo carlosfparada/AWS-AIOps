@@ -168,12 +168,12 @@
             execution_environment: "{{ ee_name }}"
             wait: true            
         controller_templates:
-          - name: "AWS AIOps: X. Fix CVE {{ payload.events[0].reported_cve }}"
+          - name: "AWS AIOps: X. Fix CVE {{ payload.events[0].payload.reported_cve }}"
             description: ""
             organization: "Default"
             project: "AWS AIOps Project"
             inventory: "AWS Inventory"
-            playbook: "aws_aiops_fix_{{ payload.events[0].reported_cve }}.yml"
+            playbook: "aws_aiops_fix_{{ payload.events[0].payload.reported_cve }}.yml"
             verbosity: 0
             job_type: "run"
             credentials:
