@@ -159,8 +159,8 @@
         aap_password: "{{ admin_password }}"
         aap_validate_certs: false
         controller_projects:
-          - name: "AWS AIOps fix Project"
-            description: "AWS AIOps fix Project"
+          - name: "AWS AIOps Fix Project"
+            description: "AWS AIOps Fix Project"
             organization: "Default"
             scm_type: "git"
             scm_url: "{{ github_url }}"
