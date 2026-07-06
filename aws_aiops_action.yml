@@ -115,15 +115,17 @@
   ######
 
     - name: Prompt Openshift AI
+      var:
+        prompt: >
+                Write an ansible playbook to mitigate the following CVE:
+                '{{ cve_description }}'
+                Return for me only the playbook code, not any other text.
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
         body: |
           model: "{{ ai_model }}"
-          prompt: >
-                Write an ansible playbook to mitigate the following CVE:
-                '{{ cve_description }}'
-                Return for me only the playbook code, not any other text.
+          prompt: "{{ prompt }}"
           max_tokens: "{{ ai_max_tokens }}"
           temperature: 0
         status_code: 200
