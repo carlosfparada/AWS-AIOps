@@ -123,7 +123,7 @@
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
-        body: |
+        body:
           model: "{{ ai_model }}"
           prompt: "{{ prompt }}"
           max_tokens: "{{ ai_max_tokens }}"
