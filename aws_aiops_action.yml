@@ -72,8 +72,8 @@
   # GET CVE description
   ######
 
-    - name: Authenticate using Service Account Client ID and Secret
-      uri:
+    - name: Get access token using Service Account Client ID and Secret
+      ansible.builtin.uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
         method: POST
         body_format: "form-urlencoded"
@@ -83,15 +83,13 @@
           client_secret: "{{ lightspeed_client_secret }}"
         status_code: 200
       register: sso_response
-      no_log: false # Protects the resulting access token from appearing in logs
 
-    - name: Fetch CVE data from Red Hat Insights Vulnerability API
-      uri:
-        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
+    - name: Query Insights for CVE details
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_id }}"
         method: GET
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
-          Accept: "application/json"
         status_code: 200
       register: cve_response
 
