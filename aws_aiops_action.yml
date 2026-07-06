@@ -109,7 +109,7 @@
         body: |
           { 
           "model": "{{ ai_model }}",
-          "prompt": "Give me an example of a basic ansible playbook",
+          "prompt": "Give me an example of a basic ansible playbook to mitigate this CVE: {{ cve_response.json.data }}",
           "max_tokens": {{ ai_max_tokens }},
           "temperature": 0
           }
