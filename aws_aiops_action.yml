@@ -68,6 +68,38 @@
     #   "org_id": "13959588"
     # }
 
+  ######
+  # GET CVE description
+  ######
+
+    - name: Authenticate using Service Account Client ID and Secret
+      uri:
+        url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+        method: POST
+        body_format: x-www-form-urlencoded
+        body:
+          grant_type: client_credentials
+          client_id: "{{ lightspeed_client_id }}"
+          client_secret: "{{ lightspeed_client_secret }}"
+        status_code: 200
+      register: sso_response
+      no_log: true # Protects the resulting access token from appearing in logs
+
+    - name: Fetch CVE data from Red Hat Insights Vulnerability API
+      uri:
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ target_cve }}"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+          Accept: "application/json"
+        status_code: 200
+      register: cve_response
+
+
+  ######
+  # AI Prompt
+  ######
+
     - name: Prompt to Openshift AI
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
