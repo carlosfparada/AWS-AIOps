@@ -83,7 +83,7 @@
           client_secret: "{{ lightspeed_client_secret }}"
         status_code: 200
       register: sso_response
-      no_log: true # Protects the resulting access token from appearing in logs
+      no_log: false # Protects the resulting access token from appearing in logs
 
     - name: Fetch CVE data from Red Hat Insights Vulnerability API
       uri:
