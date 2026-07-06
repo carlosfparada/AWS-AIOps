@@ -143,7 +143,7 @@
 
     - name: Set Generated Ansible Playbook
       ansible.builtin.set_fact:
-        generated_playbook: ai_response.json.choices[0].text
+        generated_playbook: "{{ ai_response.json.choices[0].text }}"
 
     - name: Debug Clean Playbook
       debug:
