@@ -175,6 +175,7 @@
             inventory: "AWS Inventory"
             playbook: "playbook_fix_{{ payload.events[0].payload.reported_cve }}.yml"
             verbosity: 0
+            #job_type: "check"
             job_type: "run"
             credentials:
               - "AWS Credential"
