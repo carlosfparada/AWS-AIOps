@@ -128,12 +128,16 @@
 
     - name: Extract clean Ansible Playbook
       ansible.builtin.set_fact:
-        clean_playbook: >-
-          {{
-            (ai_response.json.choices[0].text | 
-            regex_search('```yaml\n([\s\S]*?)\n```', '\1'))[0]
-          }}
-
+        # clean_playbook: >-
+        #   {{
+        #     (ai_response.json.choices[0].text | 
+        #     regex_search('```yaml\n([\s\S]*?)\n```', '\1'))[0]
+        #   }}
+        generated_playbook: >-
+          {{ ai_response.json.choices[0].text
+             | regex_search('```yaml\n(.*?)```', '\1', multiline=True, ignorecase=True)
+             | first }}
+             
     - name: Debug Clean Playbook
       debug:
         var: clean_playbook
