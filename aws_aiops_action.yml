@@ -152,7 +152,7 @@
     ######
     # Create Job Template and Project
     ######
-    - name: Create Job Template
+    - name: Create Project and Job Template
       vars:
         aap_hostname: "https://{{ aap_fqdn }}"
         aap_username: admin
@@ -181,11 +181,9 @@
               - "AWS AIOps Ansible Credential"
             execution_environment: "{{ ee_name }}"
             survey_enabled: false
-    - name: Create Project and Job Template
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.dispatch
-      vars:
         dispatch_include_wildcard_vars: true
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.dispatch        
       # ansible.builtin.include_role:
       #   name: "{{ item }}"
       # loop:  
