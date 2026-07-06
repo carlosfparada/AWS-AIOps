@@ -160,7 +160,7 @@
         aap_validate_certs: false
         controller_projects:
           - name: "AWS AIOps fix Project"
-            description: "AWS AIOps Project"
+            description: "AWS AIOps fix Project"
             organization: "Default"
             scm_type: "git"
             scm_url: "{{ github_url }}"
@@ -181,9 +181,14 @@
               - "AWS AIOps Ansible Credential"
             execution_environment: "{{ ee_name }}"
             survey_enabled: false
+    - name: Create Project and Job Template
       ansible.builtin.include_role:
-        name: "{{ item }}"
-      loop:  
-        - infra.aap_configuration.controller_projects
-        - infra.aap_configuration.controller_project_update
-        - infra.aap_configuration.controller_job_templates
+        name: infra.aap_configuration.dispatch
+      vars:
+        dispatch_include_wildcard_vars: true
+      # ansible.builtin.include_role:
+      #   name: "{{ item }}"
+      # loop:  
+      #   - infra.aap_configuration.controller_projects
+      #   - infra.aap_configuration.controller_project_update
+      #   - infra.aap_configuration.controller_job_templates
