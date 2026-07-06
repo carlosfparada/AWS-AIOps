@@ -84,7 +84,7 @@
         status_code: 200
       register: sso_response
 
-    - name: Query Insights for CVE details
+    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }} details
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
         method: GET
@@ -93,6 +93,10 @@
         status_code: 200
       register: cve_response
 
+
+    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Details
+      debug:
+        var: cve_response.json.data
 
   ######
   # AI Prompt
