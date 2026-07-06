@@ -119,7 +119,7 @@
         prompt: >
                 Write an ansible playbook to mitigate the following CVE:
                 '{{ cve_description }}'
-                Return for me only the playbook code, remove all other text like ```yaml.
+                Return for me only the playbook code, remove all other text.
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
@@ -143,7 +143,11 @@
 
     - name: Set Generated Ansible Playbook
       ansible.builtin.set_fact:
-        generated_playbook: "{{ ai_response.json.choices[0].text }}"
+        generated_playbook: >-
+          {{ ai_response.json.choices[0].text
+             .split('```yaml')[1]
+             .split('```')[0]
+             | trim }}
 
     - name: Debug Clean Playbook
       debug:
