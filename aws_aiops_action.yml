@@ -76,7 +76,7 @@
       uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
         method: POST
-        body_format: x-www-form-urlencoded
+        body_format: "x-www-form-urlencoded"
         body:
           grant_type: client_credentials
           client_id: "{{ lightspeed_client_id }}"
