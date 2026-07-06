@@ -158,6 +158,15 @@
         aap_username: admin
         aap_password: "{{ admin_password }}"
         aap_validate_certs: false
+        controller_projects:
+          - name: "AWS AIOps fix Project"
+            description: "AWS AIOps Project"
+            organization: "Default"
+            scm_type: "git"
+            scm_url: "{{ github_url }}"
+            scm_update_on_launch: "True"
+            execution_environment: "{{ ee_name }}"
+            wait: true            
         controller_templates:
           - name: "AWS AIOps: X. Fix CVE {{ playload.events[0].reported_cve }}"
             description: ""
@@ -172,15 +181,6 @@
               - "AWS AIOps Ansible Credential"
             execution_environment: "{{ ee_name }}"
             survey_enabled: false
-        controller_projects:
-          - name: "AWS AIOps fix Project"
-            description: "AWS AIOps Project"
-            organization: "Default"
-            scm_type: "git"
-            scm_url: "{{ project_fix_url }}"
-            scm_update_on_launch: "True"
-            execution_environment: "{{ ee_name }}"
-            wait: true            
       ansible.builtin.include_role:
         name: "{{ item }}"
       loop:  
