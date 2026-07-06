@@ -87,7 +87,7 @@
 
     - name: Fetch CVE data from Red Hat Insights Vulnerability API
       uri:
-        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ target_cve }}"
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
         method: GET
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
