@@ -182,11 +182,11 @@
             execution_environment: "{{ ee_name }}"
             survey_enabled: false
         dispatch_include_wildcard_vars: true
-      # ansible.builtin.include_role:
-      #   name: infra.aap_configuration.dispatch        
       ansible.builtin.include_role:
-        name: "{{ item }}"
-      loop:  
-        - infra.aap_configuration.controller_projects
-        - infra.aap_configuration.controller_project_update
-        - infra.aap_configuration.controller_job_templates
+        name: infra.aap_configuration.dispatch        
+      # ansible.builtin.include_role:
+      #   name: "{{ item }}"
+      # loop:  
+      #   - infra.aap_configuration.controller_projects
+      #   - infra.aap_configuration.controller_project_update
+      #   - infra.aap_configuration.controller_job_templates
