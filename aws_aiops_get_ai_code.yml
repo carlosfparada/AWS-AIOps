@@ -94,7 +94,7 @@
     - name: Copy playbook content to the GIT folder
       ansible.builtin.copy:
         content: "{{ generated_playbook }}"
-        dest: "{{ repository['path'] }}/playbook_fix_{{ cve_name }}.yml"
+        dest: "{{ repository['path'] }}/playbook_mitigation.yml"
         force: true
         mode: '0644'
 
