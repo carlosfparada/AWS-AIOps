@@ -61,11 +61,12 @@
         status_code: 200
       register: cve_response
 
+    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Description
+      debug:
+        msg: "CVE Name: {{ cve_response.json.data.attributes.description }}"
+
     - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.set_stats:
         data:
           cve_description: "{{ cve_response.json.data.attributes.description }}"
 
-    - name: Debug CVE {{ cve_description }} Description
-      debug:
-        msg: "CVE Name: {{ cve_description }}"
