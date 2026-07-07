@@ -15,14 +15,6 @@
   gather_facts: no
   vars_files: vars/main.yml
   tasks:
-
-    - name: Set provider
-      set_fact: 
-        panos_provider: 
-          ip_address: "{{ groups['rhel'][0] }}"
-          username: "{{ ansible_user }}"
-          password: "{{ ansible_ssh_pass }}"
-
     - name: Debug Hostvars
       debug:
         var: hostvars['localhost']
