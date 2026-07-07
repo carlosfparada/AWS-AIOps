@@ -33,12 +33,13 @@
   ######
 
     - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
-      set_fact:
-        cve_name: "{{ payload.events[0].payload.reported_cve }}"
+      ansible_builtin.set_stats:
+        data:
+          cve_name: "{{ payload.events[0].payload.reported_cve }}"
 
-    - name: Debug CVE {{ cve_name }} Name
+    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Name
       debug:
-        msg: "CVE Name: {{ cve_name }}"
+        msg: "CVE Name: {{ payload.events[0].payload.reported_cve }}"
 
     - name: Get access token using Service Account Client ID and Secret
       ansible.builtin.uri:
@@ -63,7 +64,7 @@
 
     - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Description
       debug:
-        msg: "CVE Name: {{ cve_response.json.data.attributes.description }}"
+        msg: "CVE Description: {{ cve_response.json.data.attributes.description }}"
 
     - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.set_stats:
