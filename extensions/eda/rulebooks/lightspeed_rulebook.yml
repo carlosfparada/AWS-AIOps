@@ -26,11 +26,16 @@
       actions:
         - print_event:
             pretty: true
-        - run_job_template:
+        - run_workflow_template:
             organization: "Default"
-            name: "AWS AIOps: X. Action"
+            name: "AWS AIOps: Mitigation Workflow"
             labels:
-              - EDA Lightspeed vulnerability
+              - EDA Lightspeed Vulnerability
+        # - run_job_template:
+        #     organization: "Default"
+        #     name: "AWS AIOps: X. Action"
+        #     labels:
+        #       - EDA Lightspeed Vulnerability
 
     - name: Match Advisor Recommendation Event
       condition:
