@@ -98,6 +98,7 @@
       ansible.builtin.set_fact:
         generated_playbook: >-
           {{ ai_response.json.choices[0].message.reasoning_content |
+          wordwrap(60) |
           comment('plain', prefix='####### REASONING #######', postfix='#######') }}
           
           {{ ai_response.json.choices[0].message.content
