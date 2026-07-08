@@ -98,7 +98,7 @@
       ansible.builtin.set_fact:
         generated_playbook: >-
           {{ ai_response.json.choices[0].message.reasoning_content |
-          comment('plain', prefix='#######\n#', postfix='#\n#######\n') }}" }}
+          comment('plain', prefix='####### REASONING #######\n#', postfix='#\n#######\n') }}" }}
           + 
           {{ ai_response.json.choices[0].message.content
              .split('```yaml')[1]
