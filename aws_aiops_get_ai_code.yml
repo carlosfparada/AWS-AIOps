@@ -101,9 +101,7 @@
           comment('plain', prefix="####### REASONING #######\n", postfix="#\n#######\n\n\n") }}
           + 
           {{ ai_response.json.choices[0].message.content
-             .split('```yaml')[1]
-             .split('```')[0]
-             | trim }}
+             .split('```yaml')[1].split('```')[0] | trim }}
 
     - name: Debug Clean Playbook
       debug:
