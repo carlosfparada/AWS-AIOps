@@ -1,15 +1,6 @@
 ---
 
-# - name: Get nodes from Inventory and add to Groups
-#   hosts: localhost
-#   connection: local
-#   gather_facts: no
-#   tasks:
-#   - include_role: 
-#       name: utils_hosts_aws
-
-
-- name: RHELs with Lightspeed Action
+- name: Get CVE Description
   hosts: localhost
   connection: local
   gather_facts: no
@@ -27,10 +18,6 @@
       debug:
         var: payload
 
-
-  ######
-  # GET CVE description
-  ######
 
     - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
       ansible.builtin.set_stats:
