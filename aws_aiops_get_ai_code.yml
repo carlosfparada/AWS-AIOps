@@ -45,9 +45,8 @@
     - name: Prompt Openshift AI
       vars:
         prompt: >
-                Write an ansible playbook to mitigate the following CVE:
+                Write an ansible playbook to mitigate the following CVE on RHEL systems:
                 '{{ cve_description }}'
-                Return for me only the playbook code, remove all other text.
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
