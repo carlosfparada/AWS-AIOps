@@ -69,7 +69,7 @@
 
     - name: Prompt Openshift AI
       vars:
-        messages: >
+        prompt: >
                 Write an ansible playbook to mitigate the following CVE:
                 '{{ cve_description }}'
                 Return for me only the playbook code, remove all other text.
