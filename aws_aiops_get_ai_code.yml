@@ -97,7 +97,7 @@
     - name: Set Generated Ansible Playbook
       ansible.builtin.set_fact:
         generated_playbook: >-
-          {{ ai_response.json.choices[0].text
+          {{ ai_response.json.choices[0].message.content
              .split('```yaml')[1]
              .split('```')[0]
              | trim }}
