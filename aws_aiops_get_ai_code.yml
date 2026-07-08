@@ -32,9 +32,44 @@
   # AI Prompt
   ######
 
+    # - name: Prompt Openshift AI
+    #   vars:
+    #     prompt: >
+    #             Write an ansible playbook to mitigate the following CVE:
+    #             '{{ cve_description }}'
+    #             Return for me only the playbook code, remove all other text.
+    #   ansible.builtin.uri:
+    #     url: "{{ ai_endpoint }}"
+    #     method: POST
+    #     body:
+    #       model: "{{ ai_model }}"
+    #       prompt: "{{ prompt }}"
+    #       max_tokens: "{{ ai_max_tokens }}"
+    #       temperature: 0
+    #     status_code: 200
+    #     body_format: json
+    #     headers:
+    #       Content-Type: "application/json"
+    #       Authorization: "Bearer {{ ai_token }}"
+    #     validate_certs: yes
+    #   delegate_to: localhost
+    #   register: ai_response
+
+    # - name: Debug Prompt to Openshift AI
+    #   debug:
+    #     var: ai_response
+
+    # - name: Set Generated Ansible Playbook
+    #   ansible.builtin.set_fact:
+    #     generated_playbook: >-
+    #       {{ ai_response.json.choices[0].text
+    #          .split('```yaml')[1]
+    #          .split('```')[0]
+    #          | trim }}
+
     - name: Prompt Openshift AI
       vars:
-        prompt: >
+        messages: >
                 Write an ansible playbook to mitigate the following CVE:
                 '{{ cve_description }}'
                 Return for me only the playbook code, remove all other text.
@@ -43,9 +78,9 @@
         method: POST
         body:
           model: "{{ ai_model }}"
-          prompt: "{{ prompt }}"
+          messages: 
+            content: "{{ prompt }}"
           max_tokens: "{{ ai_max_tokens }}"
-          temperature: 0
         status_code: 200
         body_format: json
         headers:
