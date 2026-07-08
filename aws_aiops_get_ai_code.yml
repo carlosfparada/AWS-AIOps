@@ -80,7 +80,7 @@
           model: "{{ ai_model }}"
           messages: 
             content: "{{ prompt }}"
-          max_tokens: "{{ ai_max_tokens }}"
+          #max_tokens: "{{ ai_max_tokens }}"
         status_code: 200
         body_format: json
         headers:
