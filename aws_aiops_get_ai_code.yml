@@ -63,6 +63,9 @@
         validate_certs: yes
       delegate_to: localhost
       register: ai_response
+      retries: 10
+      delay: 5
+      until: ai_response.status_code == 200
 
     - name: Debug Prompt to Openshift AI
       debug:
