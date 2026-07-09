@@ -45,7 +45,7 @@
     - name: Prompt Openshift AI
       vars:
         prompt: >
-                Write an ansible playbook to mitigate the following CVE on rhel hosts:
+                Write an ansible playbook with target hosts rhel to mitigate the following CVE:
                 '{{ cve_description }}'
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
