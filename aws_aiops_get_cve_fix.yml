@@ -69,17 +69,6 @@
                 systems: "{{ affected_systems }}"
       register: download_remediation
 
-
-    - name: Download the Remediation Playbook (.yml)
-      ansible.builtin.uri:
-        url: "https://console.redhat.com/api/remediations/v1/remediations/download?vulnerabilities={{ cve_name }}&systems={{ affected_systems | join(',') }}"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ sso_response.json.access_token }}"
-        status_code: 200
-      register: download_remediation
-
-
     - name: Debug Clean Playbook
       ansible.builtin.debug:
         var: generated_playbook
