@@ -62,10 +62,11 @@
         body_format: json
         body:
           name: "Fix {{ cve_name }}"
+          auto_reboot: false
           add:
             issues:
               - id: "vulnerabilities:{{ cve_name }}"
-                systems: "{{ affected_systems }}"
+                systems: "{{ affected_systems | to_json }}"
       register: download_remediation
 
     - name: Debug Clean Playbook
