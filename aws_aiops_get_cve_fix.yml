@@ -61,10 +61,10 @@
         status_code: 200
         body_format: json
         body:
+          name: "Temp_Automation_Fix_{{ cve_name }}"
           issues:
             - id: "vulnerabilities: {{ cve_name }}"
               systems: "{{ affected_systems }}"
-        return_content: true        
       register: download_remediation
 
     - name: Debug Clean Playbook
