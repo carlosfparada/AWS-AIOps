@@ -72,7 +72,7 @@
 
     - name: Download the Remediation Playbook (.yml)
       ansible.builtin.uri:
-        url: "https://console.redhat.com/api/remediations/v1/remediations/download?vulnerabilities={{ cve_name }}&systems={{ affected_systems | map(attribute='id') | join(',') }}"
+        url: "https://console.redhat.com/api/remediations/v1/remediations/download?vulnerabilities={{ cve_name }}&systems={{ affected_systems | join(',') }}"
         method: GET
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
