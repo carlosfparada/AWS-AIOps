@@ -20,8 +20,7 @@
 
     - name: Set fact {{ payload.events[0].payload.reported_cve }} Name
       ansible.builtin.set_fact:
-        data:
-          cve_name: "{{ payload.events[0].payload.reported_cve }}"
+        cve_name: "{{ payload.events[0].payload.reported_cve }}"
 
     - name: Set stats {{ cve_name }} Name
       ansible.builtin.set_stats:
@@ -85,8 +84,7 @@
 
     - name: Set fact {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.set_fact:
-        data:
-          cve_description: "{{ cve_response.json.data.attributes.description }}"
+        cve_description: "{{ cve_response.json.data.attributes.description }}"
 
     - name: Set stats {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.set_stats:
