@@ -45,8 +45,9 @@
     - name: Prompt Openshift AI
       vars:
         prompt: >
-                Write a simple ansible playbook targeting rhel hosts to mitigate the {{ cve_name }},
-                which has the following description: '{{ cve_description }}'
+                Write a minimalist ansible playbook to run on rhel group of hosts
+                to mitigate the {{ cve_name }},
+                with the following description: '{{ cve_description }}'.
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
