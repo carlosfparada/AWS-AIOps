@@ -64,7 +64,7 @@
           name: "Fix {{ cve_name }}"
           add:
             issues:
-              - id: "vulnerabilities: {{ cve_name }}"
+              - id: "vulnerabilities:{{ cve_name }}"
                 systems: "{{ affected_systems }}"
       register: download_remediation
 
