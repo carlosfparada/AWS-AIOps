@@ -61,3 +61,30 @@
     #     fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
     #     success_msg: "There is a Fix available on Lightspeed, moving to Patching"
 
+    - name: Generate Remediation Playbook for the CVE
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/remediations/v1/remediations"
+        method: POST
+        force_basic_auth: yes
+        url_username: "{{ insights_username }}"
+        url_password: "{{ insights_password }}"
+        body_format: json
+        body:
+          name: "Remediation for {{ target_cve }}"
+          add:
+            issues:
+              - id: "vulnerabilities:{{ target_cve }}"
+            # Supply the Insights System IDs (inventory IDs) you want to patch
+            systems: "{{ affected_system_uuid_list }}" 
+        status_code: 201
+      register: remediation_job
+      
+    - name: Download the generated Remediation Playbook (.yml)
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/remediations/v1/remediations/{{ remediation_job.json.id }}/playbook"
+        method: GET
+        force_basic_auth: yes
+        url_username: "{{ insights_username }}"
+        url_password: "{{ insights_password }}"
+        dest: "/tmp/insights_patch_remediation.yml"
+        status_code: 200
