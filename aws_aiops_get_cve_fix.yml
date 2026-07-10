@@ -54,14 +54,14 @@
 
     - name: Download the Remediation Playbook (.yml)
       ansible.builtin.uri:
-        url: https://console.redhat.com/remediations/v1/remediations/download
+        url: https://console.redhat.com/remediations/v1/remediations
         method: POST
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
         body_format: json
         body:
-          name: "Temp_Automation_Fix_{{ cve_name }}"
+          name: "Fix {{ cve_name }}"
           add:
             issues:
               - id: "vulnerabilities: {{ cve_name }}"
