@@ -9,7 +9,7 @@
       name: utils_hosts_aws
 
 
-- name: Generate/Emulate new CVE event
+- name: Generate/Emulate new CVE event (Mitigation)
   hosts: aap
   gather_facts: no
   vars_files: vars/main.yml

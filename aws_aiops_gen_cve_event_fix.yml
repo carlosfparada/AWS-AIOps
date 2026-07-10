@@ -1,0 +1,64 @@
+---
+
+- name: Get nodes from Inventory and add to Groups
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - include_role: 
+      name: utils_hosts_aws
+
+
+- name: Generate/Emulate new CVE event (Fix)
+  hosts: aap
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+    - name: Set CVE
+      set_fact: 
+        cve_event_body: |
+            {
+              "bundle": "rhel",
+              "application": "vulnerability",
+              "version": "v1.1.0",
+              "event_type": "any-cve-known-exploit",
+              "timestamp": "2025-03-19T20:19:19.958529",
+              "context": {
+                "display_name": "randomserver",
+                "inventory_id": "704fe5b0-210d-47d5-9483-e8dab3348432",
+                "org_id": "13959588"
+              },
+              "events": [
+                {
+                  "metadata": {},
+                  "payload": {
+                    "reported_cve": "CVE-2025-24201",
+                    "cvss_score": 7.5,
+                    "impact_id": 5,
+                    "known_exploit": true,
+                    "has_rule": false,
+                    "publish_date": "2025-03-11T00:00:00+00:00"
+                  }
+                }
+              ],
+              "recipients": [
+                {
+                  "only_admins": false,
+                  "ignore_user_preferences": false
+                }
+              ],
+              "org_id": "13959588"
+            }
+
+    - name: Create a CVE Event
+      ansible.builtin.uri:
+        url: "http://{{ inventory_hostname }}:10000"
+        method: POST
+        body: "{{ cve_event_body }}"
+        status_code: 200
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+          Accept: "application/json; indent=4"
+        validate_certs: false
+      delegate_to: localhost
