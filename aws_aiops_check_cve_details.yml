@@ -52,15 +52,6 @@
       ansible.builtin.debug:
         var: cve_response    
 
-    - name: Check whether there is a Fix available on Lightspeed
-      ansible.builtin.assert:
-        that:
-          # - affected_systems > 0
-          - cve_response.json.data.attributes.rw_systems_with_fix is defined
-          - cve_response.json.data.attributes.rw_systems_with_fix > 0
-        fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
-        success_msg: "There is a Fix available on Lightspeed, moving to Patching"
-
     - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.debug:
         msg: "CVE Description: {{ cve_response.json.data.attributes.description }}"
@@ -70,3 +61,11 @@
         data:
           cve_description: "{{ cve_response.json.data.attributes.description }}"
 
+    - name: Check whether there is a Fix available on Lightspeed
+      ansible.builtin.assert:
+        that:
+          # - affected_systems > 0
+          - cve_response.json.data.attributes.rw_systems_with_fix is defined
+          - cve_response.json.data.attributes.rw_systems_with_fix > 0
+        fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
+        success_msg: "There is a Fix available on Lightspeed, moving to Patching"
