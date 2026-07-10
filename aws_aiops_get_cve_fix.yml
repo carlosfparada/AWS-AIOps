@@ -61,7 +61,7 @@
         status_code: 200
         body_format: json
         body:
-          name: "Fix {{ cve_name }}"
+          name: "Fix_{{ cve_name }}_{{ ansible_date_time.iso8601 }}"
           auto_reboot: false
           add:
             issues:
