@@ -1,6 +1,6 @@
 ---
 
-- name: Get CVE Description
+- name: Get CVE Details
   hosts: localhost
   connection: local
   gather_facts: no
