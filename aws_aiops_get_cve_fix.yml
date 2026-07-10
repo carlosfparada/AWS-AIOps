@@ -52,22 +52,22 @@
         msg: "No systems are reported as affected by {{ cve_name }}. Aborting..."
       when: dynamic_system_uuids | length == 0
 
-    # - name: Download the Remediation Playbook (.yml)
-    #   ansible.builtin.uri:
-    #     url: https://console.redhat.com/api/remediations/v1/remediations
-    #     method: POST
-    #     headers:
-    #       Authorization: "Bearer {{ sso_response.json.access_token }}"
-    #     status_code: 200
-    #     body_format: json
-    #     body:
-    #       name: "Fix {{ cve_name }}"
-    #       auto_reboot: false
-    #       add:
-    #         issues:
-    #           - id: "vulnerabilities:{{ cve_name }}"
-    #             systems: "{{ affected_systems | list }}"
-    #   register: download_remediation
+    - name: Download the Remediation Playbook (.yml)
+      ansible.builtin.uri:
+        url: https://console.redhat.com/api/remediations/v1/remediations
+        method: POST
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+        body_format: json
+        body:
+          name: "Fix {{ cve_name }}"
+          auto_reboot: false
+          add:
+            issues:
+              - id: "vulnerabilities:{{ cve_name }}"
+                systems: "{{ affected_systems | list }}"
+      register: download_remediation
 
 
     - name: Download the Remediation Playbook (.yml)
