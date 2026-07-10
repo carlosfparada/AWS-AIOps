@@ -28,6 +28,13 @@
       ansible.builtin.debug:
         msg: "CVE Name: {{ payload.events[0].payload.reported_cve }}"
 
+    # - name: Check whether there is a Fix available on Lightspeed
+    #   ansible.builtin.assert:
+    #     that:
+    #       - affected_systems > 0
+    #     fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
+    #     success_msg: "There is a Fix available on Lightspeed, moving to Patching"
+
     - name: Get access token using Service Account Client ID and Secret
       ansible.builtin.uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
@@ -47,19 +54,7 @@
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
-        dest: "/tmp/lightspeed_fix.yml"
       register: cve_response
-
-    - name: Debug CVE Response
-      ansible.builtin.debug:
-        var: cve_response    
-
-    # - name: Check whether there is a Fix available on Lightspeed
-    #   ansible.builtin.assert:
-    #     that:
-    #       - affected_systems > 0
-    #     fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
-    #     success_msg: "There is a Fix available on Lightspeed, moving to Patching"
 
     - name: Generate Remediation Playbook for the CVE
       ansible.builtin.uri:
