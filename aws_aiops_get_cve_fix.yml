@@ -18,22 +18,9 @@
       ansible.builtin.debug:
         var: payload
 
-
-    - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
-      ansible.builtin.set_stats:
-        data:
-          cve_name: "{{ payload.events[0].payload.reported_cve }}"
-
-    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Name
+    - name: Debug {{ payload.events[0].payload.reported_cve }} Name
       ansible.builtin.debug:
-        msg: "CVE Name: {{ payload.events[0].payload.reported_cve }}"
-
-    # - name: Check whether there is a Fix available on Lightspeed
-    #   ansible.builtin.assert:
-    #     that:
-    #       - affected_systems > 0
-    #     fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
-    #     success_msg: "There is a Fix available on Lightspeed, moving to Patching"
+        msg: "CVE Name: {{ cve_name }}"
 
     - name: Get access token using Service Account Client ID and Secret
       ansible.builtin.uri:
@@ -47,39 +34,43 @@
         status_code: 200
       register: sso_response
 
-    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }}
+    - name: Query Lightspeed for the affected systems
       ansible.builtin.uri:
-        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
         method: GET
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
-      register: cve_response
+      register: systems_response
 
-    - name: Generate Remediation Playbook for the CVE
-      ansible.builtin.uri:
-        url: "https://console.redhat.com/api/remediations/v1/remediations"
-        method: POST
-        force_basic_auth: yes
-        url_username: "{{ insights_username }}"
-        url_password: "{{ insights_password }}"
-        body_format: json
-        body:
-          name: "Remediation for {{ target_cve }}"
-          add:
-            issues:
-              - id: "vulnerabilities:{{ target_cve }}"
-            # Supply the Insights System IDs (inventory IDs) you want to patch
-            systems: "{{ affected_system_uuid_list }}" 
-        status_code: 201
-      register: remediation_job
-      
-    - name: Download the generated Remediation Playbook (.yml)
+    - name: Extract UUIDs into a flat list
+      ansible.builtin.set_fact:
+        dynamic_system_uuids: "{{ systems_response.json.data | map(attribute='id') | list }}"
+
+    - name: Check if any system is affected
+      ansible.builtin.fail:
+        msg: "No systems are reported as affected by {{ cve_name }}."
+      when: dynamic_system_uuids | length == 0
+
+
+
+
+
+
+    - name: Download the Remediation Playbook (.yml)
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/remediations/v1/remediations/{{ remediation_job.json.id }}/playbook"
-        method: GET
-        force_basic_auth: yes
-        url_username: "{{ insights_username }}"
-        url_password: "{{ insights_password }}"
-        dest: "/tmp/insights_patch_remediation.yml"
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        #dest: "/tmp/insights_patch_remediation.yml"
         status_code: 200
+      register: 
+
+    - name: Debug Clean Playbook
+      ansible.builtin.debug:
+        var: generated_playbook
+
+    - name: Set stats generated Playbook
+      ansible.builtin.set_stats:
+        data:
+          generated_playbook: "{{ generated_playbook }}"

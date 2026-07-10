@@ -18,14 +18,19 @@
       ansible.builtin.debug:
         var: payload
 
-    - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
-      ansible.builtin.set_stats:
+    - name: Set fact {{ payload.events[0].payload.reported_cve }} Name
+      ansible.builtin.set_fact:
         data:
           cve_name: "{{ payload.events[0].payload.reported_cve }}"
 
-    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Name
+    - name: Set stats {{ cve_name }} Name
+      ansible.builtin.set_stats:
+        data:
+          cve_name: "{{ cve_name }}"
+
+    - name: Debug {{ cve_name }} Name
       ansible.builtin.debug:
-        msg: "CVE Name: {{ payload.events[0].payload.reported_cve }}"
+        msg: "CVE Name: {{ cve_name }}"
 
     - name: Get access token using Service Account Client ID and Secret
       ansible.builtin.uri:
@@ -39,7 +44,29 @@
         status_code: 200
       register: sso_response
 
-    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }}
+
+
+    - name: Query Lightspeed for the affected systems
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+      register: systems_response
+
+    - name: Extract UUIDs into a flat list
+      ansible.builtin.set_fact:
+        dynamic_system_uuids: "{{ systems_response.json.data | map(attribute='id') | list }}"
+
+    - name: Check if any system is affected
+      ansible.builtin.assert:
+        that:
+          - dynamic_system_uuids | length == 0
+        fail_msg: "There ARE NO Systems affected by {{ cve_name }}"
+        success_msg: "There ARE Systems affected by {{ cve_name }}: {{ dynamic_system_uuids }}"
+
+    - name: Query Lightspeed for {{ payload.events[0].payload.reported_cve }}
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
         method: GET
@@ -52,19 +79,24 @@
       ansible.builtin.debug:
         var: cve_response    
 
-    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Description
+    - name: Debug {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.debug:
         msg: "CVE Description: {{ cve_response.json.data.attributes.description }}"
 
-    - name: Set stats CVE {{ payload.events[0].payload.reported_cve }} Description
+    - name: Set fact {{ payload.events[0].payload.reported_cve }} Description
+      ansible.builtin.set_fact:
+        data:
+          cve_description: "{{ cve_response.json.data.attributes.description }}"
+
+    - name: Set stats {{ payload.events[0].payload.reported_cve }} Description
       ansible.builtin.set_stats:
         data:
           cve_description: "{{ cve_response.json.data.attributes.description }}"
 
-    - name: Check whether there is a Fix available on Lightspeed
+    - name: Check whether there are Fixes available on Lightspeed for 
       ansible.builtin.assert:
         that:
-          - cve_response.json.data.attributes.rw_systems_with_fix is defined
-          - cve_response.json.data.attributes.rw_systems_with_fix > 0
-        fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
-        success_msg: "There is a Fix available on Lightspeed, moving to Patching"
+            - cve_response.json.data.attributes.advisories_list | length > 0
+            # - cve_response.json.data.attributes.advisories_list | length == 0
+        fail_msg: "There are no Advisories (Fixes) available on Lightspeed, so using AI-based Mitigation"
+        success_msg: "There are Advisories (Fixes) available on Lightspeed, applying the Patching"
