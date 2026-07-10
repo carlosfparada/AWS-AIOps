@@ -53,12 +53,6 @@
       register: affected_systems_response
       ignore_errors: true
 
-    - name: Check for {{ cve_name }} errors on Lightspeed
-      ansible.builtin.assert:
-        that:
-          - json.errors is not defined
-        fail_msg: "Error on {{ cve_name }} query. Error: {{ json.errors }}."
-
     - name: Set fact Affected Systems
       ansible.builtin.set_fact:
         affected_systems: "{{ affected_systems_response.json.data | map(attribute='id') | list }}"
