@@ -51,6 +51,7 @@
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
       register: affected_systems_response
+      ignore_errors: true
 
     - name: Check for {{ cve_name }} errors on Lightspeed
       ansible.builtin.assert:
