@@ -103,5 +103,5 @@
         that:
             - cve_response.json.data.attributes.advisories_list | length > 0
             # - cve_response.json.data.attributes.advisories_list | length == 0
-        fail_msg: "There are no Advisories (Fixes) available on Lightspeed, so using AI-based Mitigation"
-        success_msg: "There are Advisories (Fixes) available on Lightspeed, applying the Patching"
+        fail_msg: "There are no Advisories (Fixes) available on Lightspeed. Going to use AI-based Mitigation"
+        success_msg: "There are Advisories (Fixes) available on Lightspeed. Goint to apply Patching"
