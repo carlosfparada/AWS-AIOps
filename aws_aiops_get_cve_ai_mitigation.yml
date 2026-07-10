@@ -88,7 +88,7 @@
           {{ ai_response.json.choices[0].message.content
              .split('```yaml')[1].split('```')[0] | trim }}
 
-    - name: Debug Clean Playbook
+    - name: Debug generated Playbook
       ansible.builtin.debug:
         var: generated_playbook
 

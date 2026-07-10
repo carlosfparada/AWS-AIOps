@@ -67,13 +67,13 @@
             issues:
               - id: "vulnerabilities:{{ cve_name }}"
                 systems: "{{ affected_systems }}"
-      register: download_remediation
+      register: downloaded_playbook
 
-    - name: Debug Clean Playbook
+    - name: Debug dowloaded Playbook
       ansible.builtin.debug:
         var: generated_playbook
 
     - name: Set stats generated Playbook
       ansible.builtin.set_stats:
         data:
-          generated_playbook: "{{ generated_playbook }}"
+          downloaded_playbook: "{{ downloaded_playbook }}"
