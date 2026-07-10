@@ -40,7 +40,7 @@
         status_code: 200
       register: sso_response
 
-    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }} description
+    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }}
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
         method: GET
@@ -48,6 +48,10 @@
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
       register: cve_response
+
+    - name: Debug CVE Response
+      debug:
+        var: cve_response    
 
     - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Description
       debug:
