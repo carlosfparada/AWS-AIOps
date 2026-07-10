@@ -62,9 +62,10 @@
         body_format: json
         body:
           name: "Temp_Automation_Fix_{{ cve_name }}"
-          issues:
-            - id: "vulnerabilities: {{ cve_name }}"
-              systems: "{{ affected_systems }}"
+          add:
+            issues:
+              - id: "vulnerabilities: {{ cve_name }}"
+                systems: "{{ affected_systems }}"
       register: download_remediation
 
     - name: Debug Clean Playbook
