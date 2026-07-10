@@ -43,8 +43,6 @@
         status_code: 200
       register: sso_response
 
-
-
     - name: Query Lightspeed for the affected systems
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
@@ -52,18 +50,27 @@
         headers:
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
-      register: systems_response
+      register: affected_systems_response
 
-    - name: Extract UUIDs into a flat list
+    - name: Set fact Affected Systems
       ansible.builtin.set_fact:
-        dynamic_system_uuids: "{{ systems_response.json.data | map(attribute='id') | list }}"
+        affected_systems: "{{ affected_systems_response.json.data | map(attribute='id') | list }}"
 
-    - name: Check if any system is affected
+    - name: Set stats Affected Systems
+      ansible.builtin.set_stats:
+        data:
+          affected_systems: "{{ affected_systems }}"
+
+    - name: Debug Affected Systems
+      ansible.builtin.debug:
+        msg: "Affected Systems: {{ affected_systems }}"
+
+    - name: Check whether any System is Affected
       ansible.builtin.assert:
         that:
           - dynamic_system_uuids | length > 0
         fail_msg: "There ARE NO Systems affected by {{ cve_name }}"
-        success_msg: "There ARE Systems affected by {{ cve_name }}: {{ dynamic_system_uuids }}"
+        success_msg: "There ARE Systems affected by {{ cve_name }}: {{ affected_systems }}"
 
     - name: Query Lightspeed for {{ payload.events[0].payload.reported_cve }}
       ansible.builtin.uri:
