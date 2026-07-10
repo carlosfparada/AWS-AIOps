@@ -66,7 +66,7 @@
           add:
             issues:
               - id: "vulnerabilities:{{ cve_name }}"
-                systems: "{{ affected_systems }}"
+                systems: "{{ affected_systems | list }}"
       register: download_remediation
 
     - name: Debug Clean Playbook
