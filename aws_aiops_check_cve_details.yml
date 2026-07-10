@@ -18,7 +18,6 @@
       ansible.builtin.debug:
         var: payload
 
-
     - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
       ansible.builtin.set_stats:
         data:
