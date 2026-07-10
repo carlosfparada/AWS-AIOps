@@ -1,0 +1,63 @@
+---
+
+- name: Get CVE Fix
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+    - name: Debug Hostvars
+      ansible.builtin.debug:
+        var: hostvars['localhost']
+
+    - name: AIOps Lightspeed action payload
+      ansible.builtin.set_fact:
+        payload: "{{ ansible_eda.event.payload }}"
+
+    - name: Debug Payload
+      ansible.builtin.debug:
+        var: payload
+
+
+    - name: Set fact CVE {{ payload.events[0].payload.reported_cve }} Name
+      ansible.builtin.set_stats:
+        data:
+          cve_name: "{{ payload.events[0].payload.reported_cve }}"
+
+    - name: Debug CVE {{ payload.events[0].payload.reported_cve }} Name
+      ansible.builtin.debug:
+        msg: "CVE Name: {{ payload.events[0].payload.reported_cve }}"
+
+    - name: Get access token using Service Account Client ID and Secret
+      ansible.builtin.uri:
+        url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+        method: POST
+        body_format: "form-urlencoded"
+        body:
+          grant_type: client_credentials
+          client_id: "{{ lightspeed_client_id }}"
+          client_secret: "{{ lightspeed_client_secret }}"
+        status_code: 200
+      register: sso_response
+
+    - name: Query Lightspeed for CVE {{ payload.events[0].payload.reported_cve }}
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+        dest: "/tmp/lightspeed_fix.yml"
+      register: cve_response
+
+    - name: Debug CVE Response
+      ansible.builtin.debug:
+        var: cve_response    
+
+    # - name: Check whether there is a Fix available on Lightspeed
+    #   ansible.builtin.assert:
+    #     that:
+    #       - affected_systems > 0
+    #     fail_msg: "There is no Fix available on Lightspeed, moving to AI-based Mitigation"
+    #     success_msg: "There is a Fix available on Lightspeed, moving to Patching"
+
