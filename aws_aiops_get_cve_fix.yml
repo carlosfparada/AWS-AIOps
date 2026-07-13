@@ -5,6 +5,8 @@
   connection: local
   gather_facts: yes
   vars_files: vars/main.yml
+  vars:
+    affected_systems_display_name: []
   tasks:
     - name: Debug Hostvars
       ansible.builtin.debug:
@@ -103,12 +105,11 @@
     #     downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.fqdn | regex_escape, item.display_name) }}"
     #   loop: "{{ inventory_response.json.results | dict2items }}"
 
-
-    - name: Collect display_name of all affected systems
+    - name: Replace fqdn by display_name on affected systems to match ansible Inventory
       ansible.builtin.set_fact:
-        affected_systems: "{{ systems_response.json.data | map(attribute='display_name') | list }}"
-
-
+        #affected_systems_display_name: "{{ item.attributes.display_name }}"
+        downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.attribute.fqdn, item.attribute.dislay) }}"
+      loop: "{{ systems_response.json.data }}"
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
