@@ -90,10 +90,18 @@
         status_code: 200
       register: inventory_response
 
-    - name: Modify the string directly in memory using regex_replace
+    # - name: 2. Construct the Ansible Hostname -> System Name dictionary
+    #   ansible.builtin.set_fact:
+    #     # Items with no explicit display_name will gracefully fallback to their FQDN
+    #     host_map_dict: >-
+    #       {{ dict(inventory_response.json.results | 
+    #               map(attribute='fqdn') | 
+    #               zip(inventory_response.json.results | map(attribute='display_name'))) }}
+
+    - name: Replace hosts targets on playbook, from FQDN to the display_name
       ansible.builtin.set_fact:
-        downloaded_playbook: >-
-          {{ downloaded_playbook | regex_replace('hosts:\s*".*', 'hosts: "rhel') }}
+        downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.fqdn | regex_escape, item.display_name) }}"
+      loop: "{{ inventory_response.json.results | dict2items }}"
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
