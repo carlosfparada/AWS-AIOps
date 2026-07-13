@@ -81,14 +81,14 @@
       register: downloaded_playbook
 
 
-    - name: Fetch Host Inventory from Red Hat Lightspeed
-      ansible.builtin.uri:
-        url: https://console.redhat.com/api/inventory/v1/hosts
-        method: GET
-        headers:
-          Authorization: "Bearer {{ sso_response.json.access_token }}"
-        status_code: 200
-      register: inventory_response
+    # - name: Fetch Host Inventory from Red Hat Lightspeed
+    #   ansible.builtin.uri:
+    #     url: https://console.redhat.com/api/inventory/v1/hosts
+    #     method: GET
+    #     headers:
+    #       Authorization: "Bearer {{ sso_response.json.access_token }}"
+    #     status_code: 200
+    #   register: inventory_response
 
     # - name: 2. Construct the Ansible Hostname -> System Name dictionary
     #   ansible.builtin.set_fact:
@@ -98,10 +98,17 @@
     #               map(attribute='fqdn') | 
     #               zip(inventory_response.json.results | map(attribute='display_name'))) }}
 
-    - name: Replace hosts targets on playbook, from FQDN to the display_name
+    # - name: Replace hosts targets on playbook, from FQDN to the display_name
+    #   ansible.builtin.set_fact:
+    #     downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.fqdn | regex_escape, item.display_name) }}"
+    #   loop: "{{ inventory_response.json.results | dict2items }}"
+
+
+    - name: Collect display_name of all affected systems
       ansible.builtin.set_fact:
-        downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.fqdn | regex_escape, item.display_name) }}"
-      loop: "{{ inventory_response.json.results | dict2items }}"
+        affected_systems: "{{ systems_response.json.data | map(attribute='display_name') | list }}"
+
+
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
