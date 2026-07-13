@@ -89,7 +89,6 @@
         status_code: 200
       register: sso_response
       
-
     - name: Query Lightspeed for {{ payload.events[0].payload.reported_cve }}
       ansible.builtin.uri:
         url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ payload.events[0].payload.reported_cve }}"
