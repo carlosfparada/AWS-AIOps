@@ -23,7 +23,7 @@
 
     - name: Copy playbook content to the GIT folder (Fix)
       ansible.builtin.copy:
-        content: "{{ generated_playbook }}"
+        content: "{{ downloaded_playbook }}"
         dest: "{{ repository['path'] }}/playbook_fix.yml"
         force: true
         mode: '0644'
