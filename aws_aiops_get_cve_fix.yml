@@ -81,7 +81,7 @@
       register: downloaded_playbook_response
 
     - name: Set fact generated Playbook content
-      ansible.builtin.set_fect:
+      ansible.builtin.set_fact:
         downloaded_playbook: "{{ downloaded_playbook_response.content }}"
 
     - name: Fetch Host Inventory from Red Hat Lightspeed
