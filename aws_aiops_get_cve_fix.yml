@@ -109,7 +109,7 @@
       ansible.builtin.set_fact:
         #affected_systems_display_name: "{{ item.attributes.display_name }}"
         downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.attributes.fqdn, item.attributes.dislay) }}"
-      loop: "{{ inventory_response.json.data }}"
+      loop: "{{ inventory_response.json.results }}"
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
