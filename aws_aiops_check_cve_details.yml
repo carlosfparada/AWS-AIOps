@@ -66,6 +66,10 @@
       ansible.builtin.debug:
         msg: "Affected Systems: {{ affected_systems }}"
 
+    - name: Exit cleanly if this is not the staging path
+      ansible.builtin.meta: end_play
+      when: affected_systems | length == 0
+
     - name: Check whether any System is Affected
       ansible.builtin.assert:
         that:
