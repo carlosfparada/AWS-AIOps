@@ -88,6 +88,7 @@
           client_secret: "{{ lightspeed_client_secret }}"
         status_code: 200
       register: sso_response
+      
 
     - name: Query Lightspeed for {{ payload.events[0].payload.reported_cve }}
       ansible.builtin.uri:
