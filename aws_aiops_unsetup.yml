@@ -14,7 +14,8 @@
   become: true
   tasks:
     - debug:
-        var: hostvars[inventory_hostname].tags.Name
+        # var: hostvars[inventory_hostname].tags.Name
+        var: inventory_hostname
 
     - name: Unregister using Org ID and Activation Key
       community.general.redhat_subscription:

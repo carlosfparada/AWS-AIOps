@@ -95,8 +95,16 @@
 
     - name: Replace fqdn by display_name on affected systems to match ansible Inventory
       ansible.builtin.set_fact:
+        fqdn: "{{ downloaded_playbook | regex_replace((item.fqdn), (item.display_name), multiline=True) }}"
+      loop: "{{ inventory_response.json.results }}"
+
+
+    - name: Replace fqdn by display_name on affected systems to match ansible Inventory
+      ansible.builtin.set_fact:
         downloaded_playbook: "{{ downloaded_playbook | regex_replace((item.fqdn), (item.display_name), multiline=True) }}"
       loop: "{{ inventory_response.json.results }}"
+
+
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:

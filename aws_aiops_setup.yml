@@ -14,7 +14,8 @@
   become: true
   tasks:
     - debug:
-        var: hostvars[inventory_hostname].tags.Name
+        # var: hostvars[inventory_hostname].tags.Name
+        var: inventory_hostname
 
     - name: Register using Org ID and Activation Key
       community.general.redhat_subscription:
@@ -27,6 +28,7 @@
     - name: Register with Insights
       redhatinsights.insights.insights_register:
         state: present
-        display_name: "{{ hostvars[inventory_hostname].tags.Name }}"
+        #display_name: "{{ hostvars[inventory_hostname].tags.Name }}"
+        display_name: "{{ inventory_hostname }}"
         force_reregister: true
       become: true
