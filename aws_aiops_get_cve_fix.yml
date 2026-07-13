@@ -5,8 +5,6 @@
   connection: local
   gather_facts: yes
   vars_files: vars/main.yml
-  vars:
-    affected_systems_display_name: []
   tasks:
     - name: Debug Hostvars
       ansible.builtin.debug:
@@ -80,8 +78,11 @@
         status_code: 200
         return_content: true
         dest: "./insights_remediation_{{ cve_name }}.yml"     
-      register: downloaded_playbook
+      register: downloaded_playbook_response
 
+    - name: Set fact generated Playbook content
+      ansible.builtin.set_fect:
+        downloaded_playbook: "{{ downloaded_playbook_response.content }}"
 
     - name: Fetch Host Inventory from Red Hat Lightspeed
       ansible.builtin.uri:
