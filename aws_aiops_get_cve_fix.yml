@@ -45,14 +45,14 @@
 
     - name: Extract UUIDs into a flat list
       ansible.builtin.set_fact:
-        dynamic_system_uuids: "{{ systems_response.json.data | map(attribute='id') | list }}"
+        affected_systems: "{{ systems_response.json.data | map(attribute='id') | list }}"
 
     - name: Check if any system is affected
       ansible.builtin.fail:
         msg: "No systems are reported as affected by {{ cve_name }}. Aborting..."
-      when: dynamic_system_uuids | length == 0
+      when: affected_systems | length == 0
 
-    - name: Download the Remediation Playbook (.yml)
+    - name: Request Red Hat Lightspeed to generate a Remediation Plan
       ansible.builtin.uri:
         url: https://console.redhat.com/api/remediations/v1/remediations
         method: POST
@@ -67,7 +67,17 @@
             issues:
               - id: "vulnerabilities:{{ cve_name }}"
                 systems: "{{ affected_systems }}"
-      register: downloaded_playbook
+      register: remediation_response
+
+    - name: Download the Remediation Playbook (.yml)
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/remediations/v1/remediations/{{ remediation_response.json.id }}/playbook"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+        return_content: true
+        dest: "./insights_remediation_{{ cve_name }}.yml"      
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
