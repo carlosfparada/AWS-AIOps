@@ -80,6 +80,21 @@
         dest: "./insights_remediation_{{ cve_name }}.yml"     
       register: downloaded_playbook
 
+
+    - name: Fetch Host Inventory from Red Hat Lightspeed
+      ansible.builtin.uri:
+        url: https://console.redhat.com/api/inventory/v1/hosts
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+      register: inventory_response
+
+    - name: Modify the string directly in memory using regex_replace
+      ansible.builtin.set_fact:
+        downloaded_playbook: >-
+          {{ downloaded_playbook | regex_replace('hosts:\s*".*', 'hosts: "rhel') }}
+
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
         var: downloaded_playbook.content
