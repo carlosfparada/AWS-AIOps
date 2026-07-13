@@ -108,7 +108,7 @@
     - name: Replace fqdn by display_name on affected systems to match ansible Inventory
       ansible.builtin.set_fact:
         #affected_systems_display_name: "{{ item.attributes.display_name }}"
-        downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.attributes.fqdn, item.attributes.dislay) }}"
+        downloaded_playbook: "{{ downloaded_playbook | regex_replace(item.fqdn, item.dislay) }}"
       loop: "{{ inventory_response.json.results }}"
 
     - name: Debug dowloaded Playbook
