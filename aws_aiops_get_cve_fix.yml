@@ -82,9 +82,9 @@
 
     - name: Debug dowloaded Playbook
       ansible.builtin.debug:
-        var: downloaded_playbook
+        var: downloaded_playbook.content
 
     - name: Set stats generated Playbook
       ansible.builtin.set_stats:
         data:
-          downloaded_playbook: "{{ downloaded_playbook }}"
+          downloaded_playbook: "{{ downloaded_playbook.content }}"
