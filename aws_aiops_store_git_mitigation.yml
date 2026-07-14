@@ -31,7 +31,7 @@
     - name: Publish the changes
       ansible.scm.git_publish:
         commit:
-          message: Adding new playbook_fix_{{ cve_name }}.yml"
+          message: Adding new playbook_mitigation_{{ cve_name }}.yml"
         path: "{{ repository['path'] }}"
         user:
           name: "{{ github_user }}"
