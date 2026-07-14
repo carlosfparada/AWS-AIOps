@@ -38,7 +38,7 @@
                     "known_exploit": true,
                     "has_rule": false,
                     "publish_date": "2026-07-04T00:00:00+00:00",
-                    "demo_has_fix: true"
+                    "demo_has_fix": true
                   }
                 }
               ],

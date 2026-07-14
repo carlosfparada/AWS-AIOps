@@ -37,8 +37,8 @@
                     "impact_id": 5,
                     "known_exploit": true,
                     "has_rule": false,
-                    "publish_date": "2026-07-04T00:00:00+00:00"
-                    "demo_has_fix: false"
+                    "publish_date": "2026-07-04T00:00:00+00:00",
+                    "demo_has_fix": false
                   }
                 }
               ],
