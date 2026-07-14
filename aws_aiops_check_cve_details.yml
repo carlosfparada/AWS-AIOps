@@ -6,17 +6,17 @@
   gather_facts: no
   vars_files: vars/main.yml
   tasks:
-    # - name: Debug Hostvars
-    #   ansible.builtin.debug:
-    #     var: hostvars['localhost']
+    - name: Debug Hostvars
+      ansible.builtin.debug:
+        var: hostvars['localhost']
 
-    # - name: AIOps Lightspeed action payload
-    #   ansible.builtin.set_fact:
-    #     payload: "{{ ansible_eda.event.payload }}"
+    - name: AIOps Lightspeed action payload
+      ansible.builtin.set_fact:
+        payload: "{{ ansible_eda.event.payload }}"
 
-    # - name: Debug Payload
-    #   ansible.builtin.debug:
-    #     var: payload
+    - name: Debug Payload
+      ansible.builtin.debug:
+        var: payload
 
     # - name: Set fact {{ payload.events[0].payload.reported_cve }} Name
     #   ansible.builtin.set_fact:
