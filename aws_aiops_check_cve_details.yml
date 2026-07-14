@@ -118,7 +118,7 @@
     - name: Check whether there are Fixes available on Lightspeed for 
       ansible.builtin.assert:
         that:
-            #- cve_response.json.data.attributes.advisories_list | length == 0
-            - cve_response.json.data.attributes.advisories_list | length > 0
+            - cve_response.json.data.attributes.advisories_list | length == 0
+            #- cve_response.json.data.attributes.advisories_list | length > 0
         fail_msg: "There ARE NO Advisories (Fixes) available on Lightspeed. Going to use AI-based Mitigation"
         success_msg: "There ARE Advisories (Fixes) available on Lightspeed: {{ cve_response.json.data.attributes.advisories_list }}. Going to apply Patching."
