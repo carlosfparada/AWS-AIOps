@@ -1,6 +1,6 @@
 ---
 
-- name: Get CVE Fix
+- name: Get CVE Remediation
   hosts: localhost
   connection: local
   gather_facts: yes
@@ -61,7 +61,7 @@
         status_code: 201
         body_format: json
         body:
-          name: "Fix_{{ cve_name }}_{{ ansible_date_time.iso8601 }}"
+          name: "Remediation_{{ cve_name }}_{{ ansible_date_time.iso8601 }}"
           auto_reboot: true
           add:
             issues:

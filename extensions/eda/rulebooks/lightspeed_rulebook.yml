@@ -37,7 +37,7 @@
             pretty: true
         - run_workflow_template:
             organization: "Default"
-            name: "AWS AIOps: FIX & MITIGATION Workflow"
+            name: "AWS AIOps: MITIGATION & REMEDIATION Workflow"
             labels:
               - EDA Lightspeed Vulnerability
       
