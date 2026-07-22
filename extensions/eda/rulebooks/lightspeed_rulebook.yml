@@ -18,24 +18,24 @@
       actions:
         - print_event:
             pretty: true
-    - name: match vulnerability event
-      condition: |-
-        event.payload.application == "vulnerability"
-        and event.payload.event_type in [
-          "new-recommendation",
-          "any-cve-known-exploit",
-          "new-cve-cvss",
-          "new-cve-severity",
-          "new-cve-security-rule"
-        ]
-      actions:
-        - print_event:
-            pretty: true
-        - run_workflow_template:
-            organization: "Default"
-            name: "AWS AIOps: FIX & MITIGATION Workflow"
-            labels:
-              - EDA Lightspeed Vulnerability
+    # - name: match vulnerability event
+    #   condition: |-
+    #     event.payload.application == "vulnerability"
+    #     and event.payload.event_type in [
+    #       "new-recommendation",
+    #       "any-cve-known-exploit",
+    #       "new-cve-cvss",
+    #       "new-cve-severity",
+    #       "new-cve-security-rule"
+    #     ]
+    #   actions:
+    #     - print_event:
+    #         pretty: true
+    #     - run_workflow_template:
+    #         organization: "Default"
+    #         name: "AWS AIOps: FIX & MITIGATION Workflow"
+    #         labels:
+    #           - EDA Lightspeed Vulnerability
 
 
     # - name: Match Advisor Recommendation Event
