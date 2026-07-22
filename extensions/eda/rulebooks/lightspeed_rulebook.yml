@@ -20,13 +20,13 @@
           "any-cve-known-exploit",
           "system-cve-known-exploit"
         ]
-    # OLD
+    # Global-level
       # "new-recommendation",
       # "any-cve-known-exploit",
       # "new-cve-cvss",
       # "new-cve-severity",
       # "new-cve-security-rule"
-    # NEW
+    # System-level
       # system-cve-known-exploit
       # system-cve-severity
       # system-cve-security-rule
