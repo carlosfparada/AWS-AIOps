@@ -14,7 +14,18 @@
         # password: # (optional) path to a key file to be used together with certfile
   rules:
     - name: match all vulnerability events
-      condition: event.payload.application == "vulnerability"
+      condition: |-
+        event.payload.application == "vulnerability"
+        and event.payload.event_type in [
+          "any-cve-known-exploit",
+          "system-cve-known-exploit"
+        ]
+      # system-cve-known-exploit
+      # system-cve-severity
+      # system-cve-security-rule
+      # system-cve-cvss
+      # system-cve-all
+      
       actions:
         - print_event:
             pretty: true
