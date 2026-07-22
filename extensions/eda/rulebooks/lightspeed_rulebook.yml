@@ -20,34 +20,27 @@
           "any-cve-known-exploit",
           "system-cve-known-exploit"
         ]
+    # OLD
+      # "new-recommendation",
+      # "any-cve-known-exploit",
+      # "new-cve-cvss",
+      # "new-cve-severity",
+      # "new-cve-security-rule"
+    # NEW
       # system-cve-known-exploit
       # system-cve-severity
       # system-cve-security-rule
       # system-cve-cvss
       # system-cve-all
-      
       actions:
         - print_event:
             pretty: true
-    # - name: match vulnerability event
-    #   condition: |-
-    #     event.payload.application == "vulnerability"
-    #     and event.payload.event_type in [
-    #       "new-recommendation",
-    #       "any-cve-known-exploit",
-    #       "new-cve-cvss",
-    #       "new-cve-severity",
-    #       "new-cve-security-rule"
-    #     ]
-    #   actions:
-    #     - print_event:
-    #         pretty: true
-    #     - run_workflow_template:
-    #         organization: "Default"
-    #         name: "AWS AIOps: FIX & MITIGATION Workflow"
-    #         labels:
-    #           - EDA Lightspeed Vulnerability
-
+        - run_workflow_template:
+            organization: "Default"
+            name: "AWS AIOps: FIX & MITIGATION Workflow"
+            labels:
+              - EDA Lightspeed Vulnerability
+      
 
     # - name: Match Advisor Recommendation Event
     #   condition:
@@ -76,16 +69,3 @@
     #     #     name: "AIOps: XXX"
     #     # labels:
     #     #   - EDA Lightspeed
-
-    # - name: Always true
-    #   condition:
-    #     event.payload is defined
-    #   actions:
-    #     - print_event:
-    #         pretty: true
-    #     - run_job_template:
-    #         organization: "Default"
-    #         name: "AWS AIOps: X. Action"
-    #         labels:
-    #           - EDA Lightspeed all
-
