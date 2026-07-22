@@ -50,6 +50,7 @@
               ],
               "org_id": "15801425"
             }
+            
     # SAMPLE any-cve-known-exploit
     # {
     #   "bundle": "rhel",
