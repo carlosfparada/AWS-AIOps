@@ -50,7 +50,7 @@
               ],
               "org_id": "15801425"
             }
-    # SAMPLE
+    # SAMPLE any-cve-known-exploit
     # {
     #   "bundle": "rhel",
     #   "application": "vulnerability",
@@ -83,6 +83,78 @@
     #   ],
     #   "org_id": "13959588"
     # }
+
+    # SAMPLE system-cve-known-exploit
+    # {
+    #   "meta":{
+    #       "endpoint":"",
+    #       "headers":{
+    #         "Content-Length":"871",
+    #         "Content-Type":"application/json;charset=utf-8",
+    #         "Host":"aap.cparada.com:10000",
+    #         "User-Agent":"Quarkus REST Client"
+    #       },
+    #       "received_at":"2026-07-22T14:57:20.511851Z",
+    #       "source":{
+    #         "name":"redhatinsights.eda.insights",
+    #         "type":"redhatinsights.eda.insights"
+    #       },
+    #       "uuid":"db5cc6f3-6b65-4b6b-b312-bf527f2917f2"
+    #   },
+    #   "payload":{
+    #       "account_id":"None",
+    #       "application":"vulnerability",
+    #       "bundle":"rhel",
+    #       "context":{
+    #         "display_name":"ec2-13-221-42-140.compute-1.amazonaws.com",
+    #         "inventory_id":"917e67e9-d2bd-4b29-b066-62fccd8d5905",
+    #         "org_id":"15801425"
+    #       },
+    #       "event_type":"system-cve-known-exploit",
+    #       "events":[
+    #         {
+    #             "metadata":{                  
+    #             },
+    #             "payload":{
+    #               "cvss_score":7.8,
+    #               "has_rule":false,
+    #               "impact_id":5,
+    #               "known_exploit":true,
+    #               "publish_date":"2025-07-22T00:00:00+00:00",
+    #               "reported_cve":"CVE-2025-38352"
+    #             }
+    #         },
+    #         {
+    #             "metadata":{
+                  
+    #             },
+    #             "payload":{
+    #               "cvss_score":7.8,
+    #               "has_rule":false,
+    #               "impact_id":5,
+    #               "known_exploit":true,
+    #               "publish_date":"2026-04-22T00:00:00+00:00",
+    #               "reported_cve":"CVE-2026-31431"
+    #             }
+    #         }
+    #       ],
+    #       "org_id":"15801425",
+    #       "severity":"CRITICAL",
+    #       "source":{
+    #         "application":{
+    #             "display_name":"Vulnerability"
+    #         },
+    #         "bundle":{
+    #             "display_name":"Red Hat Enterprise Linux"
+    #         },
+    #         "event_type":{
+    #             "display_name":"System vulnerability ""with known exploit"
+    #         }
+    #       },
+    #       "timestamp":"2026-07-22T14:57:19.826173"
+    #   }
+    # }
+
 
     - name: Create a CVE Event
       ansible.builtin.uri:
