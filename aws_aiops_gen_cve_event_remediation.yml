@@ -125,8 +125,7 @@
     #             }
     #         },
     #         {
-    #             "metadata":{
-                  
+    #             "metadata":{            
     #             },
     #             "payload":{
     #               "cvss_score":7.8,
@@ -152,6 +151,88 @@
     #         }
     #       },
     #       "timestamp":"2026-07-22T14:57:19.826173"
+    #   }
+    # }
+
+    # SAMPLE system-cve-all
+    # {
+    #   "meta":{
+    #       "endpoint":"",
+    #       "headers":{
+    #         "Content-Length":"193824",
+    #         "Content-Type":"application/json;charset=utf-8",
+    #         "Host":"aap.cparada.com:10000",
+    #         "User-Agent":"Quarkus REST Client"
+    #       },
+    #       "received_at":"2026-07-22T14:57:21.056212Z",
+    #       "source":{
+    #         "name":"redhatinsights.eda.insights",
+    #         "type":"redhatinsights.eda.insights"
+    #       },
+    #       "uuid":"6bee8eb9-312d-4c8c-95de-96b8011aba70"
+    #   },
+    #   "payload":{
+    #       "account_id":"None",
+    #       "application":"vulnerability",
+    #       "bundle":"rhel",
+    #       "context":{
+    #         "display_name":"ec2-13-221-42-140.compute-1.amazonaws.com",
+    #         "inventory_id":"917e67e9-d2bd-4b29-b066-62fccd8d5905",
+    #         "org_id":"15801425"
+    #       },
+    #       "event_type":"system-cve-all",
+    #       "events":[
+    #         {
+    #             "metadata":{            
+    #             },
+    #             "payload":{
+    #               "cvss_score":6.7,
+    #               "has_rule":false,
+    #               "impact_id":4,
+    #               "known_exploit":false,
+    #               "publish_date":"2024-08-26T00:00:00+00:00",
+    #               "reported_cve":"CVE-2024-44932"
+    #             }
+    #         },
+    #         {
+    #             "metadata":{              
+    #             },
+    #             "payload":{
+    #               "cvss_score":5.5,
+    #               "has_rule":false,
+    #               "impact_id":4,
+    #               "known_exploit":false,
+    #               "publish_date":"2024-11-05T00:00:00+00:00",
+    #               "reported_cve":"CVE-2024-50117"
+    #             }
+    #         },
+    #         {
+    #             "metadata":{                  
+    #             },
+    #             "payload":{
+    #               "cvss_score":9.8,
+    #               "has_rule":false,
+    #               "impact_id":5,
+    #               "known_exploit":false,
+    #               "publish_date":"2026-01-27T14:00:00+00:00",
+    #               "reported_cve":"CVE-2025-15467"
+    #             }
+    #         }
+    #       ],
+    #       "org_id":"15801425",
+    #       "severity":"IMPORTANT",
+    #       "source":{
+    #         "application":{
+    #             "display_name":"Vulnerability"
+    #         },
+    #         "bundle":{
+    #             "display_name":"Red Hat Enterprise Linux"
+    #         },
+    #         "event_type":{
+    #             "display_name":"System vulnerability"
+    #         }
+    #       },
+    #       "timestamp":"2026-07-22T14:57:19.825739"
     #   }
     # }
 
