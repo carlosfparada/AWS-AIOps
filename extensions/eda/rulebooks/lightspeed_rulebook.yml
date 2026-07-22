@@ -13,8 +13,8 @@
         # keyfile:  # (optional) path to a key file to be used together with certfile
         # password: # (optional) path to a key file to be used together with certfile
   rules:
-    - name: match all events
-      condition: true
+    - name: match all vulnerability events
+      condition: event.payload.application == "vulnerability"
       actions:
         - print_event:
             pretty: true
