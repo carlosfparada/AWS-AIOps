@@ -1,0 +1,74 @@
+---
+
+- name: Check CVE Systems
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+    - name: Debug Hostvars
+      ansible.builtin.debug:
+        var: hostvars['localhost']
+
+    - name: AIOps Lightspeed System action payload
+      ansible.builtin.set_fact:
+        payload: "{{ ansible_eda.event.payload }}"
+
+    - name: Debug Payload
+      ansible.builtin.debug:
+        var: payload
+
+    - name: Set fact
+      ansible.builtin.set_fact:
+        cve_systems: "{{ payload.events }}"
+
+    - name: Set stats
+      ansible.builtin.set_stats:
+        data:
+          cve_systems: "{{ payload.events }}"
+
+    - name: Debug {{ cve_name }} Name
+      ansible.builtin.debug:
+        var: cve_systems
+
+    - name: Get access token using Service Account Client ID and Secret
+      ansible.builtin.uri:
+        url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+        method: POST
+        body_format: "form-urlencoded"
+        body:
+          grant_type: client_credentials
+          client_id: "{{ lightspeed_client_id }}"
+          client_secret: "{{ lightspeed_client_secret }}"
+        status_code: 200
+      register: sso_response
+
+    - name: Query Lightspeed for the affected systems
+      ansible.builtin.uri:
+        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sso_response.json.access_token }}"
+        status_code: 200
+      register: affected_systems_response
+      ignore_errors: true
+
+    - name: Set fact Affected Systems
+      ansible.builtin.set_fact:
+        affected_systems: "{{ affected_systems_response.json.data | map(attribute='id') | list }}"
+
+    - name: Set stats Affected Systems
+      ansible.builtin.set_stats:
+        data:
+          affected_systems: "{{ affected_systems }}"
+
+    - name: Debug Affected Systems
+      ansible.builtin.debug:
+        msg: "Affected Systems: {{ affected_systems }}"
+
+    - name: Check whether any System is Affected
+      ansible.builtin.assert:
+        that:
+          - affected_systems | length > 0
+        fail_msg: "There ARE NO Systems affected by {{ cve_name }}. Aborting..."
+        success_msg: "There ARE Systems affected by {{ cve_name }}: Continue {{ affected_systems }}"
