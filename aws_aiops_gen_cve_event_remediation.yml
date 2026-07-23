@@ -50,7 +50,20 @@
               ],
               "org_id": "15801425"
             }
-            
+
+    - name: Create a CVE Event
+      ansible.builtin.uri:
+        url: "http://{{ inventory_hostname }}:10000"
+        method: POST
+        body: "{{ cve_event_body }}"
+        status_code: 200
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+          Accept: "application/json; indent=4"
+        validate_certs: false
+      delegate_to: localhost
+
     # SAMPLE any-cve-known-exploit
     # {
     #   "bundle": "rhel",
@@ -236,17 +249,3 @@
     #       "timestamp":"2026-07-22T14:57:19.825739"
     #   }
     # }
-
-
-    - name: Create a CVE Event
-      ansible.builtin.uri:
-        url: "http://{{ inventory_hostname }}:10000"
-        method: POST
-        body: "{{ cve_event_body }}"
-        status_code: 200
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-          Accept: "application/json; indent=4"
-        validate_certs: false
-      delegate_to: localhost
