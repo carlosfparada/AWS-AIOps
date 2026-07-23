@@ -13,13 +13,6 @@
         # keyfile:  # (optional) path to a key file to be used together with certfile
         # password: # (optional) path to a key file to be used together with certfile
   rules:
-    - name: Match new known exploit vulnerability events
-      condition: |-
-        event.payload.application == "vulnerability"
-        and event.payload.event_type in [
-          "any-cve-known-exploit",
-          "system-cve-known-exploit"
-        ]
     # Activate notifications for EDA
     # https://console.redhat.com/settings/notifications/configure-events?bundle=rhel&tab=configuration
     # Global-level
@@ -34,6 +27,14 @@
       # system-cve-security-rule
       # system-cve-cvss
       # system-cve-all
+
+    - name: Match new known exploit vulnerability events
+      condition: |-
+        event.payload.application == "vulnerability"
+        and event.payload.event_type in [
+          "any-cve-known-exploit",
+          "system-cve-known-exploit"
+        ]
       actions:
         - print_event:
             pretty: true
