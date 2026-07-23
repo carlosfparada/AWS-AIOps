@@ -65,6 +65,7 @@
       delegate_to: localhost
 
     # SAMPLE any-cve-known-exploit
+
     # {
     #   "bundle": "rhel",
     #   "application": "vulnerability",
