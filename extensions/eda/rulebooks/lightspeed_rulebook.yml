@@ -54,7 +54,7 @@
             pretty: true
         - run_workflow_template:
             organization: "Default"
-            name: "AWS AIOps: SYSTEM MITIGATION & REMEDIATION Workflow"
+            name: "AWS AIOps: Check CVE Systems"
             labels:
               - EDA Lightspeed Vulnerability System
 
