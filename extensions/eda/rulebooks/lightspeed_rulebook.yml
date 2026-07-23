@@ -20,6 +20,8 @@
           "any-cve-known-exploit",
           "system-cve-known-exploit"
         ]
+    # Activate notifications for EDA
+    # https://console.redhat.com/settings/notifications/configure-events?bundle=rhel&tab=configuration
     # Global-level
       # "new-recommendation",
       # "any-cve-known-exploit",
