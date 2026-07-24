@@ -22,35 +22,35 @@
       ansible.builtin.debug:
         msg: "CVE Name: {{ cve_name }}"
 
-    - name: Get access token using Service Account Client ID and Secret
-      ansible.builtin.uri:
-        url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
-        method: POST
-        body_format: "form-urlencoded"
-        body:
-          grant_type: client_credentials
-          client_id: "{{ lightspeed_client_id }}"
-          client_secret: "{{ lightspeed_client_secret }}"
-        status_code: 200
-      register: sso_response
+    # - name: Get access token using Service Account Client ID and Secret
+    #   ansible.builtin.uri:
+    #     url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    #     method: POST
+    #     body_format: "form-urlencoded"
+    #     body:
+    #       grant_type: client_credentials
+    #       client_id: "{{ lightspeed_client_id }}"
+    #       client_secret: "{{ lightspeed_client_secret }}"
+    #     status_code: 200
+    #   register: sso_response
 
-    - name: Query Lightspeed for the affected systems
-      ansible.builtin.uri:
-        url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ sso_response.json.access_token }}"
-        status_code: 200
-      register: systems_response
+    # - name: Query Lightspeed for the affected systems
+    #   ansible.builtin.uri:
+    #     url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
+    #     method: GET
+    #     headers:
+    #       Authorization: "Bearer {{ sso_response.json.access_token }}"
+    #     status_code: 200
+    #   register: systems_response
 
-    - name: Extract UUIDs into a flat list
-      ansible.builtin.set_fact:
-        affected_systems: "{{ systems_response.json.data | map(attribute='id') | list }}"
+    # - name: Extract UUIDs into a flat list
+    #   ansible.builtin.set_fact:
+    #     affected_systems_id: "{{ systems_response.json.data | map(attribute='id') | list }}"
 
-    - name: Check if any system is affected
-      ansible.builtin.fail:
-        msg: "No systems are reported as affected by {{ cve_name }}. Aborting..."
-      when: affected_systems | length == 0
+    # - name: Check if any system is affected
+    #   ansible.builtin.fail:
+    #     msg: "No systems are reported as affected by {{ cve_name }}. Aborting..."
+    #   when: affected_systems_id | length == 0
 
     - name: Request Red Hat Lightspeed to generate a Remediation Plan
       ansible.builtin.uri:
@@ -66,7 +66,7 @@
           add:
             issues:
               - id: "vulnerabilities:{{ cve_name }}"
-                systems: "{{ affected_systems }}"
+                systems: "{{ affected_systems_id }}"
       register: remediation_response
 
     - name: Download the Remediation Playbook (.yml)

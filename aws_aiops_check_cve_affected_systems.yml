@@ -51,24 +51,37 @@
           Authorization: "Bearer {{ sso_response.json.access_token }}"
         status_code: 200
       register: affected_systems_response
-      ignore_errors: true
+      # ignore_errors: true
 
-    - name: Set fact Affected Systems
+    - name: Debug Affected Systems Response
+      ansible.builtin.debug:
+        var: affected_systems_response
+
+    - name: Set fact Affected Systems ID
       ansible.builtin.set_fact:
-        affected_systems: "{{ affected_systems_response.json.data | map(attribute='id') | list }}"
+        affected_systems_id: "{{ affected_systems_response.json.data | map(attribute='id') | list }}"
 
-    - name: Set stats Affected Systems
+    - name: Set stats Affected Systems ID
+      ansible.builtin.set_fact:
+        affected_systems_id: "{{ affected_systems_id }}"
+
+    - name: Set stats Affected Systems ID
       ansible.builtin.set_stats:
         data:
-          affected_systems: "{{ affected_systems }}"
+          affected_systems_id: "{{ affected_systems_id }}"
 
-    - name: Debug Affected Systems
-      ansible.builtin.debug:
-        msg: "Affected Systems: {{ affected_systems }}"
+    - name: Set fact Affected Systems FQDN
+      ansible.builtin.set_fact:
+        affected_systems_fqdn: "{{ affected_systems_response.json.data | map(attribute='display_name') | list }}"
+
+    - name: Set stats Affected Systems FQDN
+      ansible.builtin.set_stats:
+        data:
+          affected_systems_fqdn: "{{ affected_systems_fqdn }}"
 
     - name: Check whether any System is Affected
       ansible.builtin.assert:
         that:
-          - affected_systems | length > 0
+          - affected_systems_id | length > 0
         fail_msg: "There ARE NO Systems affected by {{ cve_name }}. Aborting..."
         success_msg: "There ARE Systems affected by {{ cve_name }}: Continue {{ affected_systems }}"
