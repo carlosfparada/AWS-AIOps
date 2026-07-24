@@ -22,17 +22,17 @@
       ansible.builtin.debug:
         msg: "CVE Name: {{ cve_name }}"
 
-    # - name: Get access token using Service Account Client ID and Secret
-    #   ansible.builtin.uri:
-    #     url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
-    #     method: POST
-    #     body_format: "form-urlencoded"
-    #     body:
-    #       grant_type: client_credentials
-    #       client_id: "{{ lightspeed_client_id }}"
-    #       client_secret: "{{ lightspeed_client_secret }}"
-    #     status_code: 200
-    #   register: sso_response
+    - name: Get access token using Service Account Client ID and Secret
+      ansible.builtin.uri:
+        url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+        method: POST
+        body_format: "form-urlencoded"
+        body:
+          grant_type: client_credentials
+          client_id: "{{ lightspeed_client_id }}"
+          client_secret: "{{ lightspeed_client_secret }}"
+        status_code: 200
+      register: sso_response
 
     # - name: Query Lightspeed for the affected systems
     #   ansible.builtin.uri:
