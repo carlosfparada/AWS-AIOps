@@ -18,7 +18,7 @@
       ansible.builtin.debug:
         var: payload
 
-    - name: Get access token using Service Account Client ID and Secret
+    - name: Get Lightspeed access token using Service Account Client ID and Secret
       ansible.builtin.uri:
         url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
         method: POST
@@ -39,7 +39,7 @@
         status_code: 200
       register: cve_response
 
-    - name: Debug CVE Response
+    - name: Debug Lightspeed Response
       ansible.builtin.debug:
         var: cve_response    
 
@@ -56,7 +56,7 @@
     #     data:
     #       cve_description: "{{ cve_response.json.data.attributes.description }}"
 
-    - name: Check whether there are Remediations available on Lightspeed for 
+    - name: Check whether there are Remediations available on Lightspeed for {{ cve_name }}
       ansible.builtin.assert:
         that:
             # real check
