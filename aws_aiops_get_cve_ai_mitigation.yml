@@ -48,12 +48,29 @@
     #          .split('```')[0]
     #          | trim }}
 
+    - name: Fetch CVE data from Red Hat Security Data API
+      ansible.builtin.uri:
+        url: "https://access.redhat.com/hydra/rest/securitydata/cve/{{ cve_name }}.json"
+        method: GET
+        return_content: true
+        status_code: 200
+      register: cve_response
+
+    - name: Display CVE details
+      ansible.builtin.debug:
+        var: cve_response.json
+
+    - name: Display the Mitigation description
+      ansible.builtin.debug:
+        msg: "{{ cve_response.json.mitigation.value | default('No mitigation available for this CVE.') }}"
+
     - name: Prompt Openshift AI
       vars:
         prompt: >
-                Write a minimalist ansible playbook to run on rhel group of hosts
-                to mitigate the {{ cve_name }},
-                with the following description: '{{ cve_description }}'.
+                Write a minimalist ansible playbook to run on
+                rhel group of hosts to mitigate the {{ cve_name }}.
+                The CVE has the following data:
+                Description: '{{ cve_description }}'.
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
