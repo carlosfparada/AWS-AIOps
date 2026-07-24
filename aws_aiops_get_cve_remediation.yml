@@ -34,24 +34,6 @@
         status_code: 200
       register: sso_response
 
-    # - name: Query Lightspeed for the affected systems
-    #   ansible.builtin.uri:
-    #     url: "https://console.redhat.com/api/vulnerability/v1/cves/{{ cve_name }}/affected_systems"
-    #     method: GET
-    #     headers:
-    #       Authorization: "Bearer {{ sso_response.json.access_token }}"
-    #     status_code: 200
-    #   register: systems_response
-
-    # - name: Extract UUIDs into a flat list
-    #   ansible.builtin.set_fact:
-    #     affected_systems_id: "{{ systems_response.json.data | map(attribute='id') | list }}"
-
-    # - name: Check if any system is affected
-    #   ansible.builtin.fail:
-    #     msg: "No systems are reported as affected by {{ cve_name }}. Aborting..."
-    #   when: affected_systems_id | length == 0
-
     - name: Request Red Hat Lightspeed to generate a Remediation Plan
       ansible.builtin.uri:
         url: https://console.redhat.com/api/remediations/v1/remediations
