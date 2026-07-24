@@ -52,11 +52,11 @@
       actions:
         - print_event:
             pretty: true
-        - run_workflow_template:
-            organization: "Default"
-            name: "AWS AIOps: Check CVE Systems"
-            labels:
-              - EDA Lightspeed Vulnerability System
+        # - run_workflow_template:
+        #     organization: "Default"
+        #     name: "AWS AIOps: Check CVE Systems"
+        #     labels:
+        #       - EDA Lightspeed Vulnerability System
 
     # - name: Match Advisor Recommendation Event
     #   condition:
