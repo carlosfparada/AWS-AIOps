@@ -28,7 +28,7 @@
       # system-cve-cvss
       # system-cve-all
 
-    - name: Match new known exploit vulnerability events
+    - name: Match any new known exploit vulnerability events
       condition: |-
         event.payload.application == "vulnerability"
         and event.payload.event_type in [
@@ -43,7 +43,7 @@
             labels:
               - EDA Lightspeed Vulnerability All
 
-    - name: Match new known exploit vulnerability events
+    - name: Match all System known exploit vulnerability events
       condition: |-
         event.payload.application == "vulnerability"
         and event.payload.event_type in [
