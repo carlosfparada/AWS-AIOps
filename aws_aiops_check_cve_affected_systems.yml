@@ -84,4 +84,4 @@
         that:
           - affected_systems_id | length > 0
         fail_msg: "There ARE NO Systems affected by {{ cve_name }}. Aborting..."
-        success_msg: "There ARE Systems affected by {{ cve_name }}: Continue {{ affected_systems }}"
+        success_msg: "There ARE Systems affected by {{ cve_name }}: Continue {{ affected_systems_fqdn }}"
