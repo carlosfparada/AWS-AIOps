@@ -72,7 +72,7 @@
 
     - name: Set fact Affected Systems FQDN
       ansible.builtin.set_fact:
-        affected_systems_fqdn: "{{ affected_systems_response.json.data | map(attribute='display_name') | list }}"
+        affected_systems_fqdn: "{{ affected_systems_response.json.data.atributes | map(attribute='display_name') | list }}"
 
     - name: Set stats Affected Systems FQDN
       ansible.builtin.set_stats:
