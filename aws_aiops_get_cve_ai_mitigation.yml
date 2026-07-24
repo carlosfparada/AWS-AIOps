@@ -61,9 +61,9 @@
     - name: Prompt Openshift AI
       vars:
         prompt: >
-                Write an ansible playbook to run on hosts 
-                '{{ affected_systems_fqdn | join(',') }}, and to mitigate 
-                the CVE {{ cve_name }} with the following data:
+                Write an ansible playbook to mitigate CVE {{ cve_name }}.
+                Use this list of hosts as targets '{{ affected_systems_fqdn | join(',') }}.
+                The CVE has the following details and mitigation descriprions:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
       ansible.builtin.uri:
