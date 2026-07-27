@@ -37,8 +37,9 @@
       vars:
         prompt: >
                 Write an ansible playbook to mitigate CVE {{ cve_name }}.
-                Use this list of hosts as targets: '{{ affected_systems_fqdn | join(',') }}.
-                The CVE has the following details and mitigation descriprions:
+                You MUST the following list of hosts as playbook targets: 
+                '{{ affected_systems_fqdn | join(',') }}'.
+                The CVE has the following details and mitigation descriptions:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
       ansible.builtin.uri:
