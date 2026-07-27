@@ -10,15 +10,15 @@
       ansible.builtin.debug:
         var: hostvars['localhost']
 
-    - name: AIOps Lightspeed action payload
+    - name: AIOps Lightspeed action payload 1
       ansible.builtin.set_fact:
         payload: "{{ ansible_eda }}"
 
-    - name: AIOps Lightspeed action payload
+    - name: AIOps Lightspeed action payload 2
       ansible.builtin.set_fact:
         payload: "{{ ansible_eda.event }}"
         
-    - name: AIOps Lightspeed action payload
+    - name: AIOps Lightspeed action payload 3
       ansible.builtin.set_fact:
         payload: "{{ ansible_eda.event.payload }}"
 
