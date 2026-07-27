@@ -53,7 +53,7 @@
       actions:
         - print_event:
             pretty: true
-        - run_workflow_template:
+        - run_job_template:
             organization: "Default"
             name: "AWS AIOps: Check CVE Systems"
             labels:
