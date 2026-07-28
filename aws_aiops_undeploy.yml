@@ -1,5 +1,7 @@
 ---
 
+- import_playbook: aws_aiops_unsetup.yml
+
 - name: AWS AIOps Undeploy
   hosts: localhost
   connection: local
@@ -7,6 +9,5 @@
   vars_files: 
     - main.yml
   tasks:
-    - import_playbook: aws_aiops_unsetup.yml
     - include_role: 
         name: aws_undeploy_aiops
