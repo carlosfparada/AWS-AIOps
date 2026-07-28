@@ -32,3 +32,10 @@
         display_name: "{{ inventory_hostname }}"
         force_reregister: true
       become: true
+
+    - name: Copy exploit to RHEL ec2-user home
+      ansible.builtin.copy:
+        src: "scripts/copy_fail_exp.py"
+        dest: "/home/ec2-user/copy_fail_exp.py"
+        force: true
+        mode: '0755'
