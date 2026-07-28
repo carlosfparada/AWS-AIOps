@@ -32,12 +32,12 @@
                 {
                   "metadata": {},
                   "payload": {
-                    "reported_cve": "CVE-2026-53359",
+                    "reported_cve": "CVE-2026-31431",
                     "cvss_score": 7.8,
                     "impact_id": 5,
                     "known_exploit": true,
                     "has_rule": false,
-                    "publish_date": "2026-07-04T00:00:00+00:00",
+                    "publish_date": "2026-04-22T00:00:00+00:00",
                     "demo_has_remediation": true
                   }
                 }
