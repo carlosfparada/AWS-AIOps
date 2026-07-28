@@ -33,7 +33,7 @@
         force_reregister: true
       become: true
 
-    - name: Copy exploit to RHEL ec2-user home
+    - name: Copy CVE exploit to RHEL /home/ec2-user/
       ansible.builtin.copy:
         src: "scripts/copy_fail_exp.py"
         dest: "/home/ec2-user/copy_fail_exp.py"
