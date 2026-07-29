@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Exploit for CVE-2026-31431
 import ctypes
 import os
 import socket
