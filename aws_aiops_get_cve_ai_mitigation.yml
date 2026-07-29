@@ -37,7 +37,7 @@
                 You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
                 You MUST NOT use block structures on handlers.
-                Do NOT check whether the updates have been performed.
+                Do NOT check whether the updates have been done.
                 The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
