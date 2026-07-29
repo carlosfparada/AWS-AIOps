@@ -34,7 +34,7 @@
       ansible.builtin.set_fact:
         prompt: >
                 Write an ansible playbook to mitigate CVE {{ cve_name }}.
-                You MUST the following list of hosts as playbook targets: 
+                You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
                 The CVE has the following details and mitigation descriptions:
                 Details: '{{ cve_details }}'.
