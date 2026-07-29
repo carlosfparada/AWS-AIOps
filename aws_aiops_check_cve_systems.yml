@@ -24,18 +24,19 @@
         aap_username: admin
         aap_password: "{{ admin_password }}"
         aap_validate_certs: true
-        ansible_eda:
-          event:
-            payload:
-              events: 
-                - payload: 
-                    reported_cve: "{{ item.payload.reported_cve }}"
-                    publish_date: "{{ item.payload.publish_date }}"
-                    known_exploit: "{{ item.payload.known_exploit }}"
+        extra_vars:
+          ansible_eda:
+            event:
+              payload:
+                events: 
+                  - payload: 
+                      reported_cve: "{{ item.payload.reported_cve }}"
+                      publish_date: "{{ item.payload.publish_date }}"
+                      known_exploit: "{{ item.payload.known_exploit }}"
         controller_workflow_launch_jobs:
           - name: "AWS AIOps: MITIGATION & REMEDIATION Workflow"
             organization: Default
-            extra_vars: "{{ ansible_eda }}"
+            extra_vars: "{{ extra_vars }}"
       ansible.builtin.include_role: 
         name: infra.aap_configuration.controller_workflow_launch
       # debug:
