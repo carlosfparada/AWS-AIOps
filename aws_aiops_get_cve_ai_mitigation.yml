@@ -37,8 +37,6 @@
                 You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
                 You MUST NOT use block structures on handlers.
-                If a kernel upgrade is needed, make sure you reboot it 
-                before checking if it is updated.
                 The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
