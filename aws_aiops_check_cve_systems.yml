@@ -18,13 +18,60 @@
       ansible.builtin.debug:
         var: payload
 
-    - name: Loop over all CVEs
-      debug:
-        var: "{{ item }}"
+    - name: Loop over CVEs and Launch Job Workflow Template
+      vars:
+        controller_workflow_launch_jobs:
+          - name: "AWS AIOps: MITIGATION & REMEDIATION Workflow"
+        ansible_eda:
+          event:
+            payload:
+              events: 
+                - payload: 
+                    reported_cve: "{{ item.payload.reported_cve }}"
+                    publish_date: "{{ item.payload.publish_date }}"
+                    known_exploit: "{{ item.payload.known_exploit }}"
+      ansible.builtin.include_role: 
+        name: infra.aap_configuration.controller_workflow_launch
       loop: "{{ payload.events }}"
 
 
-    
+# EVENT: any-cve-known-exploit
+# {
+#   "bundle": "rhel",
+#   "application": "vulnerability",
+#   "version": "v1.1.0",
+#   "event_type": "any-cve-known-exploit",
+#   "timestamp": "2026-07-10T10:19:19.958529",
+#   "context": {
+#     "display_name": "randomserver",
+#     "inventory_id": "704fe5b0-210d-47d5-9483-e8dab3348432",
+#     "org_id": "15801425"
+#   },
+#   "events": [
+#     {
+#       "metadata": {},
+#       "payload": {
+#         "reported_cve": "CVE-2026-31431",
+#         "cvss_score": 7.8,
+#         "impact_id": 5,
+#         "known_exploit": true,
+#         "has_rule": false,
+#         "publish_date": "2026-04-22T00:00:00+00:00",
+#         "demo_has_remediation": true
+#       }
+#     }
+#   ],
+#   "recipients": [
+#     {
+#       "only_admins": false,
+#       "ignore_user_preferences": false
+#     }
+#   ],
+#   "org_id": "15801425"
+# }
+
+
+# EVENT: system-cve-known-exploit
 # ansible_facts:
 #   payload:
 #     account_id: null
