@@ -37,6 +37,7 @@
                 You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
                 You MUST NOT use block structure on handlers.
+                You MUST use ignore_errors: true to make the playbook always succeed.
                 The CVE has the following details and mitigation descriptions:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
