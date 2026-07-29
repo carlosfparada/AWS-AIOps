@@ -1,15 +1,15 @@
 ---
 
-- name: Get nodes from Inventory and add to Groups
-  hosts: localhost
-  connection: local
-  gather_facts: no
-  tasks:
-  - include_role: 
-      name: utils_hosts_aws
+# - name: Get nodes from Inventory and add to Groups
+#   hosts: localhost
+#   connection: local
+#   gather_facts: no
+#   tasks:
+#   - include_role: 
+#       name: utils_hosts_aws
 
 
-- name: Setup RHELs with Lightspeed
+- name: Setup NEW RHELs with Lightspeed
   hosts: rhelnew
   become: true
   tasks:

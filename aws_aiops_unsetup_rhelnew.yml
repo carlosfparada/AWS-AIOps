@@ -9,8 +9,8 @@
 #       name: utils_hosts_aws
 
 
-- name: Unsetup RHELs with Lightspeed
-  hosts: rhel
+- name: Unsetup NEW RHELs with Lightspeed
+  hosts: rhel_new
   become: true
   tasks:
     - debug:

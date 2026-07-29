@@ -21,6 +21,13 @@
       "tag:Name": "{{ ec2_rt_name }}"
   register: rtb
 
+- name: Terminate RHEL 3 instance
+  amazon.aws.ec2_instance:
+    region: "{{ ec2_vpc_region }}"
+    filters:
+      "tag:name": "{{ ec2_rhel3_instance_name }}"
+    state: absent
+
 - name: Terminate RHEL 2 instance
   amazon.aws.ec2_instance:
     region: "{{ ec2_vpc_region }}"
