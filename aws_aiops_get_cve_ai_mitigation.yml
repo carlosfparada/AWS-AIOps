@@ -36,8 +36,8 @@
                 Write an ansible playbook to mitigate CVE {{ cve_name }}.
                 You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
-                You MUST NOT use block structure on handlers.
-                The CVE has the following details and mitigation descriptions:
+                You MUST NOT use block structures on handlers.
+                The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
                 References: '{{ cve_references }}'.
