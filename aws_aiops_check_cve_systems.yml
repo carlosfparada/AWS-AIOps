@@ -33,6 +33,7 @@
                       reported_cve: "{{ item.payload.reported_cve }}"
                       publish_date: "{{ item.payload.publish_date }}"
                       known_exploit: "{{ item.payload.known_exploit }}"
+                      demo_has_remediation: false
         controller_workflow_launch_jobs:
           - name: "AWS AIOps: MITIGATION & REMEDIATION Workflow"
             organization: Default
