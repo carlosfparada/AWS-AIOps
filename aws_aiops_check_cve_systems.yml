@@ -26,6 +26,8 @@
         aap_validate_certs: true
         controller_workflow_launch_jobs:
           - name: "AWS AIOps: MITIGATION & REMEDIATION Workflow"
+            organization: Default
+            extra_vars: true
         ansible_eda:
           event:
             payload:
@@ -36,8 +38,6 @@
                     known_exploit: "{{ item.payload.known_exploit }}"
       ansible.builtin.include_role: 
         name: infra.aap_configuration.controller_workflow_launch
-        organization: Default
-        extra_vars: true
       # debug:
       #   var: ansible_eda
       loop: "{{ payload.events }}"
