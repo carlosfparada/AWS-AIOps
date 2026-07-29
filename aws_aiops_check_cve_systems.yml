@@ -34,10 +34,12 @@
                     reported_cve: "{{ item.payload.reported_cve }}"
                     publish_date: "{{ item.payload.publish_date }}"
                     known_exploit: "{{ item.payload.known_exploit }}"
-      # ansible.builtin.include_role: 
-      #   name: infra.aap_configuration.controller_workflow_launch
-      debug:
-        var: ansible_eda
+      ansible.builtin.include_role: 
+        name: infra.aap_configuration.controller_workflow_launch
+        organization: Default
+        extra_vars: true
+      # debug:
+      #   var: ansible_eda
       loop: "{{ payload.events }}"
 
 
