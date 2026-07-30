@@ -72,13 +72,12 @@
           DON'T update any software package or kernel binary, DO ONLY mitigation
           based on kernel parameters or similar mitigation measures.
           You SHOULD reboot the systems to apply changes if needed.
-          The CVE has the following details:
-          Details: '{{ cve_details }}'.
-          RHSB: '{{ cve_rhsb_content }}'.
           You MUST use the following string as ansible play targets (hosts): 
           '{{ affected_systems_fqdn | join(',') }}'.
-
-
+          The CVE has the following details: 
+          '{{ cve_details }}'
+          The Red Hat Security Bulletin containt mitigation details:
+          '{{ cve_rhsb_content }}'.
 
 # Write a simple ansible playbook to mitigate {{ cve_name }}.
 # DO NOT include tasks that perform backups, checks or validations.
