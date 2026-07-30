@@ -36,8 +36,8 @@
                 Write an ansible playbook to mitigate {{ cve_name }}.
                 The playbbok MUST only cover RHEL as the OS for target nodes.
                 I DON'T want you to update any package or kernel binary,
-                I just want to do mitogation playing with kernel parameters,
-                selinux and similat mitigation measures.
+                I just want to do mitogation playing with kernel parameters
+                and similar mitigation measures.
                 The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
                 Mitigation: '{{ cve_mitigation }}'.
