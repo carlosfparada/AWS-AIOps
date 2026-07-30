@@ -30,18 +30,17 @@
       uri:
         url: "https://access.redhat.com/security/data/csaf/v2/vex/{{ cve_name | split('-')[1] }}/{{ cve_name }}.json"
         return_content: true
-        status_code: [200, 404]
-      register: vex_doc
-      delegate_to: localhost
+        status_code: 200
+      register: vex_content
 
     - name: Extract RHSB reference and per-product remediation status
       set_fact:
-        rhsb_ref: "{{ vex_doc.json.document.references
+        rhsb_ref: "{{ vex_content.json.document.references
                       | selectattr('category','equalto','external')
                       | selectattr('url','search','RHSB')
                       | map(attribute='url') | list }}"
-        product_remediations: "{{ vex_doc.json.vulnerabilities[0].remediations | default([]) }}"
-      when: vex_doc.status == 200
+        product_remediations: "{{ vex_content.json.vulnerabilities[0].remediations | default([]) }}"
+      when: vex_content.status == 200
 
 
     - name: Set fact prompt
