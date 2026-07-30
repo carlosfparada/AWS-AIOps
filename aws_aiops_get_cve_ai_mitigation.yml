@@ -33,8 +33,8 @@
     - name: Set fact prompt
       ansible.builtin.set_fact:
         prompt: >
-                Write a simple ansible playbook to mitigate {{ cve_name }}.
-                Do not include backus, checks, validations or reports.
+                Write a simple ansible playbook to mitigate {{ cve_name }},
+                and do not include backus, checks, validations or reports.
                 The playbbok MUST only cover RHEL as the OS for target nodes.
                 I DON'T want you to update any package or kernel binary,
                 I just want to do mitigation based on kernel parameters
