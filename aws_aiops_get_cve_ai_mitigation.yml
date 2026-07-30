@@ -33,14 +33,20 @@
         status_code: 200
       register: vex_response
 
-    - name: Extract RHSB reference and per-product remediation status
+    # - name: Extract RHSB reference and per-product remediation status
+    #   set_fact:
+    #     rhsb_link: "{{ vex_response.json.document.references
+    #                   | selectattr('category','equalto','external')
+    #                   | selectattr('url','search','RHSB')
+    #                   | map(attribute='url') | list }}"
+    #     product_remediations: "{{ vex_response.json.vulnerabilities[0].remediations | default([]) }}"
+    #   when: vex_response.status == 200
+
+    - name: Extract RHSB link
       set_fact:
-        rhsb_link: "{{ vex_response.json.document.references
-                      | selectattr('category','equalto','external')
-                      | selectattr('url','search','RHSB')
-                      | map(attribute='url') | list }}"
-        product_remediations: "{{ vex_response.json.vulnerabilities[0].remediations | default([]) }}"
-      when: vex_response.status == 200
+        rhsb_link: "{{ item.url }}"
+      loop: "{{ vex_response.json.vulnerabilities[0].references | default([]) }}"
+      when: "'RHSB' in item.summary" 
 
     - name: Pull the current VEX/CSAF record for this CVE
       uri:
