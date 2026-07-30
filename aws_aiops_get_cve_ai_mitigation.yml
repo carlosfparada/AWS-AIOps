@@ -57,7 +57,7 @@
     #     status_code: 200
     #   register: rhsb_content
 
-    - name: Set fact prompt
+    - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
         # sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
         # sudo reboot
