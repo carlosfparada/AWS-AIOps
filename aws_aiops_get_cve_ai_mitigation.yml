@@ -70,7 +70,9 @@
           The playbbok MUST only cover the RHEL OS for target nodes.
           DO NOT include tasks that perform backups, checks or validations.
           I DON'T want you to update any software package or kernel binary.
-          You MUST reboot the systems to apply changes if needed.
+          I just want you to do mitigation based on kernel parameters
+          and similar mitigation measures.
+          You SHOULD reboot the systems to apply changes if needed.
           The CVE has the following details:
           Details: '{{ cve_details }}'.
           RHSB: '{{ cve_rhsb_content }}'.
