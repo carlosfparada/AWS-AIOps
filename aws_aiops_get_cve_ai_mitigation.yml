@@ -33,6 +33,9 @@
     - name: Set fact prompt
       ansible.builtin.set_fact:
 # sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
+# sudo reboot
+# sudo grubby --update-kernel=ALL --remove-args="initcall_blacklist=algif_aead_init"
+# sudo reboot       
         prompt: >
           Write a simple ansible playbook to mitigate {{ cve_name }}.
           Do not include tasks for backus, checks, validations or reports.
