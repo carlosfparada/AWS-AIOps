@@ -38,6 +38,7 @@
                 '{{ affected_systems_fqdn | join(',') }}'.
                 You MUST NOT use block structures on handlers.
                 If kernel update is needed, update for latest, not specific one.
+                Do NOT add inline comments jinja2 or JSON code!
                 Do NOT ensure the latest kernel package is installed!
                 The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
