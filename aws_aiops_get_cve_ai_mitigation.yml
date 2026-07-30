@@ -44,7 +44,8 @@
                 Mitigation: '{{ cve_mitigation }}'.
                 References: '{{ cve_references }}'.
                 You MUST use the following string as ansible play targets (hosts): 
-                '{{ affected_systems_fqdn | join(',') }}'.
+                '{{ affected_systems_fqdn | join(',') }},https://www.akamai.com/cloud/guides/cve-2026-31431-copy-fail-mitigation',
+                .
 
 # Write an ansible playbook to mitigate CVE {{ cve_name }}.
 # You MUST use the following string as ansible play targets (hosts): 
