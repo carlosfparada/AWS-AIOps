@@ -30,6 +30,20 @@
       ansible.builtin.set_fact:
         cve_references: "{{ cve_response.json.references | default('No mitigation available for this CVE.') }}"
 
+    - name: Query Red Hat Portal Search API for RHSB Bulletins
+      ansible.builtin.uri:
+        url: "https://access.redhat.com/api/metadata/search"
+        method: POST
+        body_format: json
+        headers:
+          Content-Type: "application/json"
+        body:
+          keywords: "{{ cve_id }} RHSB"
+          documentType: "security_bulletin"
+          rows: 5
+        return_content: true
+      register: portal_search
+
     - name: Set fact prompt
       ansible.builtin.set_fact:
 # sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
