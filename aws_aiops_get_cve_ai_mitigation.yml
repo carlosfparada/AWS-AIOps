@@ -31,16 +31,23 @@
         url: "https://access.redhat.com/security/data/csaf/v2/vex/{{ cve_name.split('-')[1] }}/{{ cve_name | lower }}.json"
         return_content: true
         status_code: 200
-      register: vex_content
+      register: vex_response
 
     - name: Extract RHSB reference and per-product remediation status
       set_fact:
-        rhsb_ref: "{{ vex_content.json.document.references
+        rhsb_link: "{{ vex_response.json.document.references
                       | selectattr('category','equalto','external')
                       | selectattr('url','search','RHSB')
                       | map(attribute='url') | list }}"
-        product_remediations: "{{ vex_content.json.vulnerabilities[0].remediations | default([]) }}"
-      when: vex_content.status == 200
+        product_remediations: "{{ vex_response.json.vulnerabilities[0].remediations | default([]) }}"
+      when: vex_response.status == 200
+
+    - name: Pull the current VEX/CSAF record for this CVE
+      uri:
+        url: "{{ rhsb_link }}"
+        return_content: true
+        status_code: 200
+      register: rhsb_content
 
 
     - name: Set fact prompt
