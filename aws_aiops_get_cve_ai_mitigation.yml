@@ -32,20 +32,21 @@
 
     - name: Set fact prompt
       ansible.builtin.set_fact:
+# sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
         prompt: >
-                Write a simple ansible playbook to mitigate {{ cve_name }}.
-                Do not include tasks for backus, checks, validations or reports.
-                The playbbok MUST only cover the RHEL OS for target nodes.
-                I DON'T want you to update any software package or kernel binary.
-                I just want you to do mitigation based on kernel parameters
-                and similar mitigation measures.
-                The CVE has the following details, mitigation and references:
-                Details: '{{ cve_details }}'.
-                Mitigation: '{{ cve_mitigation }}'.
-                References: '{{ cve_references }}'.
-                You MUST use the following string as ansible play targets (hosts): 
-                '{{ affected_systems_fqdn | join(',') }},https://www.akamai.com/cloud/guides/cve-2026-31431-copy-fail-mitigation',
-                .
+          Write a simple ansible playbook to mitigate {{ cve_name }}.
+          Do not include tasks for backus, checks, validations or reports.
+          The playbbok MUST only cover the RHEL OS for target nodes.
+          I DON'T want you to update any software package or kernel binary.
+          I just want you to do mitigation based on kernel parameters
+          and similar mitigation measures.
+          The CVE has the following details, mitigation and references:
+          Details: '{{ cve_details }}'.
+          Mitigation: '{{ cve_mitigation }}'.
+          References: '{{ cve_references }},
+          https://www.akamai.com/cloud/guides/cve-2026-31431-copy-fail-mitigation'.
+          You MUST use the following string as ansible play targets (hosts): 
+          '{{ affected_systems_fqdn | join(',') }}'.
 
 # Write an ansible playbook to mitigate CVE {{ cve_name }}.
 # You MUST use the following string as ansible play targets (hosts): 
