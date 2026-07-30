@@ -35,6 +35,6 @@
     - name: Copy CVE exploit to RHEL /home/ec2-user/
       ansible.builtin.copy:
         src: "scripts/copy_fail_exp.py"
-        dest: "/home/ec2-user/copy_fail_exp.py"
+        dest: "/home/ec2-user/copy_fail_exploit_CVE‑2026‑31431.py"
         force: true
         mode: '0755'
