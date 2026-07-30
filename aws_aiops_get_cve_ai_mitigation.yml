@@ -28,7 +28,7 @@
     #   ansible.builtin.set_fact:
     #     cve_mitigation: "{{ cve_response.json.mitigation.value | default('No mitigation available for this CVE.') }}"
 
-    - name: Fetch Data from VEX/CSAF for {{ cve_name }}
+    - name: Fetch Data from VEX/CSAF API for {{ cve_name }}
       uri:
         url: "https://access.redhat.com/security/data/csaf/v2/vex/{{ cve_name.split('-')[1] }}/{{ cve_name | lower }}.json"
         return_content: true
