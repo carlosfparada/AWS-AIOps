@@ -60,6 +60,7 @@
 
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
+        # CVE-2026-31431
         # sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
         # sudo reboot
         # sudo grubby --update-kernel=ALL --remove-args="initcall_blacklist=algif_aead_init"
