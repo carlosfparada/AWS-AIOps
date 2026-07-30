@@ -36,6 +36,7 @@
                 Write a minimal ansible playbook to mitigate CVE {{ cve_name }}.
                 You MUST use the following string as ansible play targets (hosts): 
                 '{{ affected_systems_fqdn | join(',') }}'.
+                The playbbok MUST only cover RHEL as the OS for target nodes.
                 I DON'T want you to update any package or kernel, only do mitigation.
                 The CVE has the following details, mitigation and references:
                 Details: '{{ cve_details }}'.
