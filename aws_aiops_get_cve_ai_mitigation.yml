@@ -28,7 +28,7 @@
 
     - name: Pull the current VEX/CSAF record for this CVE
       uri:
-        url: "https://access.redhat.com/security/data/csaf/v2/vex/2026/cve-2026-31431.json"
+        url: "https://access.redhat.com/security/data/csaf/v2/vex/{{ cve_name | split('-')[1] }}/{{ cve_name }}.json"
         return_content: true
         status_code: [200, 404]
       register: vex_doc
