@@ -66,6 +66,7 @@
         prompt: >
           Write a simple ansible playbook to mitigate {{ cve_name }}.
           The playbbok MUST only cover the RHEL OS for target nodes.
+          DO NOT include tasks that perform backups, checks or validations.
           I DON'T want you to update any software package or kernel binary.
           You can reboot the systems to apply changes if needed.
           The CVE has the following details:
@@ -128,6 +129,9 @@
     - name: Set Generated Ansible Playbook
       ansible.builtin.set_fact:
         generated_playbook: >-
+          {{ cve_details | wordwrap(60) |
+          comment('plain', prefix='####### DETAILS #######', postfix='#######') }}
+
           {{ ai_response.json.choices[0].message.reasoning_content |
           wordwrap(60) |
           comment('plain', prefix='####### REASONING #######', postfix='#######') }}
