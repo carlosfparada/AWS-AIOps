@@ -51,8 +51,8 @@
       when: "'RHSB' in item.summary" 
 
     - name: Fetch RHSB Content
-      ansible.builtin.uri:
-        url: "{{cve_rhsb_url }}"
+      ansible.builtin.u ri:
+        url: "{{ cve_rhsb_url }}"
         return_content: true
         status_code: 200
       register: cve_rhsb_content
