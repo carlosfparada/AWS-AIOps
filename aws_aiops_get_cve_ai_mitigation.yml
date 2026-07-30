@@ -38,7 +38,7 @@
 # sudo reboot       
         prompt: >
           Write a simple ansible playbook to mitigate {{ cve_name }}.
-          Do not include tasks for backus, checks, validations or reports.
+          DO NOT include tasks that perform backups, checks or validations.
           The playbbok MUST only cover the RHEL9 OS for target nodes.
           I DON'T want you to update any software package or kernel binary.
           I just want you to do mitigation based on kernel parameters
@@ -47,8 +47,7 @@
           The CVE has the following details, mitigation and references:
           Details: '{{ cve_details }}'.
           Mitigation: '{{ cve_mitigation }}'.
-          References: '{{ cve_references }},
-          https://www.akamai.com/cloud/guides/cve-2026-31431-copy-fail-mitigation'.
+          References: '{{ cve_references }}'.
           You MUST use the following string as ansible play targets (hosts): 
           '{{ affected_systems_fqdn | join(',') }}'.
 
