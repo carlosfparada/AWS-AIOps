@@ -50,12 +50,12 @@
       loop: "{{ cve_response.json.vulnerabilities[0].references | default([]) }}"
       when: "'RHSB' in item.summary" 
 
-    # - name: Pull the current VEX/CSAF record for this CVE
-    #   uri:
-    #     url: "{{ rhsb_link }}"
-    #     return_content: true
-    #     status_code: 200
-    #   register: rhsb_content
+    - name: Fetch RHSB Content
+      ansible.builtin.uri:
+        url: "{{cve_rhsb_url }}"
+        return_content: true
+        status_code: 200
+      register: cve_rhsb_content
 
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
@@ -72,7 +72,7 @@
           You can reboot the systems to apply changes if needed.
           The CVE has the following details:
           Details: '{{ cve_details }}'.
-          RHSB: '{{ cve_rhsb_url }}'.
+          RHSB: '{{ cve_rhsb_content }}'.
           You MUST use the following string as ansible play targets (hosts): 
           '{{ affected_systems_fqdn | join(',') }}'.
 
