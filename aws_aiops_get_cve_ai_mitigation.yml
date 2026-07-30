@@ -55,6 +55,7 @@
         url: "{{ cve_rhsb_url }}"
         return_content: true
         status_code: 200
+      when: cve_rhsb_url is defined
       register: cve_rhsb_content
 
     - name: Set Fact Red Hat AI Prompt
