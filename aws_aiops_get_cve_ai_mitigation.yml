@@ -70,8 +70,8 @@
       set_fact:
         rhsb_summary_matches: "{{ cve_rhsb_content.content |
           regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>',
-          '\\1', ignorecase=True) | default([], true) }}"
-          #| regex_replace('<.*?]>', ' ') }}"
+          '\\1', ignorecase=True) | default([], true) |
+          | regex_replace('<.*?]>', ' ') }}"
 
     # - name: Get first match or empty string, then clean it up
     #   set_fact:
