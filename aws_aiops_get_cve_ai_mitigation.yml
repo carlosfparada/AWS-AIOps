@@ -68,15 +68,19 @@
 
     - name: Extract Executive summary section from RHSB HTML
       set_fact:
-        rhsb_summary_matches: "{{ cve_rhsb_content.content | regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>', '\\1', ignorecase=True, multiline=True) | default([], true) }}"
+        rhsb_summary_matches: >-
+            {{ cve_rhsb_content.content |
+            regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>',
+            '\\1', ignorecase=True, multiline=True) | default([], true) 
+            | first | default('', true) }}"
 
-    - name: Get first match or empty string, then clean it up
-      set_fact:
-        rhsb_summary: >-
-          {{ (rhsb_summary_matches | first | default('', true))
-            | regex_replace('<[^>]+>', ' ')
-            | regex_replace('\s+', ' ')
-            | trim }}
+    # - name: Get first match or empty string, then clean it up
+    #   set_fact:
+    #     rhsb_summary: >-
+    #       {{ (rhsb_summary_matches | first | default('', true))
+    #         | regex_replace('<[^>]+>', ' ')
+    #         | regex_replace('\s+', ' ')
+    #         | trim }}
             
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
