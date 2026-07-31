@@ -62,9 +62,9 @@
         #rhsb_summary: "{{ cve_rhsb_content.content | regex_search('.*?<h2>Executive Summary</h2>(.*?)<h2>', '\\1', multiline=True, ignorecase=True) | default('', true) }}"
         #rhsb_mitigations: "{{ cve_rhsb_content.content | regex_search('.*?<h2>Mitigations</h2>(.*?)<h2>', '\\1' multiline=True, ignorecase=True) | default('', true) }}"
         #rhsb_mitigations: "{{ cve_rhsb_content.content | regex_search('(?s)<h2>Mitigations</h2>(.*?)(?=<h2>|$)', '\\\\1', ignorecase=True) | default('', true) }}"      when: cve_rhsb_content.status == 200
-    - name: Extract Executive Summary and Mitigation sections text
-      set_fact:
-        rhsb_executive_summary: "{{ cve_rhsb_content.content | regex_search('.*?<h2>Executive summary</h2>(.*?)(<h2>)', '\\1', ignorecase=True) | default('', true) }}"
+    # - name: Extract Executive Summary and Mitigation sections text
+    #   set_fact:
+    #     rhsb_executive_summary: "{{ cve_rhsb_content.content | regex_search('.*?<h2>Executive summary</h2>(.*?)(<h2>)', '\\1', ignorecase=True) | default('', true) }}"
 
     - name: Extract Executive summary section from RHSB HTML
       set_fact:
