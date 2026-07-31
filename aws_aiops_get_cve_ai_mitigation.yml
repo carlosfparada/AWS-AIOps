@@ -60,9 +60,9 @@
 
     - name: Extract Executive Summary and Mitigation sections text
       set_fact:
-        rhsb_summary: "{{ rhsb_page.content | regex_search('## Executive summary\\n\\n(.*?)\\n\\n##', '\\1') | first | default('') }}"
-        rhsb_mitigation: "{{ rhsb_page.content | regex_search('## Mitigations\\n\\n(.*?)\\n\\n## Remediation', '\\1') | first | default('') }}"
-      when: rhsb_page.status == 200
+        rhsb_summary: "{{ cve_rhsb_content.content | regex_search('## Executive summary\\n\\n(.*?)\\n\\n##', '\\1') | first | default('') }}"
+        rhsb_mitigation: "{{ cve_rhsb_content.content | regex_search('## Mitigations\\n\\n(.*?)\\n\\n## Remediation', '\\1') | first | default('') }}"
+      when: cve_rhsb_content.status == 200
 
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
