@@ -16,32 +16,32 @@
 
     The CVE has the following details:
 
-    description:A flaw was found in the Linux kernel's algif_aead cryptographic
+    description: A flaw was found in the Linux kernel's algif_aead cryptographic
     algorithm interface. An incorrect in-place operation causes source and
     destination data mappings to differ during cryptographic processing. A
     low-privileged local attacker can exploit this flaw to corrupt the contents
     of sensitive system files and escalate to root privileges.
 
-    summary:kernel: crypto: algif_aead - Revert to operating out-of-place
+    summary: kernel: crypto: algif_aead - Revert to operating out-of-place
 
-    other:This issue is classified as Important, rather than Critical severity,
+    other: This issue is classified as Important, rather than Critical severity,
     because exploitation requires local access to the system. A low-privileged
     local attacker can exploit this flaw in the Linux kernel's cryptographic
     interface to gain root privileges by overwriting sensitive system files.
     Exploitation does not require user interaction, potentially resulting in
     full compromise of confidentiality, integrity, and availability.
 
-    general:The CVSS score(s) listed for this vulnerability do not reflect the
+    general: The CVSS score(s) listed for this vulnerability do not reflect the
     associated product's status, and are included for informational purposes to
     better understand the severity of this vulnerability.
 
 
     The Red Hat Security Bulletin containt mitigation details:
 
-    ['\n<p>A vulnerability, known as "Copy Fail", has been identified in the
-    Linux kernel\'s cryptographic interface. A user with a local account could
-    trigger the flaw to gain root privileges, such as that of a system
-    administrator.</p>\n<p>This issue has been assigned <a
+    Executive Summary: ['\n<p>A vulnerability, known as "Copy Fail", has been
+    identified in the Linux kernel\'s cryptographic interface. A user with a
+    local account could trigger the flaw to gain root privileges, such as that
+    of a system administrator.</p>\n<p>This issue has been assigned <a
     href="https://access.redhat.com/security/cve/CVE-2026-31431">CVE-2026-31431</a>
     and has a severity impact of <a
     href="https://access.redhat.com/security/updates/classification">Important</a>.
@@ -54,12 +54,12 @@
     href="https://access.redhat.com/security/cve/CVE-2026-31431">CVE
     page</a>.</p>\n']
 
-    ['\n<p>Any hardening measures that limit local access help reduce the risk
-    of exploitation. Examples include disabling SSH, ensuring SELinux is in
-    enforcing mode, using the default Security Context Constraints (SCC),
-    running workloads as non-root, and restricting <code>oc debug</code> access
-    to trusted cluster administrators. This list is not exhaustive, and the
-    applicability of each measure should be evaluated in the context of your
+    Mitigations: ['\n<p>Any hardening measures that limit local access help
+    reduce the risk of exploitation. Examples include disabling SSH, ensuring
+    SELinux is in enforcing mode, using the default Security Context Constraints
+    (SCC), running workloads as non-root, and restricting <code>oc debug</code>
+    access to trusted cluster administrators. This list is not exhaustive, and
+    the applicability of each measure should be evaluated in the context of your
     operational requirements and security policies. Additionally, disabling any
     single access method does not eliminate all other means by which a user
     could gain local access.</p>\n<h3>Overall Guidance</h3>\n<p>This advice is
