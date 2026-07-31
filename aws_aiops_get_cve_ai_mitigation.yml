@@ -56,7 +56,7 @@
         return_content: true
         status_code: 200
       when: cve_rhsb_url is defined
-      register: cve_rhsb_content
+      register: cve_rhsb_html
 
         # rhsb_summary: "{{ cve_rhsb_content.content | regex_search('<h2>Executive summary</h2>(.*?)<h2>', '\\1') | default('', true) }}"
         #rhsb_summary: "{{ cve_rhsb_content.content | regex_search('.*?<h2>Executive Summary</h2>(.*?)<h2>', '\\1', multiline=True, ignorecase=True) | default('', true) }}"
@@ -68,7 +68,7 @@
 
     - name: Extract Executive summary section from RHSB HTML
       set_fact:
-        rhsb_summary_matches: "{{ cve_rhsb_content.content |
+        cve_rhsb_content: "{{ cve_rhsb_html.content |
           regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>',
           '\\1', ignorecase=True) | default([], true) |
           | regex_replace('<.*?]>', ' ') }}"
