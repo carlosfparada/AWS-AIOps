@@ -32,6 +32,7 @@
       ansible.builtin.copy:
         src: "{{ repository['path'] }}/playbook_mitigation.yml"
         dest: "{{ repository['path'] }}/playbook_mitigation.yml"
+        remote_src: true
         force: true
         mode: '0644'
         
