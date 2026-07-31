@@ -1,0 +1,1374 @@
+    Write a simple ansible playbook to mitigate CVE-2026-31431. The playbbok
+    MUST only cover the RHEL OS for target nodes. DON'T include tasks to perform
+    backups, checks or validations. DON'T update any software package or kernel
+    binary, DO ONLY mitigation based on kernel parameters or similar mitigation
+    measures. You SHOULD reboot the systems to apply changes if needed. You MUST
+    use the following string as ansible play targets (hosts): 
+    'ec2-98-93-112-42.compute-1.amazonaws.com,ec2-98-92-4-79.compute-1.amazonaws.com'.
+    The CVE has the following details:  'description:A flaw was found in the
+    Linux kernel's algif_aead cryptographic algorithm interface. An incorrect
+    in-place operation causes source and destination data mappings to differ
+    during cryptographic processing. A low-privileged local attacker can exploit
+    this flaw to corrupt the contents of sensitive system files and escalate to
+    root privileges.
+
+    summary:kernel: crypto: algif_aead - Revert to operating out-of-place
+
+    other:This issue is classified as Important, rather than Critical severity,
+    because exploitation requires local access to the system. A low-privileged
+    local attacker can exploit this flaw in the Linux kernel's cryptographic
+    interface to gain root privileges by overwriting sensitive system files.
+    Exploitation does not require user interaction, potentially resulting in
+    full compromise of confidentiality, integrity, and availability.
+
+    general:The CVSS score(s) listed for this vulnerability do not reflect the
+    associated product's status, and are included for informational purposes to
+    better understand the severity of this vulnerability.
+
+    ' The Red Hat Security Bulletin containt mitigation details: '{'content':
+    '\n<!DOCTYPE html>\n<html lang="en" dir="ltr" prefix="og:
+    https://ogp.me/ns#">\n  <head>\n    <meta charset="utf-8" />\n<link
+    rel="canonical"
+    href="https://access.redhat.com/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="shortlink"
+    href="https://access.redhat.com/security/vulnerabilities/RHSB-2026-002"
+    />\n<meta property="og:site_name" content="Red Hat Customer Portal"
+    />\n<meta property="og:type" content="article" />\n<meta property="og:url"
+    content="https://access.redhat.com/security/vulnerabilities/RHSB-2026-002"
+    />\n<meta property="og:title" content="RHSB-2026-002 Cryptographic Subsystem
+    Privilege Escalation - Linux Kernel (CVE-2026-31431) - Copy Fail | Red Hat
+    Customer Portal" />\n<meta property="og:description" content="Access Red
+    Hat’s knowledge, guidance, and support through your subscription." />\n<meta
+    name="twitter:card" content="summary" />\n<meta name="twitter:description"
+    content="Access Red Hat’s knowledge, guidance, and support through your
+    subscription." />\n<meta name="twitter:title" content="RHSB-2026-002
+    Cryptographic Subsystem Privilege Escalation - Linux Kernel (CVE-2026-31431)
+    - Copy Fail | Red Hat Customer Portal" />\n<meta name="twitter:image"
+    content="https://access.redhat.com/webassets/avalon/g/shadowman-200.png"
+    />\n<meta name="Generator" content="Drupal 10 (https://www.drupal.org)"
+    />\n<meta name="MobileOptimized" content="width" />\n<meta
+    name="HandheldFriendly" content="true" />\n<meta name="viewport"
+    content="width=device-width, initial-scale=1.0" />\n<link rel="alternate"
+    hreflang="en"
+    href="https://access.redhat.com/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="alternate" hreflang="ja"
+    href="https://access.redhat.com/ja/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="alternate" hreflang="zh-hans"
+    href="https://access.redhat.com/zh_CN/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="alternate" hreflang="x-default"
+    href="https://access.redhat.com/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="alternate" hreflang="fr"
+    href="https://access.redhat.com/fr/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="alternate" hreflang="ko"
+    href="https://access.redhat.com/ko/security/vulnerabilities/RHSB-2026-002"
+    />\n<link rel="icon" href="/themes/custom/dxp_security_theme/favicon.ico"
+    type="image/vnd.microsoft.icon" />\n\n    <title>RHSB-2026-002 Cryptographic
+    Subsystem Privilege Escalation - Linux Kernel (CVE-2026-31431) - Copy Fail |
+    Red Hat Customer Portal</title>\n    <link rel="stylesheet" media="all"
+    href="/sites/security/files/css/css_0Y-mXu1MQG0S7wva9iwGHniT9AIX4TaEuZnK1V26Jhk.css?delta=0&amp;language=en&amp;theme=dxp_security_theme&amp;include=eJx9iksOgzAMBS8UmiNFJn6IVPnJdiK4Pd100yJ2o5nhowdFHJLsDLajwFO01OpSaTr-ryyjU17ahEhi6N3TNzwPAoXdhTlyhdCa8sc5AYedLMRWCqqp_xWvL7zV6amG4ldSXMmhVYQ"
+    />\n<link rel="stylesheet" media="all"
+    href="/sites/security/files/css/css_lflW7JrUEbAlbKRUAmWh5JPhrkWxpYVz90OTYCZlcho.css?delta=1&amp;language=en&amp;theme=dxp_security_theme&amp;include=eJx9iksOgzAMBS8UmiNFJn6IVPnJdiK4Pd100yJ2o5nhowdFHJLsDLajwFO01OpSaTr-ryyjU17ahEhi6N3TNzwPAoXdhTlyhdCa8sc5AYedLMRWCqqp_xWvL7zV6amG4ldSXMmhVYQ"
+    />\n\n    <script>\n      window.primerSsoSettings = {\n        sso_host:
+    \'https://sso.redhat.com\',\n        client_id: \'customer-portal\',\n     
+    };\n    </script>\n    <!-- CP_PRIMER_HEAD -->\n    <meta charset="utf-8"
+    />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <!--[if
+    IEMobile]><meta http-equiv="cleartype" content="on" /><![endif]-->\n\n   
+    <!-- metaInclude -->\n    <meta name="viewport" content="width=device-width,
+    initial-scale=1" />\n\n    <!-- Chrome, Firefox OS and Opera -->\n    <meta
+    name="theme-color" content="#000000" />\n    <!-- Windows Phone -->\n   
+    <meta name="msapplication-navbutton-color" content="#000000" />\n    <!--
+    iOS Safari -->\n    <meta name="apple-mobile-web-app-status-bar-style"
+    content="#000000" />\n    \n    <script async>\n        if
+    (!HTMLScriptElement.supports || !HTMLScriptElement.supports(\'importmap\'))
+    {\n           
+    import("https://www.redhatstatic.com/dssf-001/v1-alpha/es-module-shims@1.7.3.js");\n       
+    }\n    </script>\n    \n              <script
+    type="importmap">\n                {\n                  "imports":
+    {\n                    "@rhds/elements/":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.2.0/elements/",\n                   
+    "@cpelements/elements/":
+    "https://www.redhatstatic.com/dssf-001/v2/@cpelements/elements@2.0.0-alpha.70/elements/",\n                   
+    "@patternfly/elements/":
+    "https://www.redhatstatic.com/dssf-001/v1-alpha/@patternfly/elements@2.2.2/",\n                   
+    "@patternfly/icons/":
+    "https://www.redhatstatic.com/dssf-001/v1-alpha/@patternfly/icons@1.0.2/",\n                   
+    "@patternfly/pfe-core":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@5.0.3/core.js",\n                   
+    "@patternfly/pfe-core/":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@5.0.3/"\n                 
+    },\n                  "scopes": {\n                   
+    "https://www.redhatstatic.com/dssf-001/v2/@cpelements/elements@2.0.0-alpha.70/":
+    {\n                      "@patternfly/pfe-core":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@3.0.0/core.js",\n                     
+    "@patternfly/pfe-core/":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@3.0.0/"\n                   
+    },\n                   
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.2.0/":
+    {\n                      "@patternfly/pfe-core":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@5.0.3/core.js",\n                     
+    "@patternfly/pfe-core/":
+    "https://www.redhatstatic.com/dssf-001/v2/@patternfly/pfe-core@5.0.3/"\n                   
+    },\n                    "https://www.redhatstatic.com/dssf-001/v2/":
+    {\n                        "@floating-ui/core":
+    "https://www.redhatstatic.com/dssf-001/v2/@floating-ui/core@1.6.9/dist/floating-ui.core.mjs",\n                       
+    "@floating-ui/dom":
+    "https://www.redhatstatic.com/dssf-001/v2/@floating-ui/dom@1.6.13/dist/floating-ui.dom.mjs",\n                       
+    "@floating-ui/utils":
+    "https://www.redhatstatic.com/dssf-001/v2/@floating-ui/utils@0.2.9/dist/floating-ui.utils.mjs",\n                       
+    "@floating-ui/utils/dom":
+    "https://www.redhatstatic.com/dssf-001/v2/@floating-ui/utils@0.2.9/dist/floating-ui.utils.dom.mjs",\n                       
+    "@lit/context":
+    "https://www.redhatstatic.com/dssf-001/v2/@lit/context@1.1.4/development/index.js",\n                       
+    "@lit/reactive-element":
+    "https://www.redhatstatic.com/dssf-001/v2/@lit/reactive-element@2.0.4/reactive-element.js",\n                       
+    "@lit/reactive-element/decorators/":
+    "https://www.redhatstatic.com/dssf-001/v2/@lit/reactive-element@2.0.4/decorators/",\n                       
+    "@rhds/elements/lib/":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.0.3/lib/",\n                       
+    "@rhds/icons":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/icons@1.2.0/icons.js",\n                       
+    "@rhds/icons/":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/icons@1.2.0/",\n                       
+    "@rhds/tokens/media.js":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/tokens@3.0.0/js/media.js",\n                       
+    "@rhds/tokens/":
+    "https://www.redhatstatic.com/dssf-001/v2/@rhds/tokens@3.0.0/",\n                       
+    "lit":
+    "https://www.redhatstatic.com/dssf-001/v2/lit@3.2.1/index.js",\n                       
+    "lit/":
+    "https://www.redhatstatic.com/dssf-001/v2/lit@3.2.1/",\n                       
+    "lit-element/lit-element.js":
+    "https://www.redhatstatic.com/dssf-001/v2/lit-element@4.1.1/lit-element.js",\n                       
+    "lit-html":
+    "https://www.redhatstatic.com/dssf-001/v2/lit-html@3.2.1/lit-html.js",\n                       
+    "lit-html/":
+    "https://www.redhatstatic.com/dssf-001/v2/lit-html@3.2.1/",\n                       
+    "tslib":
+    "https://www.redhatstatic.com/dssf-001/v2/tslib@2.8.1/tslib.es6.mjs"\n                   
+    }\n                  }\n                }\n             
+    </script>\n              \n    <script async 
+    src="https://static.redhat.com/libs/redhat/marketing/latest/trustarc/trustarc.js"></script>\n   
+    <script async src="//www.redhat.com/ma/dpal.js"></script>\n    \n    <script
+    type="text/javascript">\n      window.portal = {\n      \n        host      
+    : "https://access.redhat.com",\n        idp_url    :
+    "https://sso.redhat.com",\n      \n        env        : "prod",\n       
+    lang       : "en",\n        version    : "1.5.24",\n        builddate  :
+    "Thu Jul 09 2026 13:22:49 GMT+0000 (Coordinated Universal Time)",\n       
+    deploydate : "Thursday, 09-Jul-2026 13:22:58 UTC",\n        fetchdate  :
+    "Friday, 31-Jul-2026 08:45:29 UTC",\n        primer     : {}\n     
+    };\n      var w=Object.defineProperty;var a=(t,e)=>()=>(t&&(e=t(t=0)),e);var
+    u=(t,e)=>{for(var r in e)w(t,r,{get:e[r],enumerable:!0})};var
+    o=a(()=>{});var i=a(()=>{o()});var
+    l={};u(l,{loginIfSessionExists:()=>_});function _(){let
+    t=!/\\/logout.*/.test(location.pathname),e=window.portal.host===location.origin,r=document.cookie.indexOf("rh_sso_session")>=0,p=!(document.cookie.indexOf("rh_jwt")>=0);if(t&&e&&r&&p){let
+    m=encodeURIComponent(window.location.href);window.location.assign(`/login?redirectTo=${m}`)}}var
+    c=a(()=>{o();i()});o();o();i();var f="cp_primer_global_ready",h=!1;function
+    s(){return new
+    Promise(t=>{h?t(window.portal.primer):window.addEventListener(f,()=>{t(window.portal.primer)})})}o();var
+    d=!0;i();window.portal.primer.onReady=s;d&&Promise.resolve().then(()=>(c(),l)).then(({loginIfSessionExists:t})=>{t()});document.documentElement.setAttribute("lang",document.documentElement.getAttribute("lang")||window.portal.lang||"en");\n\n   
+    </script>\n    <script type="module" src="/services/primer/js/primer.js"
+    crossorigin="anonymous"></script>\n\n    \n    <script type="module">\n     
+    import
+    \'https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.2.0/elements/rh-footer/rh-footer.js\';\n   
+    </script>\n    <script type="module">\n      import
+    \'https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.2.0/elements/rh-site-status/rh-site-status.js\';\n   
+    </script>\n    <script type="module">\n      import
+    \'@rhds/elements/rh-alert/rh-alert.js\';\n    </script>\n    <link defer
+    media="all" rel="stylesheet"
+    href="https://www.redhatstatic.com/dssf-001/v2/@rhds/elements@3.2.0/elements/rh-footer/rh-footer-lightdom.css"
+    />\n    \n\n    \n    <script type="module">\n      const primer = await
+    window.portal.primer.onReady();\n      const comp = await
+    primer.components.include(\'cp-ask-red-hat\');\n\n      const cpAsk =
+    document.querySelector(\'cp-ask-red-hat\');\n      await
+    cpAsk.updateComplete;\n\n    \n      cpAsk.healthCheckEndpoint =
+    "https://access.redhat.com/api/ask/v1/health";\n      cpAsk.hydraEndpoint =
+    "https://access.redhat.com/hydra/rest/contacts/sso/current";\n     
+    cpAsk.href = "https://access.redhat.com/ask";\n    \n\n     
+    primer.session.onInit(async () => {\n        if
+    (primer.session.isAuthenticated()) {\n          // get values from primer
+    session pass them to cpAsk\n          cpAsk.authToken =
+    primer.session.getEncodedToken();\n          cpAsk.userId =
+    primer.session.getUserInfo().sub;\n        }\n      });\n    </script>\n   
+    \n\n    \n    <link rel="preconnect" href="https://static.redhat.com">\n   
+    <link rel="preconnect" href="https://consent.trustarc.com">\n    \n\n   
+    <style type="text/css" media="screen">body::before{content:"CRITICAL
+    CSS"}</style>\n\n    <!-- testing a method for async CSS loading recommended
+    at https://web.dev/defer-non-critical-css/#optimize -->\n\n    <!-- <link
+    rel="preload" href="/services/primer/css/bootstrap.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n    <!-- <link
+    rel="preload" href="/services/primer/css/bootstrap-grid.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n    <!-- <link
+    rel="preload" href="/services/primer/css/main.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n    <!-- <link
+    rel="preload" href="/services/primer/css/components.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n    <!-- <link
+    rel="preload" href="/services/primer/css/pages.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n    <!-- <link
+    rel="preload" href="/services/primer/js/primer.css" as="style"
+    onload="this.onload=null;this.rel=\'stylesheet\'"> -->\n\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/css/bootstrap.css"></noscript> -->\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/css/bootstrap-grid.css"></noscript> -->\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/css/main.css"></noscript> -->\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/css/components.css"></noscript> -->\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/css/pages.css"></noscript> -->\n    <!--
+    <noscript><link rel="stylesheet"
+    href="/services/primer/js/primer.css"></noscript> -->\n\n    <!-- /testing a
+    method for async CSS loading recommended at
+    https://web.dev/defer-non-critical-css/#optimize -->\n\n    <!-- typical
+    method for loading CSS -->\n\n    <link defer media="all" rel="stylesheet"
+    href="/services/primer/css/bootstrap.css" />\n    <link defer media="all"
+    rel="stylesheet" href="/services/primer/css/bootstrap-grid.css" />\n   
+    <link defer media="all" rel="stylesheet"
+    href="/services/primer/css/main.css" />\n    <link defer media="all"
+    rel="stylesheet" href="/services/primer/css/components.css" />\n    <link
+    defer media="all" rel="stylesheet" href="/services/primer/css/pages.css"
+    />\n    <link defer media="all" rel="stylesheet"
+    href="/services/primer/css/cphub-alerts.css" />\n    <link defer media="all"
+    rel="stylesheet" href="/services/primer/js/primer.css" />\n\n    <!--
+    /typical method for loading CSS -->\n    <!-- /CP_PRIMER_HEAD -->\n   
+    <script type="module">\n      import
+    \'https://www.redhatstatic.com/dssf-001/v2/@cpelements/elements@2.0.0-alpha.63/elements/cp-vote-and-feedback/cp-vote-and-feedback.js\'\n   
+    </script>\n    \n  </head>\n  <body class="path-node
+    page-node-type-vulnerability">\n        <a href="#main-content"
+    class="visually-hidden focusable">\n      Skip to main content\n   
+    </a>\n    \n      <div class="dialog-off-canvas-main-canvas"
+    data-off-canvas-main-canvas>\n      <!-- CP_PRIMER_HEADER -->\n<div
+    id="page-wrap" class="page-wrap">\n    <div
+    class="cphub-alerts-wrapper">\n        <div id="cphub-alerts-container"
+    class="cphub-alerts cphub-alerts--banner"></div>\n    </div>\n    <div
+    id="cphub-alerts-container--toast" class="cphub-alerts
+    cphub-alerts--toast"></div>\n    <div id="pers-top-page-wrap"
+    class="top-page-wrap pers-loader-bg">\n\n        <!--googleoff:
+    all-->\n        <header class="masthead" id="masthead">\n\n            <a
+    href="#pfe-navigation" id="global-skip-to-nav" class="skip-link
+    visually-hidden">Skip to navigation</a>\n            <a href="#cp-main"
+    class="skip-link visually-hidden">Skip to main content</a>\n\n           
+    \n      <nav id="portal-utility-nav" class="utility-navigation
+    utility-navigation--bar hidden-at-mobile"
+    data-analytics-region="universal-navigation"
+    aria-labelledby="nav__utility-nav--desktop">\n        <h3
+    id="nav__utility-nav--desktop" class="element-invisible">\n         
+    Utilities\n        </h3>\n        <ul
+    aria-labelledby="nav__utility-nav--desktop">\n          <li
+    id="nav-subscription" data-portal-tour-1="1">\n            <a
+    class="top-nav-subscriptions" data-analytics-level="2"
+    data-analytics-category="Utilities" data-analytics-text="Subscription"
+    href="https://access.redhat.com/management/">\n             
+    Subscriptions\n            </a>\n          </li>\n          <li
+    id="nav-downloads" data-portal-tour-1="2">\n            <a
+    class="top-nav-downloads" data-analytics-level="2"
+    data-analytics-category="Utilities" data-analytics-text="Downloads"
+    href="https://access.redhat.com/downloads/">\n             
+    Downloads\n            </a>\n          </li>\n          <li
+    id="nav-rh-console">\n            <a class="top-nav-rh-console"
+    data-analytics-level="2" data-analytics-category="Utilities"
+    data-analytics-text="Red Hat Console"
+    href="//console.redhat.com/">\n              Red Hat Console\n           
+    </a>\n          </li>\n          <li id="nav-support"
+    data-portal-tour-1="3">\n            <a class="top-nav-get-support"
+    data-analytics-level="2" data-analytics-category="Utilities"
+    data-analytics-text="Get Support"
+    href="https://access.redhat.com/support/">\n              Get
+    Support\n            </a>\n          </li>\n        </ul>\n     
+    </nav>\n\n      <pfe-navigation id="pfe-navigation"
+    data-analytics-region="mega menu">\n        <div
+    class="pfe-navigation__logo-wrapper"
+    id="pfe-navigation__logo-wrapper">\n          <a
+    href="https://access.redhat.com/" class="pfe-navigation__logo-link"
+    data-analytics-text="logo" data-analytics-category="MM|logo">\n           
+    <img class="pfe-navigation__logo-image" alt="Red Hat Customer Portal"
+    src="https://access.redhat.com/chrome_themes/nimbus/img/red-hat-customer-portal.svg"
+    />\n          </a>\n        </div>\n\n        <nav class="pfe-navigation"
+    aria-label="Main Navigation" data-analytics-region="main nav">\n         
+    <ul class="pfe-navigation__menu" id="pfe-navigation__menu">\n\n           
+    \n            <li class="pfe-navigation__menu-item hidden-at-tablet
+    hidden-at-desktop" id="nav-subscription--mobile"
+    data-portal-tour-1="1">\n              <a class="pfe-navigation__menu-link"
+    data-analytics-level="1" data-analytics-text="Subscriptions"
+    href="https://access.redhat.com/management/">\n               
+    Subscriptions\n              </a>\n            </li>\n            <li
+    class="pfe-navigation__menu-item hidden-at-tablet hidden-at-desktop"
+    id="nav-downloads--mobile" data-portal-tour-1="2">\n              <a
+    class="pfe-navigation__menu-link" data-analytics-level="1"
+    data-analytics-text="Downloads"
+    href="https://access.redhat.com/downloads/">\n               
+    Downloads\n              </a>\n            </li>\n            <li
+    class="pfe-navigation__menu-item hidden-at-tablet hidden-at-desktop"
+    id="nav-containers--mobile">\n              <a
+    class="pfe-navigation__menu-link" data-analytics-level="1"
+    data-analytics-text="Red Hat Console"
+    href="//console.redhat.com/">\n                Red Hat
+    Console\n              </a>\n            </li>\n            <li
+    class="pfe-navigation__menu-item hidden-at-tablet hidden-at-desktop"
+    id="nav-support--mobile" data-portal-tour-1="3">\n              <a
+    class="pfe-navigation__menu-link" data-analytics-level="1"
+    data-analytics-text="Get Support"
+    href="https://access.redhat.com/support/">\n                Get
+    Support\n              </a>\n            </li>\n\n            \n           
+    <li class="pfe-navigation__menu-item">\n              <a
+    href="https://access.redhat.com/" class="pfe-navigation__menu-link"
+    data-analytics-level="1" data-analytics-text="Products">\n               
+    Products\n              </a>\n              <div
+    class="pfe-navigation__dropdown  pfe-navigation__dropdown--3-column
+    pfe-navigation__dropdown--3-column--centered">\n               
+    \n                <div>\n                  <h3
+    id="nav__products__top_products" data-analytics-level="2"
+    data-analytics-text="Top Products" data-analytics-category="Top
+    Products">\n                    Top Products\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__products__top_products">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Products|Top Products" data-analytics-text="Red Hat
+    Enterprise Linux"
+    href="https://access.redhat.com/products/red-hat-enterprise-linux/">\n                       
+    Red Hat Enterprise Linux\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Top Products"
+    data-analytics-text="Red Hat OpenShift"
+    href="https://access.redhat.com/products/red-hat-openshift-container-platform">\n                       
+    Red Hat OpenShift\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Top Products"
+    data-analytics-text="Red Hat Ansible Automation Platform"
+    href="https://access.redhat.com/products/red-hat-ansible-automation-platform/">\n                       
+    Red Hat Ansible Automation Platform\n                     
+    </a>\n                    </li>\n                  </ul>\n                 
+    <pfe-cta>\n                    <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products"
+    data-analytics-text="All Products" data-analytics-linkType="cta"
+    href="https://access.redhat.com/products/">\n                      All
+    Products\n                    </a>\n                 
+    </pfe-cta>\n                </div>\n                \n               
+    <div>\n                  <h3 id="nav__products__downloads_containers"
+    data-analytics-level="2" data-analytics-category="Products and Services"
+    data-analytics-text="Downloads and Containers">\n                   
+    Downloads and Containers\n                  </h3>\n                  <ul
+    aria-labelledby="nav__products__downloads_containers">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Products|Downloads and Containers"
+    data-analytics-text="Downloads"
+    href="https://access.redhat.com/downloads/">\n                       
+    Downloads\n                      </a>\n                   
+    </li>\n\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Downloads and
+    Containers" data-analytics-text="Packages"
+    href="https://access.redhat.com/downloads/content/package-browser">\n                       
+    Packages\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Downloads and
+    Containers" data-analytics-text="Containers"
+    href="https://catalog.redhat.com/software/containers/explore/">\n                       
+    Containers\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n\n               
+    \n                <div>\n                  <h3
+    id="nav__products__top_resources" data-analytics-level="2"
+    data-analytics-category="Top Resources" data-analytics-text="Top
+    Resources">\n                    Top Resources\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__products__top_resources">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Products|Top Reasources"
+    data-analytics-text="Documentation"
+    href="//docs.redhat.com/">\n                       
+    Documentation\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Top Resources"
+    data-analytics-text="Product Life Cycles"
+    href="https://access.redhat.com/product-life-cycles/">\n                       
+    Product Life Cycles\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Top Resources"
+    data-analytics-text="Product Compliance"
+    href="https://access.redhat.com/compliance/">\n                       
+    Product Compliance\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Products|Top Resources"
+    data-analytics-text="Errata"
+    href="https://access.redhat.com/errata/">\n                       
+    Errata\n                      </a>\n                   
+    </li>\n\n                  </ul>\n                </div>\n             
+    </div>\n            </li>\n\n            \n            <li
+    class="pfe-navigation__menu-item">\n              <a
+    class="pfe-navigation__menu-link" data-analytics-level="1"
+    data-analytics-text="Knowledge"
+    href="https://access.redhat.com/labs/">\n               
+    Knowledge\n              </a>\n              <div
+    class="pfe-navigation__dropdown  pfe-navigation__dropdown--3-column
+    pfe-navigation__dropdown--3-column--centered">\n               
+    \n                <div>\n                  <h3
+    id="nav__knowledge__knowledge_center" data-analytics-level="2"
+    data-analytics-text="Red Hat Knowledge Center"
+    data-analytics-category="Tools">\n                    <a
+    data-analytics-level="2" data-analytics-category="Knowledge|Red Hat
+    Knowledge Center" data-analytics-text="Knowledgebase"
+    href="https://access.redhat.com/kb">\n                      Red Hat
+    Knowledge Center\n                    </a>\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__knowledge__knowledge_center">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Knowledge|Red Hat Knowledge Center"
+    data-analytics-text="Knowledgebase Solutions"
+    href="https://access.redhat.com/kb/search?document_kinds=Solution&start=0">\n                       
+    Knowledgebase Solutions\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Red Hat
+    Knowledge Center" data-analytics-text="Knowledgebase Articles"
+    href="https://access.redhat.com/kb/search?document_kinds=Article&start=0">\n                       
+    Knowledgebase Articles\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Red Hat
+    Knowledge Center" data-analytics-text="Customer Portal Labs"
+    href="https://access.redhat.com/labs/">\n                        Customer
+    Portal Labs\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Red Hat
+    Knowledge Center" data-analytics-text="Errata"
+    href="https://access.redhat.com/errata/">\n                       
+    Errata\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n\n               
+    \n                <div>\n                  <h3
+    id="nav__knowledge__product_docs">\n                    Top Product
+    Docs\n                  </h3>\n                  <ul
+    aria-labelledby="nav__knowledge__product_docs">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Knowledge|Top Product Docs"
+    data-analytics-text="Red Hat Enterprise Linux"
+    href="//docs.redhat.com/en/documentation/red_hat_enterprise_linux/">\n                       
+    Red Hat Enterprise Linux\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Top Product
+    Docs" data-analytics-text="Red Hat OpenShift"
+    href="//docs.redhat.com/en/documentation/openshift_container_platform/">\n                       
+    Red Hat OpenShift\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Top Product
+    Docs" data-analytics-text="Red Hat Ansible Automation Platform"
+    href="//docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/">\n                       
+    Red Hat Ansible Automation Platform\n                     
+    </a>\n                    </li>\n                  </ul>\n                 
+    <pfe-cta>\n                    <a data-analytics-level="3"
+    data-analytics-category="Knowledge|Top Product Docs"
+    data-analytics-text="All Product Docs" data-analytics-linkType="cta"
+    href="//docs.redhat.com/en/products">\n                      All Product
+    Docs\n                    </a>\n                 
+    </pfe-cta>\n                </div>\n\n                \n               
+    <div>\n                  <h3
+    id="nav__knowledge__training_certification">\n                    <a
+    data-analytics-level="2" data-analytics-category="Tools"
+    data-analytics-text="Training and Certification"
+    href="//www.redhat.com/en/services/training-and-certification">\n                     
+    Training and Certification\n                    </a>\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__knowledge__training_certification">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Knowledge|Training and Certification"
+    data-analytics-text="About"
+    href="//www.redhat.com/en/services/training-and-certification">\n                       
+    About\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Training and
+    Certification" data-analytics-text="Course Index"
+    href="//www.redhat.com/en/services/training/all-courses-exams">\n                       
+    Course Index\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Training and
+    Certification" data-analytics-text="Certification Index"
+    href="//www.redhat.com/en/services/certifications">\n                       
+    Certification Index\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Knowledge|Training and
+    Certification" data-analytics-text="Skill Assessment"
+    href="//skills.ole.redhat.com/">\n                        Skill
+    Assessment\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n             
+    </div>\n            </li>\n\n            \n            <li
+    class="pfe-navigation__menu-item">\n              <a
+    class="pfe-navigation__menu-link" data-analytics-level="1"
+    data-analytics-text="Security"
+    href="https://access.redhat.com/security/">\n               
+    Security\n              </a>\n              <div
+    class="pfe-navigation__dropdown  pfe-navigation__dropdown--3-column
+    pfe-navigation__dropdown--3-column--centered">\n               
+    \n                <div>\n                  <h3
+    id="security__security_center">\n                    <a
+    data-analytics-level="2" data-analytics-category="Security"
+    data-analytics-text="Red Hat Product Security Center"
+    href="https://access.redhat.com/security">\n                      Red Hat
+    Product Security Center\n                    </a>\n                 
+    </h3>\n                  <ul
+    aria-labelledby="security__security_center">\n\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Security|Red Hat Product Security Center"
+    data-analytics-text="Security Updates"
+    href="https://access.redhat.com/security/security-updates/">\n                       
+    Security Updates\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Red Hat Product
+    Security Center" data-analytics-text="Security Advisories"
+    href="https://access.redhat.com/security/security-updates/#/security-advisories">\n                       
+    Security Advisories\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Red Hat Product
+    Security Center" data-analytics-text="Red Hat CVE Database"
+    href="https://access.redhat.com/security/security-updates/#/cve">\n                       
+    Red Hat CVE Database\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Red Hat Product
+    Security Center" data-analytics-text="Errata"
+    href="https://access.redhat.com/errata/">\n                       
+    Errata\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n               
+    \n                <div>\n                  <h3
+    id="nav__security__references" data-analytics-level="2"
+    data-analytics-text="References"
+    data-analytics-category="Security">\n                   
+    References\n                  </h3>\n                  <ul
+    aria-labelledby="nav__security__references">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Security|References" data-analytics-text="Security
+    Bulletins"
+    href="https://access.redhat.com/security/vulnerabilities">\n                       
+    Security Bulletins\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Red Hat Product
+    Security Center" data-analytics-text="Severity Ratings"
+    href="https://access.redhat.com/security/updates/classification/">\n                       
+    Severity Ratings\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|References"
+    data-analytics-text="Security Data"
+    href="https://access.redhat.com/security/data">\n                       
+    Security Data\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n\n               
+    \n                <div>\n                  <h3
+    id="nav__security__top_resources">\n                    Top
+    Resources\n                  </h3>\n                  <ul
+    aria-labelledby="nav__security__top_resources">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Security|Top Resources"
+    data-analytics-text="Security Labs"
+    href="https://access.redhat.com/security/security-updates/#/security-labs">\n                       
+    Security Labs\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Top Resources"
+    data-analytics-text="Backporting Policies"
+    href="https://access.redhat.com/security/updates/backporting/">\n                       
+    Backporting Policies\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Security|Top Resources"
+    data-analytics-text="Security Blog"
+    href="//redhat.com/en/blog/channel/security">\n                       
+    Security Blog\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n\n             
+    </div>\n            </li>\n\n            \n            <li
+    class="pfe-navigation__menu-item">\n              <a
+    href="https://access.redhat.com/support/" class="pfe-navigation__menu-link"
+    data-analytics-level="1" data-analytics-text="Support">\n               
+    Support\n              </a>\n              <div
+    class="pfe-navigation__dropdown  pfe-navigation__dropdown--3-column
+    pfe-navigation__dropdown--3-column--centered">\n\n               
+    \n                <div>\n                  <h3
+    id="nav__support__rh_support">\n                    <a
+    href="https://access.redhat.com/support/" data-analytics-level="2"
+    data-analytics-text="Red Hat Support"
+    data-analytics-category="Support">\n                      Red Hat
+    Support\n                    </a>\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__support__rh_support">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Support|Red Hat Support"
+    data-analytics-text="Support Cases"
+    href="https://access.redhat.com/support/cases/">\n                       
+    Support Cases\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Red Hat Support"
+    data-analytics-text="Troubleshoot"
+    href="https://access.redhat.com/support/cases/#/troubleshoot">\n                       
+    Troubleshoot\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Red Hat Support"
+    data-analytics-text="Get Support"
+    href="https://access.redhat.com/support/">\n                        Get
+    Support\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Red Hat Support"
+    data-analytics-text="Contact Red Hat Support"
+    href="https://access.redhat.com/support/contact/">\n                       
+    Contact Red Hat Support\n                      </a>\n                   
+    </li>\n\n                  </ul>\n\n               
+    </div>\n\n                \n                <div>\n                  <h3
+    id="nav__support__community_support">\n                    <a
+    href="https://access.redhat.com/community" data-analytics-level="2"
+    data-analytics-text="Red Hat Community Support"
+    data-analytics-category="Support">\n                      Red Hat Community
+    Support\n                    </a>\n                 
+    </h3>\n                  <ul
+    aria-labelledby="nav__support__community_support">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Support|Red Hat Community Support"
+    data-analytics-text="Customer Portal Community"
+    href="https://access.redhat.com/community/">\n                       
+    Customer Portal Community\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Red Hat Community
+    Support" data-analytics-text="Community Discussions"
+    href="https://access.redhat.com/discussions/">\n                       
+    Community Discussions\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Red Hat Community
+    Support" data-analytics-text="Red Hat Accelerator Program"
+    href="https://access.redhat.com/accelerators/">\n                        Red
+    Hat Accelerator Program\n                      </a>\n                   
+    </li>\n                    <!-- commented out because the accelerator
+    program link will likely be replaced by "Contribute" in the future.
+    Translation strings are already in place so uncommenting this link is all
+    that will be needed\n                                        
+    <li>\n                                        <a data-analytics-level="3"
+    data-analytics-category="Support|Red Hat Community Support"
+    data-analytics-text="Contribute"
+    href="https://access.redhat.com/">\n                                           
+    Contribute\n                                       
+    </a>\n                                      </li> -->\n\n                 
+    </ul>\n                </div>\n\n                \n               
+    <div>\n                  <h3 id="nav__support__top_resources"
+    data-analytics-level="2" data-analytics-text="Top Resources"
+    data-analytics-category="Support">\n                    Top
+    Resources\n                  </h3>\n                  <ul
+    aria-labelledby="nav__support__top_resources">\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Support|Top Resources" data-analytics-text="Product
+    Life Cycles"
+    href="https://access.redhat.com/product-life-cycles/">\n                       
+    Product Life Cycles\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Top Resources"
+    data-analytics-text="Customer Portal Labs"
+    href="https://access.redhat.com/labs/">\n                        Customer
+    Portal Labs\n                      </a>\n                   
+    </li>\n                    <li>\n                      <a
+    data-analytics-level="3" data-analytics-category="Support|Top Resources"
+    data-analytics-text="Red Hat JBoss Supported Configurations"
+    href="https://access.redhat.com/support/configurations/jboss">\n                       
+    Red Hat JBoss Supported Configurations\n                     
+    </a>\n                    </li>\n                   
+    <li>\n                      <a data-analytics-level="3"
+    data-analytics-category="Support|Top Resources" data-analytics-text="Red Hat
+    Lightspeed"
+    href="https://cloud.redhat.com/insights">\n                        Red Hat
+    Lightspeed\n                      </a>\n                   
+    </li>\n                  </ul>\n                </div>\n             
+    </div>\n            </li>\n          </ul>\n\n\n\n                   
+    \n                    \n                    \n               
+    </nav>\n\n                \n                <div id="site-search"
+    slot="search" class="utility-link site-search">\n                    <div
+    class="content">\n                        <form class="ng-pristine ng-valid
+    topSearchForm" id="topSearchForm" name="topSearchForm"
+    action="/search/browse/search/" method="get"
+    enctype="application/x-www-form-urlencoded">\n                           
+    <cp-search-autocomplete class="push-bottom"
+    path="/webassets/avalon/j/data.json"></cp-search-autocomplete>\n                           
+    \n                            <div>\n                                Or <a
+    href="/support/cases/#/troubleshoot">troubleshoot an
+    issue</a>.\n                            </div>\n                       
+    </form>\n                    </div>\n               
+    </div>\n\n                <div id="ask-red-hat"
+    slot="event">\n                  <cp-ask-red-hat
+    data-analytics-category="RHCP|HP|Navigation|Authenticated|Subs"
+    data-analytics-text="Ask Red Hat"
+    data-analytics-linktype="cta"></cp-ask-red-hat>\n               
+    </div>\n\n                <div slot="secondary-links"
+    id="localesMenu">\n                    <button
+    class="pfe-navigation__secondary-link">\n                        <pfe-icon
+    icon="web-icon-globe" size="sm"
+    aria-hidden="true"></pfe-icon>\n                       
+    English\n                    </button>\n\n                   
+    <pfe-navigation-dropdown dropdown-width="single">\n                       
+    <h2 class="utility-header">\n                            Select Your
+    Language\n                        </h2>\n                        <ul
+    class="reset">\n                            <li><a href="#" data-lang="en"
+    id="en"
+    data-analytics-text="English">English</a></li>\n                           
+    <li><a href="#" data-lang="fr" id="fr"
+    data-analytics-text="French">Français</a></li>\n                           
+    <li><a href="#" data-lang="ko" id="ko"
+    data-analytics-text="Korean">한국어</a></li>\n                           
+    <li><a href="#" data-lang="ja" id="ja"
+    data-analytics-text="Japanese">日本語</a></li>\n                           
+    <li><a href="#" data-lang="zh_CN" id="zh_CN"
+    data-analytics-text="Chinese">中文 (中国)</a></li>\n                       
+    </ul>\n\n                    </pfe-navigation-dropdown>\n               
+    </div>\n\n                \n                <rh-account-dropdown
+    slot="account"></rh-account-dropdown>\n\n                \n               
+    <pfe-primary-detail breakpoint-width="600"
+    class="main-menu__dropdown--product__product-listing"
+    slot="main-menu__dropdown--product__product-listing"
+    consistent-height>\n                    <h3
+    slot="details-nav">\n                        \n                           
+    Infrastructure and Management\n                           
+    \n                    </h3>\n                    <div
+    slot="details">\n                        <ul>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Infrastructure and
+    Management" data-analytics-text="Red Hat Enterprise Linux"
+    href="https://access.redhat.com/products/red-hat-enterprise-linux/">\n                                   
+    Red Hat Enterprise Linux\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Infrastructure and
+    Management" data-analytics-text="Red Hat Satellite"
+    href="https://access.redhat.com/products/red-hat-satellite/">\n                                   
+    Red Hat Satellite\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Infrastructure and
+    Management" data-analytics-text="Red Hat Subscription Management"
+    href="https://access.redhat.com/products/red-hat-subscription-management/">\n                                   
+    Red Hat Subscription Management\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Infrastructure and
+    Management" data-analytics-text="Red Hat Lightspeed"
+    href="https://access.redhat.com/products/red-hat-insights/">\n                                   
+    Red Hat Lightspeed\n                               
+    </a>\n                            </li>\n                            <li><a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Infrastructure and Management" data-analytics-text="Red
+    Hat Ansible Automation Platform"
+    href="https://access.redhat.com/products/red-hat-ansible-automation-platform/">\n                                   
+    Red Hat Ansible Automation Platform\n                               
+    </a></li>\n                        </ul>\n                   
+    </div>\n\n                    <h3
+    slot="details-nav">\n                        \n                           
+    Cloud Computing\n                            \n                   
+    </h3>\n                    <div slot="details">\n                       
+    <ul>\n                            <li>\n                                <a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Cloud Computing" data-analytics-text="Red Hat OpenShift"
+    href="https://access.redhat.com/products/red-hat-openshift-container-platform">\n                                   
+    Red Hat OpenShift\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat OpenStack Platform"
+    href="https://access.redhat.com/products/red-hat-openstack-platform/">\n                                   
+    Red Hat OpenStack Platform\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing
+    Platform" data-analytics-text="Red Hat OpenShift Container Platform"
+    href="https://access.redhat.com/products/red-hat-openshift-container-platform/">\n                                   
+    Red Hat OpenShift\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing
+    Platform" data-analytics-text="Red Hat OpenShift AI"
+    href="https://access.redhat.com/products/red-hat-openshift-ai/">\n                                   
+    Red Hat OpenShift AI\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat OpenShift Dedicated"
+    href="https://access.redhat.com/products/openshift-dedicated-red-hat/">\n                                   
+    Red Hat OpenShift Dedicated\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing
+    Platform" data-analytics-text="Red Hat Advanced Cluster Security for
+    Kubernetes"
+    href="https://access.redhat.com/products/red-hat-advanced-cluster-security-for-kubernetes/">\n                                   
+    Red Hat Advanced Cluster Security for
+    Kubernetes\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat Advanced Cluster Management for Kubernetes"
+    href="https://access.redhat.com/products/red-hat-advanced-cluster-management-for-kubernetes/">\n                                   
+    Red Hat Advanced Cluster Management for
+    Kubernetes\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat Quay"
+    href="https://access.redhat.com/products/red-hat-quay/">\n                                   
+    Red Hat Quay\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat OpensShift Dev Spaces"
+    href="https://access.redhat.com/products/red-hat-openshift-dev-spaces">\n                                   
+    Red Hat OpenShift Dev Spaces\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Cloud Computing"
+    data-analytics-text="Red Hat OpenShift Service on AWS"
+    href="https://access.redhat.com/products/red-hat-openshift-service-aws">\n                                   
+    Red Hat OpenShift Service on AWS\n                               
+    </a>\n                            </li>\n                       
+    </ul>\n                    </div>\n\n                    <h3
+    slot="details-nav">\n                        \n                           
+    Storage\n                            \n                   
+    </h3>\n                    <div slot="details">\n                       
+    <ul>\n                            <li>\n                                <a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Storage" data-analytics-text="Red Hat Gluster Storage"
+    href="https://access.redhat.com/products/red-hat-storage/">\n                                   
+    Red Hat Gluster Storage\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Storage"
+    data-analytics-text="Red Hat Hyperconverged Infrastructure"
+    href="https://access.redhat.com/products/red-hat-hyperconverged-infrastructure/">\n                                   
+    Red Hat Hyperconverged Infrastructure\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Storage"
+    data-analytics-text="Red Hat Ceph Storage"
+    href="https://access.redhat.com/products/red-hat-ceph-storage/">\n                                   
+    Red Hat Ceph Storage\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Storage"
+    data-analytics-text="Red Hat Openshift Container Storage"
+    href="https://access.redhat.com/products/red-hat-openshift-data-foundation">\n                                   
+    Red Hat OpenShift Data Foundation\n                               
+    </a>\n                            </li>\n                       
+    </ul>\n                    </div>\n\n                    <h3
+    slot="details-nav">\n                        \n                           
+    Runtimes\n                            \n                   
+    </h3>\n                    <div slot="details">\n                       
+    <ul>\n                            <li>\n                                <a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Runtimes" data-analytics-text="Red Hat Runtimes"
+    href="https://access.redhat.com/products/red-hat-runtimes/">\n                                   
+    Red Hat Runtimes\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Runtimes"
+    data-analytics-text="Red Hat JBoss Enterprise Application Platform"
+    href="https://access.redhat.com/products/red-hat-jboss-enterprise-application-platform/">\n                                   
+    Red Hat JBoss Enterprise Application
+    Platform\n                                </a>\n                           
+    </li>\n                            <li>\n                                <a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Runtimes" data-analytics-text="Red Hat Data Grid"
+    href="https://access.redhat.com/products/red-hat-data-grid/">\n                                   
+    Red Hat Data Grid\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Runtimes"
+    data-analytics-text="Red Hat JBoss Web Server"
+    href="https://access.redhat.com/products/red-hat-jboss-web-server/">\n                                   
+    Red Hat JBoss Web Server\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Runtimes"
+    data-analytics-text="Red Hat build of Keycloak"
+    href="https://access.redhat.com/products/red-hat-build-of-keycloak/">\n                                   
+    Red Hat build of Keycloak\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Runtimes"
+    data-analytics-text="Red Hat support for Spring Boot"
+    href="https://access.redhat.com/products/spring-boot/">\n                                   
+    Red Hat support for Spring Boot\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Runtimes"
+    data-analytics-text="Red Hat build of Node.js"
+    href="https://access.redhat.com/products/nodejs/">\n                                   
+    Red Hat build of Node.js\n                               
+    </a>\n                            </li>\n                           
+    \n                            <li>\n                                <a
+    data-analytics-level="3" data-analytics-category="Products and
+    Services|Products:Runtimes" data-analytics-text="Red Hat build of Quarkus"
+    href="https://access.redhat.com/products/quarkus/">\n                                   
+    Red Hat build of Quarkus\n                               
+    </a>\n                            </li>\n                       
+    </ul>\n                    </div>\n\n                    <h3
+    slot="details-nav">\n                        \n                           
+    Integration and Automation\n                           
+    \n                    </h3>\n                    <div
+    slot="details">\n                        <ul class="border-bottom"
+    id="portal-menu-border-bottom">\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Integration and
+    Automation" data-analytics-text="Red Hat Application Foundations"
+    href="https://access.redhat.com/products/red-hat-application-foundations/">\n                                   
+    Red Hat Application Foundations\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Integration and
+    Automation" data-analytics-text="Red Hat Fuse"
+    href="https://access.redhat.com/products/red-hat-fuse/">\n                                   
+    Red Hat Fuse\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Integration and
+    Automation" data-analytics-text="Red Hat AMQ"
+    href="https://access.redhat.com/products/red-hat-amq/">\n                                   
+    Red Hat AMQ\n                               
+    </a>\n                            </li>\n                           
+    <li>\n                                <a data-analytics-level="3"
+    data-analytics-category="Products and Services|Products:Integration and
+    Automation" data-analytics-text="Red Hat 3scale API Management"
+    href="https://access.redhat.com/products/red-hat-3scale/">\n                                   
+    Red Hat 3scale API Management\n                               
+    </a>\n                            </li>\n                       
+    </ul>\n                    </div>\n                    <div
+    slot="details-nav--footer">\n                        <pfe-cta
+    pfe-priority="primary">\n                            <a
+    href="https://access.redhat.com/products/" class="pfe-navigation__menu-link"
+    data-analytics-level="2" data-analytics-text="All Products"
+    data-analytics-category="Products and Services|Products:"
+    data-analytics-linkType="cta">\n                                All
+    Products\n                            </a>\n                       
+    </pfe-cta>\n                    </div>\n               
+    </pfe-primary-detail>\n\n            </pfe-navigation>\n\n            <div
+    id="scroll-anchor"></div>\n\n            <!--[if IE 8]>\n               
+    <div class="portal-messages">\n                <div class="alert
+    alert-warning alert-portal alert-w-icon">\n                <span
+    class="icon-warning alert-icon" aria-hidden="true"></span>\n               
+    You are using an unsupported web browser. Update to a supported browser for
+    the best experience. <a
+    href="https://access.redhat.com/announcements/2120951">Read the
+    announcement</a>.\n                </div>\n               
+    </div>\n            <![endif]-->\n            <!--[if IE
+    9]>\n                <div class="portal-messages">\n                <div
+    class="alert alert-warning alert-portal alert-w-icon">\n               
+    <span class="icon-warning alert-icon"
+    aria-hidden="true"></span>\n                As of March 1, 2016, the Red Hat
+    Customer Portal will no longer support Internet Explorer 9. See our new <a
+    href="/help/browsers">browser support policy</a> for more
+    information.\n                </div>\n                </div>\n           
+    <![endif]-->\n            <div id="site-section"></div>\n       
+    </header>\n        <!--googleon: all-->\n\n        <main id="cp-main"
+    class="portal-content-area">\n            <div id="cp-content"
+    class="main-content">\n                            <!-- /CP_PRIMER_HEADER
+    -->\n      <div class="container">\n        <div class="region
+    region-header">\n    <div data-drupal-messages-fallback
+    class="hidden"></div>\n\n  </div>\n\n    </div>\n          <div
+    class="region region-content">\n    <div id="block-breadcrumbs"
+    class="settings-tray-editable block block-system
+    block-system-breadcrumb-block" data-drupal-settingstray="editable">\n  \n   
+    \n      <div
+    class="content">\n                                                                       
+    <script>breadcrumbs = [["Home","\\/"],["Security
+    Bulletins","\\/security\\/vulnerabilities"],["RHSB-2026-002 Cryptographic
+    Subsystem Privilege Escalation - Linux Kernel (CVE-2026-31431) - Copy
+    Fail"]]</script>\n\n\n\n    </div>\n  </div>\n\n\n      \n\n<article
+    class="page vulnerability" id=\'main-content\'>\n  <div class="hero
+    container-fluid push-bottom">\n        <div class="container push-top
+    push-bottom">\n      <div class="row">\n\n        <div class="col-sm-1
+    hidden-xs subscription-nav">\n            <ul>\n              <!-- comment
+    -->\n                            <li class="nav-li">\n                <a
+    href="#comments">\n                  <pfe-icon icon="rh-talk-bubble"
+    class="PFElement" pfelement="" pfe-type="content"
+    on="light"></pfe-icon>\n                  <span
+    class="comments-count--js">0</span> <!-- dynamic comment count
+    -->\n                </a>\n              </li>\n                           
+    <!-- vote -->\n\n              <!-- follow -->\n              <li
+    class="nav-li nav-follow" hidden>\n                <pfe-modal on="light"
+    pfelement="" class="PFElement" type="container" has_trigger="" has_body=""
+    has_header="">\n                  <button
+    slot="pfe-modal--trigger">\n                    <pfe-icon
+    icon="rh-notification-bell" class="PFElement" pfelement=""
+    pfe-type="content" on="light"></pfe-icon>\n                 
+    </button>\n                  <!-- modal body -->\n                  <h2
+    slot="pfe-modal--header" id="pfe-9bhdflflw">Get notified when this content
+    is updated.</h2>\n                  <button class="btn btn-open btn-follow"
+    data-nid="376311">Follow</button>\n                  <p class="follow-help
+    hide" aria-hidden="true">Please wait...</p>\n                  <!--
+    <pfe-button variant="secondary" on="light">\n                   
+    <button>Follow</button>\n                  </pfe-button>
+    -->\n                </pfe-modal>\n              </li>\n           
+    </ul>\n          </div>\n\n        <div class="col-sm-11"
+    lang="en">\n          <header class="header push-top-narrow">\n           
+    <h1 class="title rh-vulnerability-static__h1">RHSB-2026-002 Cryptographic
+    Subsystem Privilege Escalation - Linux Kernel (CVE-2026-31431) - Copy
+    Fail</h1>\n            <div
+    class="published-date">\n                                                                   
+    <span>Public Date: <pfe-datetime id="simpleUnixtime" timestamp="1776816000"
+    type="local" day="numeric" month="long" year="numeric" hour="2-digit"
+    minute="2-digit" locale="en"> April 30, 2026,
+    16:58</pfe-datetime></span>\n                                                             
+    <br>\n              <span>Updated <pfe-datetime id="simpleUnixtime"
+    timestamp="1778689114" type="local" day="numeric" month="long"
+    year="numeric" hour="2-digit" minute="2-digit" locale="en"> May 13, 2026,
+    12:18</pfe-datetime></span>\n            </div>\n            <div
+    class="row">\n              <div
+    class="bulletins-vote-feedback">\n                <p>Was this information
+    helpful?</p>\n                <cp-vote-and-feedback
+    is-basic-upvote-downvote="false"></cp-vote-and-feedback>\n             
+    </div>\n              <div
+    class="bulletins-vote-feedback__help-text">\n                <svg
+    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24
+    24" fill="none">\n                  <path d="M11.75 4C16.0302 4.00001 19.5
+    7.4698 19.5 11.75C19.5 16.0302 16.0302 19.5 11.75 19.5C7.4698 19.5 4.00001
+    16.0302 4 11.75C4 7.4698 7.4698 4 11.75 4ZM15.8965 8.68945C15.7013 8.49418
+    15.3847 8.49419 15.1895 8.68945L10.5 13.3789L8.31055 11.1895C8.1153 10.9942
+    7.79877 10.9942 7.60352 11.1895L6.89648 11.8965C6.70127 12.0917 6.70127
+    12.4083 6.89648 12.6035L10.1465 15.8535C10.3418 16.0487 10.6582 16.0487
+    10.8535 15.8535L16.6035 10.1035C16.7987 9.90827 16.7987 9.59173 16.6035
+    9.39648L15.8965 8.68945Z" fill="#3E8635"/>\n               
+    </svg>\n                <p>Feedback cancelled</p>\n             
+    </div>\n\n                            <div class="pfe-l-grid pfe-m-gutters
+    push-top">\n                                  <div id="stat-card-status"
+    class="stat-card-left pfe-m-6-col-on-md
+    pfe-m-4-col-on-lg">\n                                          <span
+    class="stat-number rh-vulnerability-static__impact-stat
+    rh-vulnerability-static__status-resolved">\n                         
+    <pfe-icon icon="rh-icon-yes" pfe-size="lg"
+    aria-hidden="true"></pfe-icon>\n                       
+    </span>\n                                        <span class="stat-title
+    white">\n                        Resolved\n                        <span
+    class="stat-subtitle">Status</span>\n                     
+    </span>\n                  </div>\n               
+    \n                                  <div id="stat-card-impact"
+    class="stat-card-left pfe-m-6-col-on-md
+    pfe-m-4-col-on-lg">\n                      <span class="stat-number
+    rh-vulnerability-static__impact-stat
+    rh-vulnerability-static__impact-important">\n                       
+    <pfe-icon icon="rh-icon-vulnerability-updated" pfe-size="lg"
+    aria-hidden="true"></pfe-icon>\n                     
+    </span>\n                    <span class="stat-title
+    white">\n                        Important\n                        <span
+    class="stat-subtitle">Impact</span>\n                     
+    </span>\n                  </div>\n                \n               
+    \n              </div>             </div>           </header>\n       
+    </div>       </div>     </div>   </div> \n  <div class="container">\n   
+    <div class="row">\n            <div
+    class="vulnerability__body">\n            <div><h2>Executive
+    summary</h2>\n<p>A vulnerability, known as "Copy Fail", has been identified
+    in the Linux kernel\'s cryptographic interface. A user with a local account
+    could trigger the flaw to gain root privileges, such as that of a system
+    administrator.</p>\n<p>This issue has been assigned <a
+    href="https://access.redhat.com/security/cve/CVE-2026-31431">CVE-2026-31431</a>
+    and has a severity impact of <a
+    href="https://access.redhat.com/security/updates/classification">Important</a>.
+    Configuration settings can be used to further mitigate the
+    impact.</p>\n<p>Even though the severity is less than Critical, Red Hat has
+    expedited the release of fixes. All fixes <a
+    href="https://access.redhat.com/security/cve/cve-2026-31431#cve-affected-packages">are
+    now available</a>. For the most current information, including a complete
+    list of impacted Red Hat products, please refer to the vulnerability\'s <a
+    href="https://access.redhat.com/security/cve/CVE-2026-31431">CVE
+    page</a>.</p>\n<h2>Mitigations</h2>\n<p>Any hardening measures that limit
+    local access help reduce the risk of exploitation. Examples include
+    disabling SSH, ensuring SELinux is in enforcing mode, using the default
+    Security Context Constraints (SCC), running workloads as non-root, and
+    restricting <code>oc debug</code> access to trusted cluster administrators.
+    This list is not exhaustive, and the applicability of each measure should be
+    evaluated in the context of your operational requirements and security
+    policies. Additionally, disabling any single access method does not
+    eliminate all other means by which a user could gain local
+    access.</p>\n<h3>Overall Guidance</h3>\n<p>This advice is applicable to most
+    Red Hat products.</p>\n<p>Warning: there may be performance impacts for
+    modifying functionality that uses kernel cryptographic functions. While the
+    affected module cannot be blocklisted due to being built into the kernel,
+    the affected functions themselves can be blocked using the following boot
+    arguments:</p>\n<pre><code>initcall_blacklist=algif_aead_init\n</code></pre><p>Alternatively,
+    the af_alg interface itself can be
+    blocked:</p>\n<pre><code>initcall_blacklist=af_alg_init\n</code></pre><p>As
+    a further alternative, the affected algorithm can be
+    blocked:</p>\n<pre><code>initcall_blacklist=crypto_authenc_esn_module_init\n</code></pre><h3>Product
+    Specific Mitigation Steps</h3>\n<ul>\n<li><a
+    href="https://access.redhat.com/solutions/7141931">Red Hat Enterprise
+    Linux</a></li>\n<li><a
+    href="https://access.redhat.com/solutions/7141979">OpenShift
+    4</a></li>\n<li><a
+    href="https://access.redhat.com/solutions/7142136">Managed OpenShift (ROSA
+    Classic / ROSA HCP / ARO / OSD)</a></li>\n<li><a
+    href="https://access.redhat.com/articles/7141989">ROSA Classic and OpenShift
+    Dedicated CCS</a></li>\n<li><a
+    href="https://access.redhat.com/solutions/7141996">ROSA Hosted Control
+    Planes</a></li>\n<li><a
+    href="https://access.redhat.com/solutions/7141990">ARO</a></li>\n<li><a
+    href="https://access.redhat.com/solutions/7142032">Advanced Cluster
+    Management Governance Policy</a></li>\n</ul>\n<h2>Remediation
+    Timeline</h2>\n<p>Given the interest in how this vulnerability was disclosed
+    and remediated, the following timeline outlines the key
+    events.</p>\n<p><strong>2026-03-23</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fcopy.fail%2F">Reporter
+    privately contacts upstream</a></p>\n<p><strong>2026-03-24</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fcopy.fail%2F">Upstream
+    acknowledges receiving the
+    report</a></p>\n<p><strong>2026-03-25</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fcopy.fail%2F">Upstream/Reporter
+    propose and review patches</a></p>\n<p><strong>2026-04-01</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2F%3Fid%3Da664bf3d603d">Upstream
+    commits patch to mainline</a></p>\n<p><strong>2026-04-22</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fwww.cve.org%2FCVERecord%3Fid%3DCVE-2026-31431">CVE
+    published, CVSS is unknown</a></p>\n<p><strong>2026-04-22</strong><br>\n<a
+    href="https://access.redhat.com/security/cve/cve-2026-31431">Red Hat becomes
+    aware and rates the vulnerability as
+    Moderate</a></p>\n<p><strong>2026-04-25</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fsecurity%2Fvulns.git%2Fcommit%2F%3Fid%3Dcb9d133eed6ab823b8fdefdc10600189aa69a107">Upstream
+    assigns CVSS of 7.8</a></p>\n<p><strong>2026-04-29</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fcopy.fail%2F">Reporter
+    posts a blog, technical writeup, and
+    PoC</a></p>\n<p><strong>2026-04-29</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fgithub.com%2Frapid7%2Fmetasploit-framework%2Fcommit%2Fdc97d1e">Metasploit
+    module published</a></p>\n<p><strong>2026-04-29</strong><br>\nRed Hat
+    escalates urgency of releasing
+    fixes</p>\n<p><strong>2026-04-30</strong><br>\nRed Hat publishes this
+    security bulletin</p>\n<p><strong>2026-05-01</strong><br>\n<a
+    href="https://access.redhat.com/bounce/?externalURL=https%3A%2F%2Fwww.cisa.gov%2Fnews-events%2Falerts%2F2026%2F05%2F01%2Fcisa-adds-one-known-exploited-vulnerability-catalog">CISA
+    adds vulnerability to KEV
+    catalog</a></p>\n<p><strong>2026-05-04</strong><br>\n<a
+    href="https://access.redhat.com/errata/RHSA-2026:13565">First fix to a Red
+    Hat product (RHEL-9) is released</a></p>\n</div>\n      </div>\n    </div>
+    \n    <div class="row">\n          </div> \n  </div> </article>\n\n\n<div
+    class="bulletins-vote-feedback-bottom">\n  <p>Was this information helpful?
+    Your feedback is valuable!</p>\n  <cp-vote-and-feedback
+    is-basic-upvote-downvote="false"></cp-vote-and-feedback>\n  <div
+    class="bulletins-vote-feedback__help-text">\n    <svg
+    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24
+    24" fill="none">\n      <path d="M11.75 4C16.0302 4.00001 19.5 7.4698 19.5
+    11.75C19.5 16.0302 16.0302 19.5 11.75 19.5C7.4698 19.5 4.00001 16.0302 4
+    11.75C4 7.4698 7.4698 4 11.75 4ZM15.8965 8.68945C15.7013 8.49418 15.3847
+    8.49419 15.1895 8.68945L10.5 13.3789L8.31055 11.1895C8.1153 10.9942 7.79877
+    10.9942 7.60352 11.1895L6.89648 11.8965C6.70127 12.0917 6.70127 12.4083
+    6.89648 12.6035L10.1465 15.8535C10.3418 16.0487 10.6582 16.0487 10.8535
+    15.8535L16.6035 10.1035C16.7987 9.90827 16.7987 9.59173 16.6035
+    9.39648L15.8965 8.68945Z" fill="#3E8635"/>\n    </svg>\n    <p>Feedback
+    cancelled</p>\n  </div>\n</div>\n\n<div id="follow-band" class="band
+    band-narrow band-border-top override ng-isolate-scope rh-actionsheet"
+    hidden>\n  <div class="container text-center">\n    <h2 class="subheading
+    heading-inline">Get notified when this content is updated</h2>\n    <button
+    class="btn btn-open btn-follow" data-nid="376311">Follow</button>\n 
+    </div>\n  <div class="container text-center">\n    <p class="follow-help
+    hide" aria-hidden="true">Please wait...</p>\n  </div>\n</div>\n\n<div
+    id="comments">\n  <div class="band band-border-top">\n    <div
+    class="container">\n      <div class="comments-list-header">\n        <h2
+    class="headline headline-md heading-thin">Comments</h2>\n      </div>\n   
+    </div>\n  </div>\n  \n            <div><div>\n<script>\n  // Enable the
+    cp-comments component. This is async, but it shouldn\'t have to\n  // be
+    blocking for the other script config in here.\n 
+    window.portal.primer.onReady().then((primer) =>
+    primer.components.include(\'cp-comments\'));\n\n  // Configuration used by
+    the component.\n  const pfElementsConfig = {\n    cpComments: {\n      auth:
+    {\n        type: \'cookie\',\n        name: \'rh_jwt\'\n      },\n     
+    sourceId: \'ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy\',\n     
+    canonicalUrl: \'https://access.redhat.com\',\n      apiPath:
+    \'/api/comments\',\n      allowBestResponse: \'0\',\n     
+    allowPrivateResponse: \'1\',\n      // @see CPCORE-9716 remove rest prop in
+    a later commit.\n      rest: {\n    "index":
+    "https:\\/\\/access.redhat.com\\/api\\/comments\\/ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy",\n   
+    "create":
+    "https:\\/\\/access.redhat.com\\/api\\/comments\\/ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy",\n   
+    "read":
+    "https:\\/\\/access.redhat.com\\/api\\/comments\\/ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy\\/{CID}",\n   
+    "update":
+    "https:\\/\\/access.redhat.com\\/api\\/comments\\/ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy\\/{CID}",\n   
+    "delete":
+    "https:\\/\\/access.redhat.com\\/api\\/comments\\/ZGM6ODlmZTIxYTQtMTEyOS00NTYzLWIzNGItMTlmNGRhZDkxYzUy\\/{CID}"\n},\n     
+    pager: {\n        enabled: 1,\n        size: 20\n      }\n    }\n  };\n\n 
+    /* Kick off comment initialization */\n 
+    document.addEventListener(\'pfeconfig-query\', function (e) {\n   
+    e.target.config = pfElementsConfig;\n 
+    });\n</script>\n\n<cp-comments></cp-comments>\n</div>\n</div>\n     
+    \n</div>\n\n  </div>\n\n      <!-- CP_PRIMER_FOOTER -->\n           
+    </div>\n            </main>\n            </div>\n\n            <rh-footer
+    color-palette="darker">\n\n                <a slot="logo"
+    href="https://redhat.com/en">\n                    <img alt="Red Hat"
+    src="https://static.redhat.com/libs/redhat/brand-assets/2/corp/logo--on-dark.svg"
+    loading="lazy" />\n                </a>\n\n               
+    <rh-footer-social-link slot="social-links"
+    icon="linkedin">\n\n                  <a
+    href="https://www.linkedin.com/company/red-hat"
+    data-analytics-region="social-links-exit"
+    data-analytics-category="Footer|social-links"
+    data-analytics-text="LinkedIn">\n                    <span
+    class="sr-only">LinkedIn</span>\n                    <svg
+    class="social-icons" aria-hidden="true" focusable="false"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M9.27
+    24.35h-4.3V10.52h4.3v13.83zM7.12 8.63a2.49 2.49 0 1 1 2.49-2.49 2.48 2.48 0
+    0 1-2.49 2.49Zm18.25 15.72h-4.29v-6.72C21.08 16 21 14 18.84 14s-2.58
+    1.75-2.58 3.55v6.84H12V10.52h4.12v1.89h.06a4.53 4.53 0 0 1 4.07-2.23c4.35 0
+    5.15 2.86 5.15 6.59v7.58Z"></path></svg>\n                 
+    </a>\n\n                </rh-footer-social-link>\n\n               
+    <rh-footer-social-link slot="social-links"
+    icon="youtube">\n\n                  <a
+    href="https://www.youtube.com/user/RedHatVideos"
+    data-analytics-region="social-links-exit"
+    data-analytics-category="Footer|social-links"
+    data-analytics-text="YouTube">\n                    <span
+    class="sr-only">YouTube</span>\n                    <svg
+    class="social-icons" aria-hidden="true" focusable="false"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M12.68
+    17.92V11.6l6.07 3.17-6.07 3.15ZM26 10.5a4.82 4.82 0 0 0-.9-2.23 3.21 3.21 0
+    0 0-2.25-.95C19.73 7.09 15 7.09 15 7.09s-4.72 0-7.87.23a3.21 3.21 0 0
+    0-2.25.95A4.82 4.82 0 0 0 4 10.5a34.76 34.76 0 0 0-.22 3.64v1.71A34.76 34.76
+    0 0 0 4 19.49a4.82 4.82 0 0 0 .9 2.23 3.74 3.74 0 0 0 2.47 1c1.8.17 7.65.23
+    7.65.23s4.73 0 7.87-.24a3.17 3.17 0 0 0 2.25-1 4.82 4.82 0 0 0 .9-2.23 34.76
+    34.76 0 0 0 .22-3.64v-1.7A34.76 34.76 0 0 0 26
+    10.5Z"></path></svg>\n                  </a>\n\n               
+    </rh-footer-social-link>\n\n                <rh-footer-social-link
+    slot="social-links" icon="facebook">\n\n                  <a
+    href="https://www.facebook.com/RedHat"
+    data-analytics-region="social-links-exit"
+    data-analytics-category="Footer|social-links"
+    data-analytics-text="Facebook">\n                    <span
+    class="sr-only">Facebook</span>\n                    <svg
+    class="social-icons" aria-hidden="true" focusable="false"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M25.93
+    15.07a10.93 10.93 0 1 0-12.64 10.8v-7.64h-2.77v-3.16h2.77v-2.41c0-2.74
+    1.63-4.26 4.13-4.26a16.32 16.32 0 0 1 2.45.22v2.69h-1.38A1.58 1.58 0 0 0
+    16.71 13v2.05h3l-.48 3.16h-2.52v7.64a10.94 10.94 0 0 0
+    9.22-10.8Z"></path></svg>\n                  </a>\n\n               
+    </rh-footer-social-link>\n\n                <rh-footer-social-link
+    slot="social-links" icon="x">\n\n                  <a
+    href="https://x.com/RedHat" data-analytics-region="social-links-exit"
+    data-analytics-category="Footer|social-links"
+    data-analytics-text="Twitter">\n                    <span class="sr-only">X,
+    formerly Twitter</span>\n                    <svg class="social-icons"
+    aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 30 30"><path d="m16.78 13.54 6.96-8.09h-1.65l-6.04
+    7.02-4.82-7.02H5.67l7.3 10.62-7.3 8.48h1.65l6.38-7.42 5.1
+    7.42h5.56l-7.57-11.01Zm-2.26 2.62-.74-1.06L7.9 6.69h2.53l4.75 6.79.74 1.06
+    6.17 8.83h-2.53l-5.03-7.2Z"></path></svg>\n                 
+    </a>\n\n                </rh-footer-social-link>\n\n                <h3
+    slot="links">Quick Links</h3>\n\n                <ul
+    slot="links">\n                    <li><a class="download-software"
+    href="https://access.redhat.com/downloads/">Downloads</a></li>\n                   
+    <li><a class="manage-subscriptions"
+    href="https://access.redhat.com/management">Subscriptions</a></li>\n                   
+    <li><a class="support-cases"
+    href="https://access.redhat.com/support">Support
+    Cases</a></li>\n                    <li><a class="customer-service"
+    href="https://access.redhat.com/support/customer-service">Customer
+    Service</a></li>\n                    <li><a class="quick-docs"
+    href="//docs.redhat.com/">Product Documentation</a></li>\n               
+    </ul>\n\n                <h3 slot="links">Help</h3>\n\n                <ul
+    slot="links">\n                    <li><a class="contact-us"
+    href="https://access.redhat.com/support/contact/">Contact
+    Us</a></li>\n                    <li><a class="cp-faqs"
+    href="https://access.redhat.com/articles/33844">Customer Portal
+    FAQ</a></li>\n                    <li><a class="login-problems"
+    href="https://access.redhat.com/help/login_assistance">Log-in
+    Assistance</a></li>\n                </ul>\n\n                <h3
+    slot="links">Site Info</h3>\n\n                <ul
+    slot="links">\n                    <li><a class="trust-red-hat"
+    href="https://www.redhat.com/en/trust">Trust Red
+    Hat</a></li>\n                    <li><a class="browser-support-policy"
+    href="https://www.redhat.com/en/about/browser-support">Browser Support
+    Policy</a></li>\n                    <li><a class="accessibility"
+    href="https://www.redhat.com/en/about/digital-accessibility">Accessibility</a></li>\n                   
+    <li><a class="recognition"
+    href="https://access.redhat.com/recognition/">Awards and
+    Recognition</a></li>\n                    <li><a class="colophon"
+    href="https://access.redhat.com/help/colophon/">Colophon</a></li>\n               
+    </ul>\n\n                <h3 slot="links">Related
+    Sites</h3>\n\n                <ul slot="links">\n                    <li><a
+    href="https://www.redhat.com/"
+    class="red-hat-com">redhat.com</a></li>\n                    <li><a
+    href="http://developers.redhat.com/"
+    class="red-hat-developers">developers.redhat.com</a></li>\n                   
+    <li><a href="https://connect.redhat.com/"
+    class="partner-connect">connect.redhat.com</a></li>\n                   
+    <li><a href="https://cloud.redhat.com/"
+    class="cloud-com">cloud.redhat.com</a></li>\n               
+    </ul>\n\n                <!-- Temporary location of site status component
+    until a slot is added for it in rh-footer -->\n                <div
+    class="site-status-container" slot="universal">\n                  <!-- Site
+    Status-->\n                   
+    <rh-site-status></rh-site-status>\n                </div>\n\n               
+    <!-- Universal Footer -->\n                <rh-footer-universal
+    slot="universal">\n                    <h3 slot="links-primary"
+    data-analytics-text="Red Hat legal and privacy links" hidden>Red Hat legal
+    and privacy\n                        links</h3>\n\n                    <ul
+    slot="links-primary"
+    data-analytics-region="page-footer-bottom-primary">\n\n                       
+    <li><a href="https://redhat.com/en/about/company"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="About Red Hat">About Red
+    Hat</a></li>\n\n                        <li><a
+    href="https://redhat.com/en/jobs"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Jobs">Jobs</a></li>\n\n                        <li><a
+    href="https://redhat.com/en/events"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Events">Events</a></li>\n\n                       
+    <li><a href="https://redhat.com/en/about/office-locations"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Locations">Locations</a></li>\n\n                       
+    <li><a href="https://redhat.com/en/contact"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Contact Red Hat">Contact Red
+    Hat</a></li>\n\n                        <li><a
+    href="https://redhat.com/en/blog"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Red Hat Blog">Red Hat
+    Blog</a></li>\n\n                        <li><a
+    href="https://www.redhat.com/en/about/our-culture/inclusion"\n                               
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Inclusion at Red Hat">Inclusion at Red
+    Hat</a></li>\n\n                        <li><a
+    href="https://coolstuff.redhat.com/"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Cool Stuff Store">Cool Stuff
+    Store</a></li>\n\n                        <li><a
+    href="https://www.redhat.com/en/summit"
+    data-analytics-category="Footer|Corporate"\n                               
+    data-analytics-text="Red Hat Summit">Red Hat
+    Summit</a></li>\n\n                    </ul>\n\n                   
+    <rh-footer-copyright slot="links-secondary"> © 2026 Red
+    Hat</rh-footer-copyright>\n\n                    <h3 slot="links-secondary"
+    data-analytics-text="Red Hat legal and privacy links" hidden>Red Hat legal
+    and\n                        privacy links</h3>\n\n                    <ul
+    slot="links-secondary"
+    data-analytics-region="page-footer-bottom-secondary">\n\n                       
+    <li><a
+    href="https://redhat.com/en/about/privacy-policy"\n                               
+    data-analytics-category="Footer|Red Hat legal and privacy
+    links"\n                                data-analytics-text="Privacy
+    statement">Privacy statement</a></li>\n                        <li><a
+    href="https://redhat.com/en/about/terms-use"\n                               
+    data-analytics-category="Footer|Red Hat legal and privacy
+    links"\n                                data-analytics-text="Terms of
+    use">Terms of use</a></li>\n                        <li><a
+    href="https://redhat.com/en/about/all-policies-guidelines"\n                               
+    data-analytics-category="Footer|Red Hat legal and privacy
+    links"\n                                data-analytics-text="All policies
+    and guidelines">All policies and
+    guidelines</a></li>\n                        <li><a
+    href="https://redhat.com/en/about/digital-accessibility"\n                               
+    data-analytics-category="Footer|Red Hat legal and privacy
+    links"\n                                data-analytics-text="Digital
+    accessibility" class="active">Digital
+    accessibility</a></li>\n                        <!-- If your website
+    supports trustarc include this item to add Cookie Preferences to your site.
+    -->\n                        <!-- TrustArc -->\n                       
+    <li><span id="teconsent"></span></li>\n\n                   
+    </ul>\n                </rh-footer-universal>\n           
+    </rh-footer>\n\n            <!--googleoff: all-->\n            <nav
+    id="to-top" aria-label="Back to Top">\n              <a class="btn_slideto"
+    href="#masthead" aria-labelledby="to-top">\n                <span
+    class="web-icon-upload" aria-hidden="true"></span>\n             
+    </a>\n            </nav>\n            <!-- TrustArc -->\n            <div
+    id="consent_blackbar"></div>\n            <!--googleon: all-->\n       
+    </div>\n    <!-- /CP_PRIMER_FOOTER -->\n\n  </div>\n\n    \n    <script
+    type="application/json"
+    data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\\/","pathPrefix":"","currentPath":"node\\/376311","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\\u0003","suppressDeprecationErrors":true,"red_hat_jwt":{"client_id":"customer-portal","cookie_name":"rh_jwt","scopes":"","leeway":"0","realm":"redhat-external","sso_host":"https:\\/\\/sso.redhat.com","user_integration":1,"user_plugin":"dxp_security_sso_user_auth","debug":0,"store_external_id":1,"external_id_jwt_property":"sub","stateless_auth":1,"use_external_js":0,"use_internal_js":0,"use_in_admin":0},"red_hat_drawers":{"host":"https:\\/\\/dxp-dxsp-prod.apps.ext-waf.drop.prod.us-west-2.aws.paas.redhat.com","entityId":"376311","entityType":"node","langcode":"en"},"user":{"uid":0,"permissionsHash":"9613455eced2e84d9051faf288c351283d540bd3b70d48cedcca108f1d7a438f"}}</script>\n<script
+    src="/sites/security/files/js/js_FjuLzI_x49dXjzvHd4Ls_LP193s9GQ5Q3QKashWMn0g.js?scope=footer&amp;delta=0&amp;language=en&amp;theme=dxp_security_theme&amp;include=eJxtikEWwjAIBS_UmiPlQcA2Pkh8QKy9vS5qF-ru_5mh5z07l2E19hwrK6drF-nbRL_mMaSxAVZ5s8mY8gqREZyPAI2Big3Ff3aRjiCzxy61LWdRuiq38PQNLp9x8zMmg43NE5DWNh_vBYpMTog"></script>\n\n 
+    </body>\n</html>\n', 'redirected': False, 'url':
+    'https://access.redhat.com/security/vulnerabilities/RHSB-2026-002',
+    'status': 200, 'server': 'Apache', 'cache_control': 'max-age=3600, public',
+    'x_drupal_dynamic_cache': 'MISS', 'content_language': 'en',
+    'x_content_type_options': 'nosniff', 'x_frame_options': 'SAMEORIGIN',
+    'expires': 'Sun, 19 Nov 1978 05:00:00 GMT', 'rh_cmdb': 'DXSP-001',
+    'x_drupal_cache': 'MISS', 'last_modified': 'Fri, 31 Jul 2026 08:47:05 GMT',
+    'etag': '"1785487625-gzip"', 'x_myvhost': 'executed', 'x_isphp': 'executed',
+    'content_type': 'text/html; charset=UTF-8', 'vary': 'cookie,
+    Accept-Encoding', 'date': 'Fri, 31 Jul 2026 08:47:06 GMT',
+    'transfer_encoding': 'chunked', 'connection': 'close, Transfer-Encoding',
+    'x_rh_edge_request_id': '2e9acbd8', 'x_rh_edge_reference_id':
+    '0.490f3417.1785487625.2e9acbd8', 'x_rh_edge_cache_status': 'NotCacheable
+    from child', 'strict_transport_security': 'max-age=86400 ;
+    includeSubDomains', 'cookies_string': '', 'cookies': {}, 'msg': 'OK (unknown
+    bytes)', 'elapsed': 1, 'changed': False, 'failed': False}'.
