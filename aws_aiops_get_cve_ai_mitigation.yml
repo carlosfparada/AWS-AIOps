@@ -52,7 +52,7 @@
 
     - name: Fetch CVE Red Hat Security Bulletin (RHSB) Content
       ansible.builtin.uri:
-        url: "{{ cve_rhsb_url }}aa"
+        url: "{{ cve_rhsb_url }}"
         return_content: true
         status_code: 200
       when: cve_rhsb_url is defined
