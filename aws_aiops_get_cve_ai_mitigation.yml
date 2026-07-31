@@ -70,7 +70,7 @@
 
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
-        prompt: >
+        prompt: |
           Write a simple ansible playbook to mitigate {{ cve_name }}.
           The playbbok MUST only cover the RHEL OS for target nodes.
           DON'T include tasks to perform backups, checks or validations.
@@ -79,11 +79,11 @@
           You SHOULD reboot the systems to apply changes if needed.
           You MUST use the following string as ansible play targets (hosts): 
           '{{ affected_systems_fqdn | join(',') }}'.
-          The CVE has the following details: \n
-          {{ cve_details }} \n
-          The Red Hat Security Bulletin containt mitigation details: \n
-          {{ cve_rhsb_execsummary | default ('', true) }} \n
-          {{ cve_rhsb_mitigations | default ('', true) }} \n
+          The CVE has the following details:
+          {{ cve_details }}
+          The Red Hat Security Bulletin containt mitigation details:
+          {{ cve_rhsb_execsummary | default ('', true) }}
+          {{ cve_rhsb_mitigations | default ('', true) }}
 
     - name: Request Mitigation Playbook to Openshift AI
       ansible.builtin.uri:
