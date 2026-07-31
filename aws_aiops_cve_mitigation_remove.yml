@@ -8,6 +8,7 @@
     - name: Run grubby to remove CVE Mitigation from {{ inventory_hostname }}
       ansible.builtin.command: 
         cmd: sudo grubby --update-kernel=ALL --remove-args="initcall_blacklist=algif_aead_init"
+      ignore_errors: true
 
     - name: Reboot {{ inventory_hostname }} 
       ansible.builtin.reboot:
