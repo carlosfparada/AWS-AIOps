@@ -85,7 +85,7 @@
           {{ cve_rhsb_execsummary | default ('', true) }}
           {{ cve_rhsb_mitigations | default ('', true) }}
 
-    - name: Prompt Openshift AI
+    - name: Request Mitigation Playbook to Openshift AI
       ansible.builtin.uri:
         url: "{{ ai_endpoint }}"
         method: POST
@@ -104,11 +104,11 @@
       delay: 5
       until: ai_response.status == 200
 
-    - name: Debug Prompt to Openshift AI
+    - name: Debug Response from Openshift AI
       debug:
         var: ai_response
 
-    - name: Set Generated Ansible Playbook
+    - name: Set Fact Mitigation Ansible Playbook
       ansible.builtin.set_fact:
         generated_playbook: >-
           {{ cve_details | wordwrap(60) |
