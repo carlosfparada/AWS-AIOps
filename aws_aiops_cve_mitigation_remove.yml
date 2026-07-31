@@ -12,6 +12,7 @@
     - name: Reboot {{ inventory_hostname }} 
       ansible.builtin.reboot:
         reboot_timeout: 360
+      become: true
 
     - name: Wait until RHEL {{ inventory_hostname }} boots up 
       wait_for:
