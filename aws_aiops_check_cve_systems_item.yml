@@ -22,10 +22,6 @@
             extra_vars: "{{ extra_vars }}"
       ansible.builtin.include_role: 
         name: infra.aap_configuration.controller_workflow_launch
-      # debug:
-      #   var: ansible_eda
-      loop: "{{ payload.events }}"
-      ignore_errors: true
   rescue:
     - name: Record failure for {{ item.payload.reported_cve }}
       ansible.builtin.debug:
