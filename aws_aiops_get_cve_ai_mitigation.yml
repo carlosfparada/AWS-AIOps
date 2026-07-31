@@ -68,10 +68,12 @@
 
     - name: Extract Executive summary section from RHSB HTML
       set_fact:
-        cve_rhsb_content: "{{ cve_rhsb_html.content |
-          regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>',
-          '\\1', ignorecase=True) | default([], true) |
-          regex_replace('<.*?]>', ' ') }}"
+        cve_rhsb_execsummary: "{{ cve_rhsb_html.content |
+          regex_search('(?s)<h2>Executive Summary</h2>(.*?)<h2>',
+          '\\1', ignorecase=True) | default([], true) }}"
+        cve_rhsb_mitigations: "{{ cve_rhsb_html.content |
+          regex_search('(?s)<h2>Mitigations</h2>(.*?)<h2>',
+          '\\1', ignorecase=True) | default([], true) }}"
 
     # - name: Get first match or empty string, then clean it up
     #   set_fact:
@@ -93,9 +95,10 @@
           You MUST use the following string as ansible play targets (hosts): 
           '{{ affected_systems_fqdn | join(',') }}'.
           The CVE has the following details: 
-          '{{ cve_details }}'
+          {{ cve_details }}
           The Red Hat Security Bulletin containt mitigation details:
-          '{{ cve_rhsb_content }}'.
+          {{ cve_rhsb_execsummary }}
+          {{ cve_rhsb_mitigations }}
 
     - name: Prompt Openshift AI
       ansible.builtin.uri:
