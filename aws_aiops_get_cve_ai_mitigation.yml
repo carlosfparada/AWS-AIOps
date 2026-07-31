@@ -71,7 +71,7 @@
         cve_rhsb_content: "{{ cve_rhsb_html.content |
           regex_search('(?s)<h2>Executive summary</h2>(.*?)<h2>',
           '\\1', ignorecase=True) | default([], true) |
-          | regex_replace('<.*?]>', ' ') }}"
+          regex_replace('<.*?]>', ' ') }}"
 
     # - name: Get first match or empty string, then clean it up
     #   set_fact:
