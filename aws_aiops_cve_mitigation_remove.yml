@@ -12,6 +12,7 @@
     - name: Reboot {{ inventory_hostname }} 
       ansible.builtin.command: 
         cmd: sudo reboot
+      become: true
       ignore_errors: true
 
     - name: Wait until RHEL {{ inventory_hostname }} boots up 
