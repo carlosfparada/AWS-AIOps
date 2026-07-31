@@ -60,7 +60,7 @@
 
     - name: Set Fact Red Hat AI Prompt
       ansible.builtin.set_fact:
-        # CVE-2026-31431
+        # CVE-2026-31431 Mitigation
         # sudo grubby --update-kernel=ALL --args="initcall_blacklist=algif_aead_init"
         # sudo reboot
         # sudo grubby --update-kernel=ALL --remove-args="initcall_blacklist=algif_aead_init"
@@ -78,19 +78,6 @@
           '{{ cve_details }}'
           The Red Hat Security Bulletin containt mitigation details:
           '{{ cve_rhsb_content }}'.
-
-# Write a simple ansible playbook to mitigate {{ cve_name }}.
-# DO NOT include tasks that perform backups, checks or validations.
-# The playbbok MUST only cover the RHEL9 OS for target nodes.
-# I DON'T want you to update any software package or kernel binary.
-# I just want you to do mitigation based on kernel parameters
-# and similar mitigation measures.
-# You can reboot the systems to apply changes if needed.
-# The CVE has the following details, mitigation and references:
-# Details: '{{ cve_details }}'.
-# Mitigation: '{{ cve_mitigation }}'.
-# You MUST use the following string as ansible play targets (hosts): 
-# '{{ affected_systems_fqdn | join(',') }}'.
 
     - name: Prompt Openshift AI
       ansible.builtin.uri:
