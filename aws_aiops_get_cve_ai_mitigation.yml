@@ -61,10 +61,10 @@
     - name: Extract Executive Summary and Mitigations section from RHSB HTML
       set_fact:
         cve_rhsb_execsummary: "{{ cve_rhsb_html.content |
-          regex_search('(?s)<h2>Executive Summary</h2>(.*?)<h2>',
+          regex_search('(?s)<h2>aaaExecutive Summary</h2>(.*?)<h2>',
           '\\1', ignorecase=True) | default([], true) }}"
         cve_rhsb_mitigations: "{{ cve_rhsb_html.content |
-          regex_search('(?s)<h2>Mitigations</h2>(.*?)<h2>',
+          regex_search('(?s)<h2>aaaMitigations</h2>(.*?)<h2>',
           '\\1', ignorecase=True) | default([], true) }}"
       when: cve_rhsb_html.status == 200
 
