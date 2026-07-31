@@ -43,6 +43,7 @@
       # debug:
       #   var: ansible_eda
       loop: "{{ payload.events }}"
+      ignore_errors: true
 
 
 # EVENT: any-cve-known-exploit
