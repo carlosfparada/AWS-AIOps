@@ -82,7 +82,9 @@
           The CVE has the following details:
           {{ cve_details }}
           The Red Hat Security Bulletin containt mitigation details:
+          Executive Summary:
           {{ cve_rhsb_execsummary | default ('', true) }}
+          Mitigations:
           {{ cve_rhsb_mitigations | default ('', true) }}
 
     - name: Request Mitigation Playbook to Openshift AI
