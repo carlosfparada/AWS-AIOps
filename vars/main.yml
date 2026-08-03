@@ -48,3 +48,20 @@ ec2_rhel2_key_name: "KeyPair-Virginia"
 ec2_rhel2_instance_name: rhel-2
 ec2_rhel2_user: "ec2-user"
 ec2_rhel2_pass: "{{ ansible_password }}"
+
+# RHEL 3
+# AMI
+ec2_rhel3_image_name: RHEL-9.5.0_HVM*x86_64*
+ec2_rhel3_image_id: ami-055f190f5416b8118
+# Flavour 
+ec2_rhel3_flavor_name: t2.large
+# Disk
+ec2_rhel3_disk_size: 20
+ec2_rhel3_ebs_name: /dev/sda1
+# Key Pair
+ec2_rhel3_key_name: "KeyPair-Virginia"
+# Instance
+ec2_rhel3_instance_name: rhel-3
+ec2_rhel3_user: "ec2-user"
+ec2_rhel3_pass: "{{ ansible_password }}"
+
