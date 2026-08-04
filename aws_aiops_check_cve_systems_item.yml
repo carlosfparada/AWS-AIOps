@@ -1,6 +1,6 @@
 ---
 - block:
-    - name: Loop over CVEs and Launch Job Workflow Template
+    - name: Handle 1 CVEs item and Launch Job Workflow Template
       vars:
         aap_hostname: "https://{{ aap_fqdn }}"
         aap_username: admin
