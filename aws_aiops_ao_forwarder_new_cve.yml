@@ -15,8 +15,8 @@
         body_format: form-urlencoded
         body:
           grant_type: client_credentials
-          client_id: "{{ webhook_client_id }}"
-          client_secret: "{{ webhook_client_secret }}"
+          client_id: "{{ ao_webhook_client_id }}"
+          client_secret: "{{ ao_webhook_client_secret }}"
         status_code: 200
       register: token_response
 
@@ -30,12 +30,12 @@
           Content-Type: application/json
         body: "{{ payload }}"
         status_code: 202
-      register: webhook_response
+      register: ao_webhook_response
 
     - name: Debug AO Webhook response
       ansible.builtin.debug:
-        msg: "AO Workflow data: {{ webhook_response }}"
+        msg: "AO Workflow data: {{ ao_webhook_response }}"
 
     - name: Display execution ID
       ansible.builtin.debug:
-        msg: "Workflow execution started: {{ webhook_response.json.execution_id }}"
+        msg: "Workflow execution started: {{ ao_webhook_response.json.execution_id }}"
