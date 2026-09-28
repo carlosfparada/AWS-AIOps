@@ -30,7 +30,8 @@
         headers:
           Authorization: "Bearer {{ token_response.json.access_token }}"
           Content-Type: application/json
-        body: "{{ payload }}"
+        body: 
+          payload: "{{ payload }}"
         status_code: 202
       register: ao_webhook_response
 
