@@ -10,7 +10,7 @@
 
     - name: Obtain OAuth token
       ansible.builtin.uri:
-        url: "{{ ao_webhook_base_url }}/api/v1/auth/token"
+        url: "{{ ao_webhook_url }}/api/v1/auth/token"
         method: POST
         body_format: form-urlencoded
         body:
@@ -22,7 +22,7 @@
 
     - name: Post event payload to Event-Driven Ansible forwarder endpoint
       ansible.builtin.uri:
-        url: "{{ ao_webhook_base_url }}/api/v1/webhooks/eda/{{ ao_webhook_path }}"
+        url: "{{ ao_webhook_url }}/api/v1/webhooks/eda/{{ ao_webhook_path }}"
         method: POST
         body_format: json
         headers:
