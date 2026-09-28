@@ -1,5 +1,5 @@
 ---
-- name: AWS AIOps New CVE - AO Forwarder
+- name: AWS AIOps AO Forwarder - New CVE
   hosts: localhost
   connection: local
   gather_facts: false

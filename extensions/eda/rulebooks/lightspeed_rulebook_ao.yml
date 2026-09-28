@@ -32,9 +32,9 @@
             pretty: true
         - run_workflow_template:
             organization: "Default"
-            name: "AWS AIOps: New CVE - AO Forwarder"
+            name: "AWS AIOps: AO Forwarder - New CVE"
             labels:
-              - EDA Lightspeed New CVE - AO Forwarder
+              - EDA Lightspeed AO Forwarder - New CVE
 
     - name: Match all System known exploit vulnerability events
     # Activate notifications for EDA
@@ -55,6 +55,6 @@
             pretty: true
         - run_job_template:
             organization: "Default"
-            name: "AWS AIOps: New System - AO Forwarder"
+            name: "AWS AIOps: AO Forwarder - New System"
             labels:
-              - EDA Lightspeed New System - AO Forwarder
+              - EDA Lightspeed AO Forwarder - New System
