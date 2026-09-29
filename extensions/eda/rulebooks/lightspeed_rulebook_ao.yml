@@ -35,6 +35,10 @@
             name: "AWS AIOps: AO Forwarder - New CVE"
             labels:
               - EDA Lightspeed AO Forwarder - New CVE
+            job_args:
+              extra_vars:
+                webhook_path: "{{ webhook_path }}"
+                event_payload: "{{ event.payload }}"
 
     - name: Match all System known exploit vulnerability events
     # Activate notifications for EDA
