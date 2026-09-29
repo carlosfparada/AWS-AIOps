@@ -37,7 +37,7 @@
               - EDA Lightspeed AO Forwarder - New CVE
             job_args:
               extra_vars:
-                webhook_path: "{{ webhook_path }}"
+                webhook_path: "aiops-cve-rhel"
                 event_payload: "{{ event.payload }}"
 
     - name: Match all System known exploit vulnerability events
