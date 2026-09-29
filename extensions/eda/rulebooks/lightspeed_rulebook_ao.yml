@@ -38,7 +38,7 @@
             job_args:
               extra_vars:
                 webhook_path: "aiops-cve-rhel"
-                event_payload: "{{ event.payload }}"
+                ansible_eda: "{{ event }}"
 
     - name: Match all System known exploit vulnerability events
     # Activate notifications for EDA
